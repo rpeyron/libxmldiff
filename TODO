@@ -1,0 +1,4 @@
+* Support for XPath expressions in identifiers
+* Memory leakage tests
+* Non-regression tests
+* Debug the segfault when building as a dynamic library

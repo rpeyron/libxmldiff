@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<gui version="2.0" display="Xml Diff 2 GUI">
+ <intro height="40"><div align="center"><font size="+2" color="blue">XML Diff 2</font></div></intro>
+ <program display="Diff">
+   <command diff="Diff !">xmldiff diff {before} {after} {output} {options_}</command>
+   <arg id="before" type="file" mask="XML Files (*.xml)|*.xml" display="Before">before.xml</arg>
+   <arg id="after" type="file" mask="XML Files (*.xml)|*.xml" display="After">after.xml</arg>
+   <arg id="output" type="file" mask="XML Files (*.xml)|*.xml" display="Output">output.xml</arg>
+   <arg id="options_" display="Options" params="noedit">{options}</arg>
+   <out id="result" display="Result" open-with="xmldifftreeview">{output}</out>
+  </program>
+ <program display="Options">
+  <arg id="auto_save" type="check" display="Save automatically modified xml" default="checked"><unchecked>--auto-save no</unchecked></arg>
+  <arg id="force_clean" type="check" display="Force Clean">--force-clean yes</arg>
+  <arg id="no_blanks" type="check" display="Suppress blanks" default="checked"><unchecked>--no-blanks no</unchecked></arg>
+  <arg id="pretty_print" type="check" display="Pretty print" default="checked"><unchecked>--pretty-print no</unchecked></arg>
+  <arg id="optimize" type="check" display="Optimize memory">--optimize yes</arg>
+  <arg id="use_exslt" type="check" display="Use e-XSLT">--use-xslt yes</arg>
+  <arg id="verbose" type="combo" display="Verbose Level" default="4">
+   <value display="Nothing">--verbose 0</value>
+   <value display="Operations">--verbose 2</value>
+   <value display="Detailed">--verbose 3</value>
+   <value display="Normal" />
+   <value display="Practically everything">--verbose 5</value>
+   <value display="Everything">--verbose 9</value>
+  </arg>
+  <arg id="ids" display="Identifiers">@id,@value</arg>
+  <arg id="diff_only" type="check" display="Diff Only">--diff-only yes</arg>
+  <arg id="tag_childs" type="check" display="Tag Childs" default="checked"><unchecked>--tag-childs no</unchecked></arg>
+  <arg id="before_values" type="check" display="Print Before Values" default="checked"><unchecked>--before-values no</unchecked></arg>
+  <arg id="separator" display="Separator">|</arg>
+  <out id="options" display="" type="text" params="noedit">{auto_save} {force_clean} {no_blanks} {pretty_print} {optimize} {verbose} {use_exslt} {diff_only} {tag_childs} {before_values} --ids '{ids}' --sep '{separator}'</out>
+  <settings>
+   <parameter id="display-output">no</parameter>
+   <string id="Arguments">Options</string>
+   <string id="Outputs">Options string</string>
+  </settings>
+ </program>
+ <program display="About...">
+  <intro>
+  XML Diff 2 - (c) 2003-2004 - Rémi Peyronnet - <a href="http://www.via.ecp.fr/~remi/soft/xml/xmldiff/xmldiff_en.php3">http://www.via.ecp.fr/~remi/soft/xml/xmldiff/xmldiff_en.php3</a>
+<pre>
+Syntax : xmldiff action [options] &lt;parameters&gt;
+
+Actions
+ - diff &lt;before.xml&gt; &lt;after.xml&gt; &lt;output.xml&gt;
+ - xslt &lt;style.xsl&gt; &lt;input.xml&gt; &lt;output.xml&gt;
+ - recalc &lt;before.xml&gt; &lt;after.xml&gt;
+ - load &lt;filename&gt; &lt;alias&gt;
+ - save &lt;filename&gt; &lt;alias&gt;
+ - close &lt;alias&gt; / discard &lt;alias&gt; (same as close without saving)
+ - flush
+ - options
+ - print &lt;string&gt;
+ - delete &lt;from alias&gt; &lt;xpath expression&gt;
+ - dup(licate) &lt;source alias&gt; &lt;dest alias&gt;
+ - rem(ark),#,--,;,// &lt;remark&gt;
+ - print_configuration
+
+Global Options : 
+  --auto-save yes      : Automatically save modified files
+  --force-clean no     : Force remove of blank nodes and trim spaces
+  --no-blanks yes      : Remove all blank spaces
+  --pretty-print yes   : Output using pretty print writer
+  --optimize no        : Optimize diff algorithm to reduce memory (see doc)
+  --use-exslt no       : Allow the use of exslt.org extended functions.
+  --verbose 4           : Verbose level, from 0 (nothing) to 9 (everything)
+
+Diff Options : 
+  --ids '@id,@value'   : Use these item to identify a node
+  --diff-only no       : Do not alter files, just compare.
+  --before-values yes  : Add before values in attributes or text nodes
+  --sep |              : Use this as the separator
+  --tag-childs yes     : Tag Added or Removed childs
+  </pre>
+  </intro>
+  <help href="http://people.via.ecp.fr/~remi/soft/xml/xmldiff/xmldiff_en.php3?menu=no" display="More Help" />
+  <settings>
+   <parameter id="display-output">no</parameter>
+   <parameter id="display-input">no</parameter>
+   <parameter id="display-out">no</parameter>
+  </settings>
+ </program>
+ <settings>
+   <parameter id="width">500</parameter>
+   <parameter id="height">500</parameter>
+   <parameter id="display-output">yes</parameter>
+   <parameter id="display-input">no</parameter>
+   <parameter id="display-out">yes</parameter>
+   <parameter id="update-on-over">yes</parameter>
+ </settings>
+</gui>

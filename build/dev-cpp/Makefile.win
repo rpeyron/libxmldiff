@@ -1,0 +1,45 @@
+# Project: libxmldiff
+# Makefile created by Dev-C++ 4.9.9.0
+
+CPP  = g++.exe -D__DEBUG__
+CC   = gcc.exe -D__DEBUG__
+WINDRES = windres.exe
+RES  = 
+OBJ  = output/errors.o output/lx2_diff.o output/lx2_ops.o output/lx2_parse.o output/lx2_util.o $(RES)
+LINKOBJ  = output/errors.o output/lx2_diff.o output/lx2_ops.o output/lx2_parse.o output/lx2_util.o $(RES)
+LIBS =  -L"C:/Program Files/Dev-cpp/lib" -lexslt -lxslt -lxml2 -lwsock32 -liconv  -g3 -fmessage-length=0 
+INCS =  -I"C:/Program Files/Dev-cpp/include" 
+CXXINCS =  -I"C:/Program Files/Dev-cpp/include/c++/3.3.1"  -I"C:/Program Files/Dev-cpp/include/c++/3.3.1/mingw32"  -I"C:/Program Files/Dev-cpp/include/c++/3.3.1/backward"  -I"C:/Program Files/Dev-cpp/lib/gcc-lib/mingw32/3.3.1/include"  -I"C:/Program Files/Dev-cpp/include" 
+BIN  = ../../bin/libxmldiff.dll
+CXXFLAGS = $(CXXINCS) -DBUILDING_DLL=1 -DLIBXMLDIFF_EXPORTS -DLIBXML_STATIC   -g3 -fmessage-length=0
+CFLAGS = $(INCS) -DBUILDING_DLL=1   -g3 -fmessage-length=0
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before ../../bin/libxmldiff.dll all-after
+
+
+clean: clean-custom
+	rm -f $(OBJ) $(BIN)
+
+DLLWRAP=dllwrap.exe
+DEFFILE=../../bin/liblibxmldiff.def
+STATICLIB=../../bin/liblibxmldiff.a
+
+$(BIN): $(LINKOBJ)
+	$(DLLWRAP) --output-def $(DEFFILE) --driver-name c++ --implib $(STATICLIB) $(LINKOBJ) $(LIBS) -o $(BIN)
+
+output/errors.o: ../../src/errors.cpp
+	$(CPP) -c ../../src/errors.cpp -o output/errors.o $(CXXFLAGS)
+
+output/lx2_diff.o: ../../src/lx2_diff.cpp
+	$(CPP) -c ../../src/lx2_diff.cpp -o output/lx2_diff.o $(CXXFLAGS)
+
+output/lx2_ops.o: ../../src/lx2_ops.cpp
+	$(CPP) -c ../../src/lx2_ops.cpp -o output/lx2_ops.o $(CXXFLAGS)
+
+output/lx2_parse.o: ../../src/lx2_parse.cpp
+	$(CPP) -c ../../src/lx2_parse.cpp -o output/lx2_parse.o $(CXXFLAGS)
+
+output/lx2_util.o: ../../src/lx2_util.cpp
+	$(CPP) -c ../../src/lx2_util.cpp -o output/lx2_util.o $(CXXFLAGS)

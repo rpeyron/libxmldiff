@@ -1,0 +1,54 @@
+#!/usr/bin/make -f
+CFLAGS = -g
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+ CFLAGS += -O0
+else
+ CFLAGS += -O2
+endif
+ifneq (,$(findstring nostrip,$(DEB_BUILD_OPTIONS)))
+ INSTALL_TARGET = install
+else
+ INSTALL_TARGET = install-strip
+ STRIP = yes
+endif
+
+build: build-stamp
+build-stamp:
+	rm -f debian/files debian/files.new debian/substvars
+	./configure --prefix=$(CURDIR)/debian/libxmldiff/usr
+	$(MAKE)
+	touch build-stamp
+
+clean:
+	rm -f build-stamp debian/files debian/files.new debian/substvars
+	rm -fR debian/libxmldiff
+	-$(MAKE) clean
+
+install: build
+	#install -d debian/libxmldiff/usr/games debian/libxmldiff/usr/share/games
+	$(MAKE) $(INSTALL_TARGET)
+
+binary-indep:
+
+binary-arch: build install
+	install -d debian/libxmldiff/DEBIAN debian/libxmldiff/usr/share/libxmldiff
+	install -d debian/libxmldiff/usr/share/doc/libxmldiff debian/libxmldiff/usr/share/man/man1
+	install -d debian/libxmldiff/usr/lib/menu
+	install -m644 -p debian/changelog debian/libxmldiff/usr/share/doc/libxmldiff/changelog.Debian
+	gzip -9f debian/libxmldiff/usr/share/doc/libxmldiff/changelog.Debian
+	install -m644 -p debian/copyright debian/libxmldiff/usr/share/doc/libxmldiff
+	install -m644 -p debian/libxmldiff.1 debian/libxmldiff/usr/share/man/man1
+	gzip -9f debian/libxmldiff/usr/share/man/man1/libxmldiff.1
+	install -m644 debian/menu debian/libxmldiff/usr/lib/menu/libxmldiff
+	install -m755 debian/postinst debian/libxmldiff/DEBIAN
+	install -m755 debian/postrm debian/libxmldiff/DEBIAN
+#	test "x$(STRIP)" = "xyes" && \
+#    strip --remove-section=.comment --remove-section=.note debian/libxmldiff/usr/bin/RPhoto
+	dpkg-shlibdeps debian/libxmldiff/usr/bin/xmldiff
+	dpkg-gencontrol -isp -Pdebian/libxmldiff
+	cd debian/libxmldiff && find usr -type f -exec "md5sum" "{}" ";" > DEBIAN/md5sums
+	dpkg-deb --build debian/libxmldiff ..
+
+binary: binary-arch
+.PHONY: build clean binary-arch binary-indep binary install

@@ -1,0 +1,5 @@
+libxmldiff (0.2-1) unstable; urgency=low
+
+  * Initial debian release.
+
+ -- Remi Peyronnet <remi+debian@via.ecp.fr>  Sat, 5 Mar 2004 19:17:23 +0000

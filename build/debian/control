@@ -1,0 +1,11 @@
+Source: libxmldiff
+Section: contrib/libs
+Priority: optional
+Maintainer: Remi Peyronnet <remi+libxmldiff@via.ecp.fr>
+Standards-Version: 2.4.1.2
+
+Package: libxmldiff
+Architecture: any
+Depends: libxml2 libxslt1
+Suggests: xmltreenav
+Description: libxmldiff is a simple library to diff XML files. The library comes with xmldiff, a command line tool to demonstrate libxmldiff funtionnalities.
