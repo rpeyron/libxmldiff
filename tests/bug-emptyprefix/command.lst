@@ -1,0 +1,1 @@
+std#diff before.xml after.xml output.xml#output.xml

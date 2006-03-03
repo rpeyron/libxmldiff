@@ -79,6 +79,13 @@ int replaceTokens(vector<string> & /*[in, out]*/ tokens, map<string, string> var
  */
 int LIBXMLDIFF_API executeFile(string scriptFileName, const map<string, string> & variables, const struct globalOptions & gOptions);
 
+/** Split a string into a vector */
+void splitVector(const string arg, /*[in,out]*/ vector<xmlstring> & v);
+
+/** Join a vector into a string */
+string joinVector(const vector<xmlstring> & v);
+
+
 
 /// Print usage
 void LIBXMLDIFF_API usage();

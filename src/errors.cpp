@@ -33,7 +33,7 @@
 
 
 /// XML Diff Exception Helper Function
-void throwError(int type, char * str, ...)
+void throwError(int type, const char * str, ...)
 {
     char tmp[10240];    
     va_list args;

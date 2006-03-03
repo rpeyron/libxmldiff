@@ -1,4 +1,7 @@
+* Hash code for PI, CDATA and comments
+* Differences Text in PI, CDATA and Comments
+* Best difference in text, PI, CDATA <diff:added> <diff:removed> with longest common sequence
 * Support for XPath expressions in identifiers
-* Memory leakage tests
-* Non-regression tests
+* Memory leakage tests (valgrind ?)
 * Debug the segfault when building as a dynamic library
+* Binders : Java (JAXP, libxmlj, JNI ?), Python (Swig ?)

@@ -80,34 +80,71 @@ void populate_itemlist(xmlNodePtr node, vector<idNode> & itemlist, const struct 
     curNode = node->children;
     while (curNode != NULL)
     {
-        if (curNode->type == XML_ELEMENT_NODE)
-        {
-            curNodeIdent.id = curNode->name;
-            for (id = options.ids.begin(); id != options.ids.end(); id++)
-            {
-                if (id->at(0) == '@')
-                {
-                    if (xmlHasProp(curNode, id->c_str()+1))
-                    {
-                        curNodeIdent.id += strSpace + *id + strEqual + strQuote + xmlGetProp(curNode, id->c_str()+1) + strQuote;
-                    }
-                }
-                else if (id->at(0) == '.')
-                {
-                    curNodeIdent.id += strSpace + strEqual + getNodeTextOnly(curNode);
-                }
-                else
-                {
-                    tmpNode = getFirstChildByTagName(curNode, id->c_str());
-                    if (tmpNode != NULL)
-                    {
-                        curNodeIdent.id += strSpace + *id + strEqual + xmlNodeGetContent(tmpNode);
-                    }
-                }
-            }
-            curNodeIdent.node = curNode;
-            itemlist.push_back(curNodeIdent);
-        }
+		if (!matchNode(curNode, options.ignore))
+		{
+			switch(curNode->type)
+			{
+			case XML_ELEMENT_NODE:
+				curNodeIdent.id = (((curNode->ns) && (curNode->ns->prefix))?curNode->ns->prefix:BAD_CAST"") + xmlstring(BAD_CAST ":") + curNode->name;
+				for (id = options.ids.begin(); id != options.ids.end(); id++)
+				{
+					if (id->at(0) == '@')
+					{
+						if (xmlHasProp(curNode, id->c_str()+1))
+						{
+							curNodeIdent.id += strSpace + *id + strEqual + strQuote + xmlGetProp(curNode, id->c_str()+1) + strQuote;
+						}
+					}
+					else if (id->at(0) == '.')
+					{
+						curNodeIdent.id += strSpace + strEqual + getNodeTextOnly(curNode);
+					}
+					else
+					{
+						tmpNode = getFirstChildByTagName(curNode, id->c_str());
+						if (tmpNode != NULL)
+						{
+							curNodeIdent.id += strSpace + *id + strEqual + xmlNodeGetContent(tmpNode);
+						}
+					}
+				}
+				curNodeIdent.node = curNode;
+				itemlist.push_back(curNodeIdent);
+				break;
+			// Ignore Text and Attributes
+			case XML_ATTRIBUTE_NODE :
+			case XML_TEXT_NODE :
+				break;
+			// Text-Style Content
+			case XML_PI_NODE:
+			case XML_COMMENT_NODE:
+			case XML_CDATA_SECTION_NODE :
+				switch(curNode->type)
+				{
+					case XML_PI_NODE: curNodeIdent.id = xmlstring(BAD_CAST "<?") + curNode->name; break;
+					case XML_COMMENT_NODE: curNodeIdent.id = BAD_CAST "<!--"; break;
+					case XML_CDATA_SECTION_NODE: curNodeIdent.id = BAD_CAST "#CDATA"; break;
+					default: curNodeIdent.id = ((curNode->ns)?curNode->ns->prefix:BAD_CAST"") + xmlstring(BAD_CAST ":") + curNode->name; break;
+				}
+				// TODO : Use hash code instead
+				// curNodeIdent.id += strSpace + strEqual + getNodeTextOnly(curNode);
+				curNodeIdent.id += strSpace + strEqual + curNode->content;
+				curNodeIdent.node = curNode;
+				itemlist.push_back(curNodeIdent);
+				break;
+			// Ignored items
+			case XML_NAMESPACE_DECL :
+			case XML_DOCUMENT_NODE :
+			case XML_DOCUMENT_TYPE_NODE :
+			case XML_DOCUMENT_FRAG_NODE :
+			case XML_HTML_DOCUMENT_NODE :
+				break;
+			default:
+				// TODO : Should emit something like a warning.
+				// printf("Type not treated %d : %s\n", curNode->type, curNode->name);
+				break;
+			}
+		}
         curNode = curNode->next;
     }
     stable_sort(itemlist.begin(), itemlist.end(), idNodeCompare);
@@ -131,10 +168,12 @@ void populate_itemlist(xmlNodePtr node, vector<idNode> & itemlist, const struct 
  */
 int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_options & options)
 {
+	//int i;
     int cmp;
     int status;
     xmlNodePtr curNode, tmpNode, bisNode;
     xmlNodePtr insertPoint;
+	//xmlNsPtr curNs;
     vector<idNode> * listBefore;
     vector<idNode> * listAfter;
     vector<idNode>::iterator iterBefore;
@@ -143,7 +182,7 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
     vector<xmlNodePtr> subnodes_to_diff;
     vector<xmlNodePtr>::iterator iter;
 
-    xmlstring s;
+    xmlstring s;  // char ss[100];
 
     status = DN_NONE;
     // Compare elements
@@ -167,7 +206,8 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
         {
         case -1:
             // If the id string after < before, the element has been added
-            if (!options.diffOnly)  setAttributeToAllChilds(
+            if (!(options.diffOnly || options.doNotTagDiff))  
+					setAttributeToAllChilds(
                                         iterAfter->node, 
                                         options.diff_xmlns, 
                                         options.diff_attr, 
@@ -215,7 +255,7 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
             bisNode = curNode;
             if (options.doNotFreeBeforeTreeItems)
             {
-                bisNode = xmlCopyNode(curNode, 1);
+                bisNode = xmlDocCopyNode(curNode, nodeAfter->doc, 1);
             }
             xmlUnlinkNode(bisNode);
 
@@ -251,11 +291,14 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
                     xmlAddChild(nodeAfter, bisNode);
                 }
             }
-            setAttributeToAllChilds(bisNode, 
-                options.diff_xmlns, 
-                options.diff_attr, 
-                options.diffQualifiersList[DN_REMOVED], 
-                options.tagChildsAddedRemoved);
+            if (!options.doNotTagDiff)
+				setAttributeToAllChilds(bisNode, 
+					options.diff_xmlns, 
+					options.diff_attr, 
+					options.diffQualifiersList[DN_REMOVED], 
+					options.tagChildsAddedRemoved);
+            if ((!options.diffOnly) && (bisNode->type == XML_ELEMENT_NODE)) 
+				if (xmlReconciliateNs(nodeAfter->doc, bisNode) < 0) throwError(XD_Exception::XDE_NAMESPACE_PROBLEM, "Unable to reconciliate Namespaces");
         }
     }
     removed_nodes.clear();
@@ -283,40 +326,59 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
         // Look for modified/added attributes
         for (curAttr = nodeAfter->properties; curAttr != NULL; curAttr = curAttr->next)
         {
-            xAttBefore = BAD_CAST "";
-            if (attBefore = xmlHasNsProp(nodeBefore, curAttr->name, (curAttr->ns)?curAttr->ns->href:NULL)) 
-            {
-                xAttBefore = xmlCharTmp(xmlNodeListGetString(nodeBefore->doc, attBefore->children, 1));
-            }    
-            xAttAfter = xmlCharTmp(xmlNodeListGetString(nodeAfter->doc, curAttr->children, 1));
-            if (xAttAfter.compare(xAttBefore) != 0)
-            {
-                if ((!options.diffOnly) && (options.beforeValue))
-                {
-                    s = xAttBefore;
-                    s += options.separator;
-                    s += xAttAfter;
-                    xmlSetNsProp(nodeAfter, curAttr->ns, curAttr->name, s.c_str());
-                }
-                status = DN_MODIFIED;
-            }
+			if (!matchNode((xmlNodePtr)curAttr, options.ignore))
+			{
+				xAttBefore = BAD_CAST "";
+				if (attBefore = xmlHasNsProp(nodeBefore, curAttr->name, (curAttr->ns)?curAttr->ns->href:NULL)) 
+				{
+					xAttBefore = xmlCharTmp(xmlNodeListGetString(nodeBefore->doc, attBefore->children, 1));
+				}    
+				xAttAfter = xmlCharTmp(xmlNodeListGetString(nodeAfter->doc, curAttr->children, 1));
+				if (xAttAfter.compare(xAttBefore) != 0)
+				{
+					if ((!options.diffOnly) && (options.beforeValue))
+					{
+						s = xAttBefore;
+						s += options.separator;
+						s += xAttAfter;
+						xmlSetNsProp(nodeAfter, curAttr->ns, curAttr->name, s.c_str());
+					}
+					status = DN_MODIFIED;
+				}
+			}
         }
         // Removed attributes ?
         for (curAttr = nodeBefore->properties; curAttr != NULL; curAttr = curAttr->next)
         {
-            attAfter = xmlHasNsProp(nodeAfter, curAttr->name, (curAttr->ns)?curAttr->ns->href:NULL);
-            if (attAfter == NULL)
-            {
-                if (!options.diffOnly)
-                {
-                    s = xmlCharTmp(xmlNodeListGetString(nodeBefore->doc, curAttr->children, 1));
-                    s += options.separator;
-                    // Warning : do not check that the namespace exists... 
-                    // if it is not the case, the item will appear within current namespace, and will report a difference
-                    xmlSetNsProp(nodeAfter, xmlSearchNs(nodeAfter->doc, nodeAfter, (curAttr->ns)?curAttr->ns->prefix:NULL),curAttr->name, s.c_str());
-                }
-                status = DN_MODIFIED;
-            }
+			if (!matchNode((xmlNodePtr)curAttr, options.ignore))
+			{
+				attAfter = xmlHasNsProp(nodeAfter, curAttr->name, (curAttr->ns)?curAttr->ns->href:NULL);
+				if (attAfter == NULL)
+				{
+					if (!options.diffOnly)
+					{
+						s = xmlCharTmp(xmlNodeListGetString(nodeBefore->doc, curAttr->children, 1));
+						s += options.separator;
+						if (curAttr->ns != NULL)
+						{
+							if (xmlSearchNsByHref(nodeAfter->doc, nodeAfter, curAttr->ns->href) == NULL)
+							{
+								xmlSetNsProp(nodeAfter, curAttr->ns, curAttr->name, s.c_str());
+								if (xmlReconciliateNs(nodeAfter->doc, nodeAfter) < 0) throwError(XD_Exception::XDE_NAMESPACE_PROBLEM, "Unable to reconciliate Namespaces");
+							}
+							else
+							{
+								xmlSetNsProp(nodeAfter, xmlSearchNsByHref(nodeAfter->doc, nodeAfter, curAttr->ns->href), curAttr->name, s.c_str());
+							}
+						}
+						else
+						{
+							xmlSetNsProp(nodeAfter, NULL, curAttr->name, s.c_str());
+						}
+					}
+					status = DN_MODIFIED;
+				}
+			}
         }
     }
     // Compare values
@@ -354,17 +416,29 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
          }
     }
     // Update Status if Element
-    if ((!options.diffOnly) && (status != DN_NONE) && (nodeAfter->type == XML_ELEMENT_NODE)) 
+    if ((!(options.diffOnly || options.doNotTagDiff)) && (status != DN_NONE) && (nodeAfter->type == XML_ELEMENT_NODE)) 
         xmlSetNsProp(nodeAfter, 
                 xmlSearchNs(nodeAfter->doc, nodeAfter, options.diff_xmlns.c_str()), 
                 options.diff_attr.c_str(), 
                 options.diffQualifiersList[status].c_str());
+    // Delete the node if we must keep only differences
+    if ((!options.diffOnly) && (status == DN_NONE) && (options.keepDiffOnly))
+    {
+     // FIXME : Quick Hack to void crash under Linux
+     if (nodeAfter->type != XML_DOCUMENT_NODE)
+     {
+        xmlUnlinkNode(nodeAfter);
+        xmlFreeNode(nodeAfter);
+     }
+    }
     return status;
 }
 
 int diffTree(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_options & options)
 {
     int status;
+	xmlNodePtr curNode;
+	xmlNsPtr curNs;
     beforeNodesNb = 0; afterNodesNb = 0; 
     if (options.callbackProgressionPercent != NULL)
     {
@@ -375,7 +449,33 @@ int diffTree(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
         afterNodesNb = countElementNodes(nodeAfter);
         options.callbackProgressionPercent(-2, -2, beforeNodesNb, afterNodesNb, 0, options.cbProgressionArg);
     }
-    if (!options.diffOnly) xmlNewNs(nodeAfter->children, options.diff_ns.c_str(), options.diff_xmlns.c_str());
+	// Add the namespace
+    if (!options.diffOnly)
+	{
+        if ((options.diff_ns.length() > 0) && (options.diff_xmlns.length() > 0))
+        {
+		    createNamespaceOnTop(nodeAfter, options.diff_ns.c_str(), options.diff_xmlns.c_str());
+        }
+		if (options.mergeNsOnTop)
+		{
+			// Search NS Definition node on before file
+			if (nodeBefore->type == XML_DOCUMENT_NODE) curNode = nodeBefore->children; else curNode = nodeBefore;
+			while ((curNode != NULL) && (curNode->type != XML_ELEMENT_NODE)) curNode = curNode->next;
+			if (curNode) curNs = curNode->nsDef;
+			// Search NS Definition node on after file
+			if (nodeAfter->type == XML_DOCUMENT_NODE) curNode = nodeAfter->children; else curNode = nodeAfter;
+			while ((curNode != NULL) && (curNode->type != XML_ELEMENT_NODE)) curNode = curNode->next;
+			while (curNs != NULL)
+			{
+				if (!xmlSearchNsByHref(curNode->doc, curNode, curNs->href))
+				{
+					if (xmlNewNs(curNode, curNs->href, curNs->prefix) == NULL)
+						throwError(XD_Exception::XDE_NAMESPACE_PROBLEM, "Error merging the Namespace %s (%s)", curNs->href, curNs->prefix);
+				}
+				curNs = curNs->next;
+			}
+		}
+	}
     status = diffNode(nodeBefore, nodeAfter, options);
     if (options.callbackProgressionPercent != NULL)
     {

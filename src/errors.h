@@ -43,13 +43,18 @@ class LIBXMLDIFF_API XD_Exception : public exception
 public:
     enum XDErrors {
          XDE_NOTHING = 0,
+         XDE_MEMORY_ERROR,
          XDE_OTHER_ERROR,
          XDE_MISSING_ARG,
          XDE_UNKNOWN_COMMAND,
+         XDE_UNKNOWN_ARG,
          XDE_TOO_MANY_ARGUMENTS,
          XDE_READ_ERROR,
          XDE_DIFF_MEMORY_ERROR,
-         XDE_ALIAS_NOT_FOUND
+         XDE_ALIAS_NOT_FOUND,
+		 XDE_NAMESPACE_PROBLEM,
+		 XDE_XSLT_ERROR,
+		 XDE_XSLT_STOPPED
     };
 public:
     XD_Exception(int m_type, string m_what) : exception(), 
@@ -63,7 +68,7 @@ public:
 };
 
 // XML Diff Exception Helper Function
-void LIBXMLDIFF_API throwError(int type, char * str, ...);
+void LIBXMLDIFF_API throwError(int type, const char * str, ...);
 
 // XML Diff Verbose Helper Function. type between 0 (nothing) - 9 (every thing)
 void LIBXMLDIFF_API verbose(int prio, int level, char * str, ...);

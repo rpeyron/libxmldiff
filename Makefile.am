@@ -8,6 +8,7 @@ EXTRA_DIST = \
         INSTALL \
         NEWS \
         TODO \
+		bootstrap \
         build/dev-cpp \
         build/dev-cpp/License.txt \
         build/dev-cpp/Makefile.win \
@@ -36,7 +37,28 @@ EXTRA_DIST = \
         build/debian/rules \
         build/debian/libxmldiff.1 \
 		bin/xmldiff.gui \
-		doc/libxmldiff.dox
+		doc/libxmldiff.dox \
+		tests/tests.sh \
+        tests/basics/after.xml \
+        tests/basics/before.xml \
+        tests/basics/command.lst \
+        tests/basics/toto.xml \
+        tests/bug-emptyprefix/after.xml \
+        tests/bug-emptyprefix/before.xml \
+        tests/bug-emptyprefix/command.lst \
+        tests/similar/after.xml \
+        tests/similar/before.xml \
+        tests/similar/command.lst \
+        tests/scripts/command.lst \
+        tests/scripts/script.xds \
+        tests/scripts/message.xsl \
+        tests/scripts/message.xds \
+        tests/xslt/omit-declaration.xsl \
+        tests/xslt/command.lst \
+        tests/xslt/file.xml \
+        tests/bugs/product1.xml \
+        tests/bugs/product2.xml \
+        tests/bugs/command.lst 
 
 deb:
 	ln -sf build/debian .
@@ -46,3 +68,19 @@ deb:
 
 dox:
 	doxygen doc/libxmldiff.dox
+
+tests-exp:
+	cd tests/ && sh tests.sh exp
+
+tests-run:
+	cd tests/ && sh tests.sh diff dev
+
+tests-prev:
+	cd tests/ && sh tests.sh diff prev
+
+changelog:
+	mv -f ChangeLog ChangeLog.bak
+	cvs2cl
+	mv -f ChangeLog ChangeLog.cvs
+	mv -f ChangeLog.bak ChangeLog
+

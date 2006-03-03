@@ -1,0 +1,1 @@
+omit#xslt omit-declaration.xsl file.xml result.txt#result.txt

@@ -1,0 +1,9 @@
+std#diff before.xml after.xml output.xml#output.xml
+diff#diff before.xml after.xml output.xml --keep-diff-only yes#output.xml
+ignore#diff before.xml after.xml output.xml --ignore root,@att#output.xml
+two#diff before.xml after.xml output.xml --keep-diff-only#output.xml
+invalid-arg#diff before.xml after.xml output.xml --bad-argument#output.xml
+ns#diff before.xml after.xml output.xml --diff-ns http://test --diff-xmlns test --diff-attr toto#output.xml
+noxmlns#diff before.xml after.xml output.xml --diff-xmlns no#output.xml
+nons#diff before.xml after.xml output.xml --diff-ns no#output.xml
+merge#diff before.xml after.xml merge.xml#merge.xml

@@ -1,0 +1,102 @@
+2006-03-02 22:37  remi
+	* Major changes in non-regression test unit :  
+		- test support now other operation than simple diff
+		- expected results are no more included  
+		- command.lst format was modified
+	* Fixed crash with wrong XSLT files	
+	* Implemented xsltSaveToFilename (fix omit-declaration)
+	* New feature : merge action
+	* Implemented namespaces in delete action
+
+2006-02-14 00:02  remi
+	* Support of parameters in xslt
+	* Increased the number of arguments to 25 ; now is a #define.
+	* Conversion console -> UTF8 for XSLT arguments
+	* Handling of variables in XSLT arguments
+	* Take care of <xsl:message terminate="yes" />
+
+2006-01-06 19:47  remi
+	* Fixed bug reported by Jorge Robles - Tests provided
+
+2005-08-06 16:42  [0.2.3] remi
+	* Boolean argument now are set to 'yes' if no second member was given
+	* Fixed parser bug on invalid arguments
+	* Diff strings (ns, xmlns, attr) as arguments
+	* If set to 'no', no diff namespace will be used
+
+2005-07-30 19:14  remi
+	* Kludged a crash on Linux for similar documents
+	* Fixed CDATA bug 
+	* Do not create the output file when no differences 
+	* New ignore option
+	* Added non-regression tests
+
+2005-05-28 20:13  remi
+	* Added minimalistic build
+	* Fixed namespace problem 
+	* Added --merge-ns  option 
+	* Added --keep-diff-only option 
+	* Fixed help message 
+	* Fixed removed element handling when optimizing memory
+
+2005-05-01 00:46  [0.2.2] remi 
+	* Fixed Namespace bug on imported nodes (xmlReconciliateNs)
+	* Added cleanPrivateTag function
+	* Better Error Handling 
+	* Fixed bug in namespace in elements
+
+2005-03-10 21:54  remi
+	* Added debian packaging system
+	* Removed VS6 useless warnings 
+	* Fixed a strcmp redefinition (if it still complains, rebuild all)
+	* Solved (partially) xmlFree segfault with DevCPP : static link of a mingw build of libxml2
+	* TODO: Added some todo's
+
+2005-03-05 18:01  remi
+	* Linux Build System
+	* DevPak generation
+	* Added main Header of the libxmldiff library
+
+2005-02-13 19:04  remi
+	* Initial New Tree (with DevCPP and VS support)
+	* bin/xmldiff.gui: Gui It command file
+	* BugFix : problem with force-clean on 1-char text
+
+2004-08-08 01:42 [0.2.1] remi
+	* Refactored for use in xmlTreeNav
+	* Fix of forceClean in xslt : this option does not make sense on xslt files
+
+2004-07-05 23:59  remi
+	* Added decent exception handling (first step, contents should be  completed)
+	* BugFixes :
+	    - auto-save issue : flush is called at the end of a script execution
+	    - number of nodes problems
+	    - doNotFreeBeforeItems when optimiseMemory = false
+	* Reuse alias in xslt transforms
+
+2004-06-26 20:39  remi
+	* Added xslt/exslt transformation
+	* Added scripts & script parameters
+
+2004-06-06 01:28  remi
+	* Splitted Operations design (no backwards compatibility)
+	* Implemented xmldiff progress bar callback
+	* Implemented diffOnly & doNotFreeBeforeNodes options
+	* recalc now take check if modified items are still modified
+
+2004-06-01 00:11  remi
+	* src/: libxml2_utils.h, xerces_utils.h, xmldiff_xerces.cpp: Files
+	  removed while refactoring the code.
+
+2004-06-01 00:10  [0.2.0] remi
+	* Code refactoring ; it is now split into :  
+		- xmldiff : contains program specific items (command line parsing,  options,...)	
+		- lx2_diff : diff algorithm implemented for libxml2
+		- lx2_utils : libxml2 usefull functions (and string handling)
+	   It actually does work on win32 with the same functionnality as
+	   before (Xerces).  Run under Windows and Linux.
+	* Namespace in attributes are now handled properly.
+
+2004-05-23 22:50 [0.1.0] remi
+	* First Import in CVS. Some files are taken from xmldiff previous module
+

@@ -22,15 +22,44 @@
 
 #include "libxmldiff.h"
 #include "lx2_parse.h"
+#include "lx2_str.h"
 #include "errors.h"
 
 #include <iostream>
+#include <sstream>
 #include <fstream>
+#include <vector>
 
 // If stricmp is not supported, just replace it... (only used in command line)
 #ifndef stricmp
 #define stricmp strcmp
 #endif
+
+void splitVector(const string arg, /*[in,out]*/ vector<xmlstring> & v)
+{
+    int pos, oldpos;
+    oldpos = pos = 0;
+    v.clear();
+    while((pos = arg.find(',', pos+1)) > 0)
+    {
+        v.push_back(xmlstring(BAD_CAST arg.substr(oldpos, pos-oldpos).c_str()));
+        oldpos = pos + 1;
+    }
+    if (oldpos < arg.size()) v.push_back(xmlstring(BAD_CAST arg.substr(oldpos, oldpos-arg.size()).c_str()));
+}
+
+
+string joinVector(const vector<xmlstring> & v)
+{
+	vector<xmlstring>::const_iterator i;
+	stringstream out;
+    for(i = v.begin(); i != v.end(); i++)
+    {
+        out << i->c_str() << " ";
+    }
+	return out.str();
+}
+
 
 /** parseOption : parse option item
  * @param option the option
@@ -46,38 +75,84 @@ int parseOption(const string & option, const string & arg, /* [in, out] */ struc
     bool argBool;
     int status;
 
+    argBool = false;
+
     // Usefull Macros
     #define OPT_MATCH(x) (stricmp(option.c_str(), x) == 0)
     #define ARG_MATCH(x) (stricmp(arg.c_str(), x) == 0)
     #define ONE status = 1;
-    #define TWO if (arg == "") { throwError(XD_Exception::XDE_MISSING_ARG, "Missing argument to option '%s'.", option.c_str()); } else status = 2;
+    #define TWO_BOOL(x) \
+  		if (  ARG_MATCH("yes") || ARG_MATCH("1") || ARG_MATCH("oui") || \
+		      ARG_MATCH("no") || ARG_MATCH("0") || ARG_MATCH("non") ) \
+		{ \
+			status = 2; \
+			if (ARG_MATCH("yes") || ARG_MATCH("1") || ARG_MATCH("oui")) argBool = true; \
+		} \
+		else \
+		{ \
+			status = 1; \
+			argBool = true; \
+		} \
+		x = argBool;
+
+    #define TWO \
+		if (arg == "") \
+		{ \
+			throwError(XD_Exception::XDE_MISSING_ARG, "Missing argument to option '%s'.", option.c_str()); \
+		} \
+		else status = 2;
+
 
     status = 0;
-    argBool = false;
-    if (ARG_MATCH("yes") || ARG_MATCH("1") || ARG_MATCH("oui")) argBool = true;
 
     // Separators --sep
     if OPT_MATCH("--sep") { TWO; opt.separator = BAD_CAST arg.c_str(); }
+	// Strings
+    else if OPT_MATCH("--diff-ns") 
+	{ 
+		TWO; 
+		opt.diff_ns = BAD_CAST arg.c_str(); 
+		if (opt.diff_ns.compare(BAD_CAST "no") == 0) opt.diff_ns = BAD_CAST ""; 
+	}
+    else if OPT_MATCH("--diff-xmlns") 
+	{ 
+		TWO; 
+		opt.diff_xmlns = BAD_CAST arg.c_str(); 
+		if (opt.diff_xmlns.compare(BAD_CAST "no") == 0) opt.diff_xmlns = BAD_CAST ""; 
+	}
+    else if OPT_MATCH("--diff-attr") 
+	{ 
+		TWO; 
+		opt.diff_attr = BAD_CAST arg.c_str(); 
+	}
     // Before Values --before-values
-    else if OPT_MATCH("--before-values") { TWO; opt.beforeValue = argBool;  }
+    else if OPT_MATCH("--before-values") { TWO_BOOL(opt.beforeValue);  }
     // Pretty Print --pretty-print
-    else if OPT_MATCH("--pretty-print")  { TWO; opt.formatPrettyPrint = argBool;  }
+    else if OPT_MATCH("--pretty-print")  { TWO_BOOL(opt.formatPrettyPrint);  }
     // No Blanks --no-blanks
-    else if OPT_MATCH("--no-blanks") { TWO; opt.cleanText = argBool; }
+    else if OPT_MATCH("--no-blanks") { TWO_BOOL(opt.cleanText); }
     // Force Clean --force-clean
-    else if OPT_MATCH("--force-clean") { TWO; opt.forceClean = argBool; }
+    else if OPT_MATCH("--force-clean") { TWO_BOOL(opt.forceClean); }
     // Tag Childs --tag-childs
-    else if OPT_MATCH("--tag-childs")  { TWO; opt.tagChildsAddedRemoved = argBool; }
+    else if OPT_MATCH("--tag-childs")  { TWO_BOOL(opt.tagChildsAddedRemoved); }
     // Optimize --optimize
-    else if OPT_MATCH("--optimize")  { TWO; opt.optimizeMemory = argBool; }
+    else if OPT_MATCH("--optimize")  { TWO_BOOL(opt.optimizeMemory); }
     // Diff Only --diff-only
-    else if OPT_MATCH("--diff-only")  { TWO; opt.diffOnly = argBool; }
+    else if OPT_MATCH("--diff-only")  { TWO_BOOL(opt.diffOnly); }
+    // Keep Diff Only --keep-diff-only
+    else if OPT_MATCH("--keep-diff-only")  { TWO_BOOL(opt.keepDiffOnly); }
+	// mergeNsOnTop
+    else if OPT_MATCH("--merge-ns")  { TWO_BOOL(opt.mergeNsOnTop); }
 #ifndef WITHOUT_LIBXSLT
+#ifndef WITHOUT_LIBEXSLT    
     // Use EXSLT --use-exslt
-    else if OPT_MATCH("--use-exslt")  { TWO; opt.useEXSLT = argBool; }
+    else if OPT_MATCH("--use-exslt")  { TWO_BOOL(opt.useEXSLT); }
+#endif // WITHOUT_LIBEXSLT
+    // saveWithXslt --savewithxslt
+    else if OPT_MATCH("--savewithxslt")  { TWO_BOOL(opt.saveWithXslt); }
 #endif // WITHOUT_LIBXSLT
     // Automatic Save
-    else if OPT_MATCH("--auto-save")  { TWO; opt.automaticSave = argBool; }
+    else if OPT_MATCH("--auto-save")  { TWO_BOOL(opt.automaticSave); }
     // Verbose Level
     else if (OPT_MATCH("--verbose") || OPT_MATCH("-v"))
     { 
@@ -88,22 +163,22 @@ int parseOption(const string & option, const string & arg, /* [in, out] */ struc
     else if (OPT_MATCH("--ids") || OPT_MATCH("-i"))
     { 
         TWO;
-        // Ids Splitting
-        int pos, oldpos;
-        oldpos = pos = 0;
-        opt.ids.clear();
-        while((pos = arg.find(',', pos+1)) > 0)
-        {
-            opt.ids.push_back(xmlstring(BAD_CAST arg.substr(oldpos, pos-oldpos).c_str()));
-            oldpos = pos + 1;
-        }
-        if (oldpos < arg.size()) opt.ids.push_back(xmlstring(BAD_CAST arg.substr(oldpos, oldpos-arg.size()).c_str()));
+		splitVector(arg, opt.ids);
+    }
+    // Ignore --ignore -I
+    else if (OPT_MATCH("--ignore") || OPT_MATCH("-I"))
+    { 
+        TWO;
+		splitVector(arg, opt.ignore);
     }
 
     #undef OPT_MATCH
     #undef ARG_MATCH
     #undef ONE
     #undef TWO
+    #undef TWO_BOOL
+
+	if (status == 0) throwError(XD_Exception::XDE_UNKNOWN_ARG, "Unknown argument '%s'.", option.c_str());
 
     return status;
 }
@@ -116,46 +191,47 @@ int parseOption(const string & option, const string & arg, /* [in, out] */ struc
  */
 int parseAction(string action, struct appCommand & cmd)
 {
+	int i;
+
     #define ACTION_MATCH(x) (stricmp(action.c_str(), x) == 0)
 
     // Default value
     cmd.action = XD_NONE;
     // Empty parameters.
-    cmd.param1 = "";
-    cmd.param2 = "";
-    cmd.param3 = "";
-    cmd.param4 = "";
-    cmd.param5 = "";
-    cmd.param6 = "";
-    cmd.param7 = "";
-    cmd.param8 = "";
-    cmd.param9 = "";
+	for (i = 0; i < LX_APPCOMMAND_NBPARAM; i++) cmd.param[i] = "";
 
     // Parse
     if ACTION_MATCH("help")  cmd.action = XD_HELP;
     else if ACTION_MATCH("diff") 
     {
-        cmd.param1 = "before.xml";
-        cmd.param2 = "after.xml";
-        cmd.param3 = "output.xml";
+        cmd.param[0] = "before.xml";
+        cmd.param[1] = "after.xml";
+        cmd.param[2] = "output.xml";
         cmd.action = XD_DIFF;
+    }
+    else if ACTION_MATCH("merge") 
+    {
+        cmd.param[0] = "before.xml";
+        cmd.param[1] = "after.xml";
+        cmd.param[2] = "output.xml";
+        cmd.action = XD_MERGE;
     }
     else if ACTION_MATCH("recalc") 
     {
-        cmd.param1 = "output.xml";
+        cmd.param[0] = "output.xml";
         cmd.action = XD_RECALC;
     }
-    else if ACTION_MATCH("execute")
+    else if ((ACTION_MATCH("execute")) || (ACTION_MATCH("run")))
     {
-        cmd.param1 = "xmldiff.txt";
+        cmd.param[0] = "action.xds";
         cmd.action =  XD_EXECUTE;
     }
 #ifndef WITHOUT_LIBXSLT
     else if ACTION_MATCH("xslt")
     {
-        cmd.param1 = "style.xsl";
-        cmd.param1 = "input.xml";
-        cmd.param3 = "output.xml";
+        cmd.param[0] = "style.xsl";
+        cmd.param[1] = "input.xml";
+        cmd.param[2] = "output.xml";
         cmd.action =  XD_XSLT;
     }
 #endif // WITHOUT_LIBXSLT
@@ -213,24 +289,19 @@ int parseCommandLine(const vector<string> & cl, /* [in, out] */ struct appComman
         }
         else
         {
-            switch(nArgOther)
-            {
-            case 0: 
+			if (nArgOther == 0)
+			{
                 parseAction(cl[curarg], opt);
                 if (opt.action == XD_REM) return 0;
-                break;
-            case 1: opt.param1 = cl[curarg]; break;
-            case 2: opt.param2 = cl[curarg]; break;
-            case 3: opt.param3 = cl[curarg]; break;
-            case 4: opt.param4 = cl[curarg]; break;
-            case 5: opt.param5 = cl[curarg]; break;
-            case 6: opt.param6 = cl[curarg]; break;
-            case 7: opt.param7 = cl[curarg]; break;
-            case 8: opt.param8 = cl[curarg]; break;
-            case 9: opt.param9 = cl[curarg]; break;
-            default:
-                throwError(XD_Exception::XDE_TOO_MANY_ARGUMENTS, "Too many arguments '%'.", cl[curarg].c_str());
-            }
+			} 
+			else if (nArgOther < LX_APPCOMMAND_NBPARAM)
+			{
+				opt.param[nArgOther-1] = cl[curarg];
+			}
+			else
+			{
+                throwError(XD_Exception::XDE_TOO_MANY_ARGUMENTS, "Too many arguments '%s'.", cl[curarg].c_str());
+			}
             nArgOther++;
         }
     }
@@ -238,56 +309,90 @@ int parseCommandLine(const vector<string> & cl, /* [in, out] */ struct appComman
 }
 
 /// Execute an action from the command line
-int executeAction(const struct appCommand & cmd)
+int executeAction(const struct appCommand & p_cmd)
 {
-    int rc;
+    int rc, nparam, ilen, olen, i;
     map<string, string> vars;
+	const char * params[2*LX_APPCOMMAND_NBPARAM];
+	char var[10];
+	xmlChar * temp;
+	struct appCommand cmd;
+
+	cmd = p_cmd;
 
     switch(cmd.action)
     {
     case XD_RECALC:
-        rc = recalcXmlFiles(cmd.param1, cmd);
+        rc = recalcXmlFiles(cmd.param[0], cmd);
         break;
     case XD_LOAD:
-        rc = loadXmlFile(cmd.param1, cmd.param2, cmd);
+        rc = loadXmlFile(cmd.param[0], cmd.param[1], cmd);
         break;
     case XD_SAVE:
-        rc = saveXmlFile(cmd.param1, cmd.param2, cmd);
+        rc = saveXmlFile(cmd.param[0], cmd.param[1], cmd);
         break;
     case XD_CLOSE:
     case XD_DISCARD:
-        rc = 0; closeXmlFile(cmd.param1, cmd);
+        rc = 0; closeXmlFile(cmd.param[0], cmd);
         break;
     case XD_FLUSH:
         rc = 0; flushXmlFiles(cmd);
         break;
     case XD_EXECUTE:
-        if (cmd.param2 != "") vars["$1"] = cmd.param2;
-        if (cmd.param3 != "") vars["$2"] = cmd.param3;
-        if (cmd.param4 != "") vars["$3"] = cmd.param4;
-        if (cmd.param5 != "") vars["$4"] = cmd.param5;
-        if (cmd.param6 != "") vars["$5"] = cmd.param6;
-        if (cmd.param7 != "") vars["$6"] = cmd.param7;
-        if (cmd.param8 != "") vars["$7"] = cmd.param8;
-        if (cmd.param9 != "") vars["$8"] = cmd.param9;
-        rc = executeFile(cmd.param1, vars, cmd);
+		vars["$$"] = "$";
+		for (i = 1; i < LX_APPCOMMAND_NBPARAM; i++)
+		{
+			if (cmd.param[i] != "")
+			{
+				if (i < 10) sprintf(var, "$%d",i); else sprintf(var, "$(%d)", i);
+				vars[var] = cmd.param[i];
+			}
+		}
+        rc = executeFile(cmd.param[0], vars, cmd);
         break;
+	case XD_MERGE:
+		cmd.doNotTagDiff = true;
+		// continue XD_DIFF
     case XD_DIFF:
-        rc = diffXmlFiles(cmd.param1, cmd.param2, cmd.param3, cmd);
+        rc = diffXmlFiles(cmd.param[0], cmd.param[1], cmd.param[2], cmd);
         break;
     case XD_PRINT:
-        cout << cmd.param1 << endl;
+		for(i = 0; i < LX_APPCOMMAND_NBPARAM; i++)
+			cout << cmd.param[i];
+		cout << endl;
         break;
     case XD_DELETE:
-        rc = deleteNodes(cmd.param1, BAD_CAST cmd.param2.c_str(), cmd);
+        rc = deleteNodes(cmd.param[0], BAD_CAST cmd.param[1].c_str(), cmd);
         break;
     case XD_DUP:
-        rc = duplicateDocument(cmd.param1, cmd.param2, cmd);
+        rc = duplicateDocument(cmd.param[0], cmd.param[1], cmd);
         break;
 #ifndef WITHOUT_LIBXSLT
     case XD_XSLT:
-        // TODO : Parse Parameters
-        rc = applyStylesheet(cmd.param1, cmd.param2, cmd.param3, NULL, cmd);
+		nparam = 0;
+#define PARSE_PARAM(param) \
+		if ((param != "") && (param.find('=') != string::npos)) \
+		{ \
+			olen = 2 * param.length(); ilen = olen;\
+		    temp = (xmlChar *)malloc(olen + 1); \
+			if (temp == NULL) { throwError(XD_Exception::XDE_MEMORY_ERROR, "Memory error while parsing.");} \
+		    if (isolat1ToUTF8(temp, &olen, (const unsigned char *)param.substr(0, param.find('=')).c_str(), &ilen) == -1) \
+				throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8."); \
+			params[nparam++] = strdup((const char *)temp); \
+			olen = 2 * param.length(); ilen = olen; \
+		    if (isolat1ToUTF8(temp, &olen, (const unsigned char *)param.substr(param.find('=') + 1, param.length()).c_str(), &ilen) == -1) \
+				throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8."); \
+			params[nparam++] = (const char *)temp; \
+			\
+		}
+		for (i = 3; i < LX_APPCOMMAND_NBPARAM; i++)
+		{
+			PARSE_PARAM(cmd.param[i]);
+		}
+#undef PARSE_PARAM
+		params[nparam] = NULL;
+        rc = applyStylesheet(cmd.param[0], cmd.param[1], cmd.param[2], params, cmd);
+		while (nparam > 0) { free((void *)params[--nparam]); }
         break;
 #endif // WITHOUT_LIBXSLT
     case XD_REM: break;
@@ -358,15 +463,27 @@ vector<string> tokenizeCommand(string command)
  */
 int replaceTokens(vector<string> & /*[in, out]*/ tokens, map<string, string> variables)
 {
-    int nb = 0;
+    int nb = 0, start = 0;
     vector<string>::iterator iter;
-    for (iter=tokens.begin(); iter != tokens.end(); iter++)
+	map<string, string>::iterator var;
+    for(iter=tokens.begin(); iter != tokens.end(); iter++)
     {
+		/* Old way : only replace full words
         if (variables.find(*iter) != variables.end())
         {
             *iter = variables[*iter];
             nb++;
         }
+		*/
+		for(var=variables.begin(); var != variables.end(); var++)
+		{
+			start = 0;
+			while ((start = iter->find(var->first, start)) != string::npos)
+			{
+				iter->replace(start, var->first.length(), var->second);
+				nb++;
+			}
+		}
     }
     return nb;
 }
@@ -414,14 +531,16 @@ int executeFile(string scriptFileName, const map<string, string> & variables, co
 /// Print usage
 void usage()
 {
-    cout << "xmldiff - diff two XML files. (c) 2004 - Rémi Peyronnet" << endl
+    cout << "xmldiff - diff two XML files. (c) 2004-2006 - Rémi Peyronnet" << endl
          << "Syntax : xmldiff action [options] <parameters>" << endl
          << endl << "Actions" << endl
          << " - diff <before.xml> <after.xml> <output.xml>" << endl
+         << " - merge <before.xml> <after.xml> <output.xml>" << endl
 #ifndef WITHOUT_LIBXSLT
-         << " - xslt <style.xsl> <input.xml> <output.xml>" << endl
+         << " - xslt <style.xsl> <input.xml> <output.xml> [param='value']" << endl
 #endif // WITHOUT_LIBXSLT
          << " - recalc <before.xml> <after.xml>" << endl
+         << " - execute <script.xds> (xds = list of these commands)" << endl
          << " - load <filename> <alias>" << endl
          << " - save <filename> <alias>" << endl
          << " - close <alias> / discard <alias> (same as close without saving)" << endl
@@ -439,23 +558,32 @@ void usage()
          << "  --pretty-print yes   : Output using pretty print writer" << endl
          << "  --optimize no        : Optimize diff algorithm to reduce memory (see doc)" << endl
 #ifndef WITHOUT_LIBXSLT
+#ifndef WITHOUT_LIBEXSLT
          << "  --use-exslt no       : Allow the use of exslt.org extended functions." << endl
+#endif // WITHOUT_LIBEXSLT
+         << "  --savewithxslt yes   : Save with <xsl:output> options the results of XSLT." << endl
 #endif // WITHOUT_LIBXSLT
          << "  --verbose 4          : Verbose level, from 0 (nothing) to 9 (everything)." << endl
          << endl << "Diff Options : " << endl
          << "  --ids '@id,@value'   : Use these item to identify a node" << endl
+         << "  --ignore '@ignore,..': Ignore differences on these items" << endl
          << "  --diff-only no       : Do not alter files, just compare." << endl
+         << "  --keep-diff-only no  : Keep only different nodes." << endl
          << "  --before-values yes  : Add before values in attributes or text nodes" << endl
          << "  --sep |              : Use this as the separator" << endl
          << "  --tag-childs yes     : Tag Added or Removed childs" << endl
+         << "  --merge-ns yes       : Create missing namespace on top of document" << endl
+         << "  --diff-ns http://... : Namespace definition, use no to disable" << endl
+         << "  --diff-xmlns diff    : Alias to use, use no to disable" << endl
+         << "  --diff-attr status   : Name of attribute to use (should not be used in docs)" << endl
             ;
 }
 
 /// Dump current configuration
 void printConfiguration(const struct globalOptions & opt)
 {
-    vector<xmlstring>::const_iterator id;
     cout << "Diff Only      : " << ((opt.diffOnly)?"Yes":"No") << endl
+         << "Keep Diff Only      : " << ((opt.keepDiffOnly)?"Yes":"No") << endl
          << "Before values  : " << ((opt.beforeValue)?"Yes":"No") 
          << " (separator " << opt.separator.c_str() << ")" << endl
          << "Pretty Print   : " << ((opt.formatPrettyPrint)?"Yes":"No") << endl
@@ -464,15 +592,19 @@ void printConfiguration(const struct globalOptions & opt)
          << "Optimize       : " << ((opt.optimizeMemory)?"Yes":"No") << endl
          << "Auto-Save      : " << ((opt.automaticSave)?"Yes":"No") << endl
          << "Tag Childs     : " << ((opt.tagChildsAddedRemoved)?"Yes":"No") << endl
+         << "Merge Ns       : " << ((opt.mergeNsOnTop)?"Yes":"No") << endl
 #ifndef WITHOUT_LIBXSLT
+#ifndef WITHOUT_LIBEXSLT
          << "Use EXSLT      : " << ((opt.useEXSLT)?"Yes":"No") << endl
+#endif // WITHOUT_LIBEXSLT
+         << "Save With XSLT : " << ((opt.saveWithXslt)?"Yes":"No") << endl
 #endif // WITHOUT_LIBXSLT
          << "Verbose Level  : " << opt.verboseLevel << endl
-         << "Ids            : ";
-    for(id = opt.ids.begin(); id != opt.ids.end(); id++)
-    {
-        cout << id->c_str() << " ";
-    }
-    cout << endl << endl;
+         << "Ids            : " << joinVector(opt.ids) << endl
+		 << "Ignore         : " << joinVector(opt.ignore) << endl
+		 << "Diff Namespace : " << opt.diff_ns.c_str() << endl
+		 << "Diff Alias     : " << opt.diff_xmlns.c_str() << endl
+		 << "Diff Attribute : " << opt.diff_attr.c_str() << endl
+         << endl;
 }
 

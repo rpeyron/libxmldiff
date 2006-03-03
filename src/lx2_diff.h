@@ -56,10 +56,17 @@ struct LIBXMLDIFF_API xmldiff_options
 {
     /// == Switches ==
 
+    /** Tag differences nodes recursively :
+     * - true : no diff tags will be added
+     * - false : tags will be added (if not diffOnly).
+     * Useless if diffOnly is true.
+     */ 
+    bool doNotTagDiff;
+
     /** Tag added/removed nodes recursively :
      * - true : all childs will be tagged
      * - false : only the first level node will be tagged. Childs will be copied as is.
-     * Useless if diffOnly is true.
+     * Useless if diffOnly is true or if doNotTagDiff is true.
      */ 
     bool tagChildsAddedRemoved;
 
@@ -83,7 +90,20 @@ struct LIBXMLDIFF_API xmldiff_options
      * using this options will speed up the diff, and use less memory.
      */
     bool diffOnly;
+    
+    /** With this option, only different nodes will be outputed.
+     * If not set, identic nodes are kept.
+     * This does apply only on regular nodes, not on attributes, comments,...
+     * Useless if diffOnly is true.
+     */
+    bool keepDiffOnly;
 
+	/** mergeNsOnTop
+	 * This option will merge namespace declaration on the top of the document
+	 * This is usefull to avoid local namespace declarations on nodes
+	 * Useless if diffOnly is true
+	 */
+	bool mergeNsOnTop;
 
     /// == Values ==
 
@@ -118,6 +138,15 @@ struct LIBXMLDIFF_API xmldiff_options
      * @warning Using elements and too much keys can cause performance issues.
      */
     vector<xmlstring> ids;
+
+    /** Ignore list
+     * These are elements / attributes that will not be taken in account in the diff 
+     * but will still be in the result.
+     * Attributes are prefixed by '@', and element are set as is. (eg. @id,elementKey)
+     * XPath expression are not supported yet.
+     * @warning Using elements and too much keys can cause performance issues.
+     */
+    vector<xmlstring> ignore;
 
     /// == Callbacks ==
 

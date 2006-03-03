@@ -24,7 +24,7 @@
 #include "lx2_util.h"
 
 /// Get only text nodes of node, and not all text nodes of this node and subnodes
-xmlstring getNodeTextOnly(xmlNodePtr node)
+xmlstring getNodeTextOnly(xmlNodePtr node, bool cdata)
 {
     xmlstring ret = BAD_CAST "";
     xmlNodePtr curNode;
@@ -36,8 +36,12 @@ xmlstring getNodeTextOnly(xmlNodePtr node)
         switch (curNode->type)
         {
             case XML_CDATA_SECTION_NODE:
+				if (cdata)
+					ret += curNode->content;
+				break;
             case XML_TEXT_NODE:
                 ret += curNode->content;
+				break;
         }
         curNode = curNode->next;
     }
@@ -119,6 +123,20 @@ void cleanEmptyNodes(xmlNodePtr node)
     }
 }
 
+/// Clean the _private tag of the tree.
+void cleanPrivateTag(xmlNodePtr node)
+{
+    xmlNodePtr curNode;
+	if (node == NULL) return;
+	node->_private = NULL;
+    curNode = node->children;
+    while (curNode != NULL)
+    {
+		cleanPrivateTag(curNode);
+        curNode = curNode->next;
+    }
+}
+
 /// Count XML_ELEMENT_NODE nodes
 long countElementNodes(xmlNodePtr node)
 {
@@ -139,4 +157,41 @@ long countElementNodes(xmlNodePtr node)
         curNode = curNode->next;
     }
     return nb;
+}
+
+// Create the namespace
+int createNamespaceOnTop(xmlNodePtr node, const xmlChar * href, const xmlChar * prefix)
+{
+	int success = 0;
+	xmlNodePtr curNode;
+	if (node == NULL) return success;
+	if (node->doc == NULL) return success;
+	
+	curNode = node->doc->children;
+	while (curNode != NULL)
+	{
+		if (curNode->type == XML_ELEMENT_NODE)
+		{
+			if (xmlNewNs(curNode, href, prefix) != NULL) success++;
+		}
+		curNode = curNode->next;
+	}
+	return success;
+}
+
+
+bool LIBXMLUTIL_API matchNode(xmlNodePtr node, vector<xmlstring> list)
+{
+	xmlstring nodeName;
+	vector<xmlstring>::const_iterator i;
+	if (node == NULL) return false;
+	if (list.size() == 0) return false;
+	nodeName = ((node->ns)?(node->ns->prefix + xmlstring(BAD_CAST ":")):BAD_CAST"") + 
+				xmlstring(BAD_CAST ((node->type == XML_ATTRIBUTE_NODE)?"@":"")) +
+				((node->name)?node->name:BAD_CAST "");
+    for (i = list.begin(); i != list.end(); i++)
+    {
+		if (nodeName.compare(*i) == 0) return true;
+	}
+	return false;
 }

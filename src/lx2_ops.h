@@ -46,6 +46,7 @@ enum /*LIBXMLDIFF_API*/ actType {
     XD_NONE = 0,
     XD_OPTIONS,
     XD_DIFF,
+    XD_MERGE,
     XD_RECALC,
     XD_EXECUTE,
     XD_LOAD,
@@ -79,24 +80,22 @@ struct LIBXMLDIFF_API globalOptions : public xmldiff_options {
      */
     bool optimizeMemory;
 #ifndef WITHOUT_LIBXSLT
+#ifndef WITHOUT_LIBEXSLT
     /** If set, allow the use of eXSLT functions */
     bool useEXSLT;
+#endif // WITHOUT_LIBEXSLT
+	/** If set, save output files of XSLT transformation with the stylesheet (!! Must not be discarded before !!) */
+	bool saveWithXslt;
 #endif // WITHOUT_LIBXSLT
     /** Verbose Level, from 0 (nothing) to 9 (everything) */
     int verboseLevel;
 };
 
+#define LX_APPCOMMAND_NBPARAM	25
+
 struct LIBXMLDIFF_API appCommand : public globalOptions {
     enum actType action;
-    string param1;
-    string param2;
-    string param3;
-    string param4;
-    string param5;
-    string param6;
-    string param7;
-    string param8;
-    string param9;
+    string param[LX_APPCOMMAND_NBPARAM];
 };
 
 struct fileInfo {
@@ -104,6 +103,9 @@ struct fileInfo {
     xmlDocPtr doc;
     bool modified;
     bool opened;
+#ifndef WITHOUT_LIBXSLT
+	xsltStylesheetPtr xslt;
+#endif
 };
 
 extern  map<string, fileInfo> loadedFiles;

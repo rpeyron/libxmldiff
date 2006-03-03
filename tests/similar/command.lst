@@ -1,0 +1,2 @@
+std#diff before.xml after.xml output.xml#output.xml
+diff#diff before.xml after.xml output.xml --keep-diff-only yes#output.xml

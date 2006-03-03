@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<product xmlns="http://foo.com/barl" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://foo.com/barl product.xsd">
+	<metas>
+		<ean>4242006132934</ean>
+		<price currency="EUR">135.00</price>
+		<replaces/>
+		<xhtml:meta name="keywords" content="keyword 1, keyword2, keyword3"/>
+		<xhtml:meta name="description" content="description about the product"/>
+	</metas>
+	<description>
+		<body xmlns="http://www.w3.org/1999/xhtml">
+			<li>line2</li>
+			<li>line1</li>
+            <li>line3</li>
+		</body>
+	</description>
+    <instalation>Use</instalation>
+</product>

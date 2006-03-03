@@ -1,3 +1,43 @@
+libxmldiff (0.2-4) unstable; urgency=low
+
+    * Improved non-regression test unit
+    * Fixed crash with wrong XSLT files	
+    * Implemented xsltSaveToFilename (fix omit-declaration)
+    * New feature : merge action
+    * Implemented namespaces in delete action
+    * Support of parameters in xslt
+    * Increased the number of arguments to 25 ; now is a #define.
+    * Conversion console -> UTF8 for XSLT arguments
+    * Handling of variables in XSLT arguments
+    * Take care of <xsl:message terminate="yes" />
+    * Fixed bug reported by Jorge Robles - Tests provided
+
+ -- Remi Peyronnet <remi+debian@via.ecp.fr>  Fri, 03 Mar 2006 21:46:25 +0200
+
+libxmldiff (0.2-3) unstable; urgency=low
+
+    * Kludged a crash on Linux for similar documents
+    * Fixed CDATA bug 
+    * Do not create the output file when no differences 
+    * New ignore option
+    * Added non-regression tests
+    * Added minimalistic build
+    * Fixed namespace problem 
+    * Added --merge-ns  option 
+    * Added --keep-diff-only option 
+    * Fixed help message 
+    * Fixed removed element handling when optimizing memor
+
+ -- Remi Peyronnet <remi+debian@via.ecp.fr>  Sun, 31 Jul 2005 21:46:25 +0200
+
+libxmldiff (0.2-2) unstable; urgency=low
+
+  * FIXED Namespace bug while importing nodes
+  * FIXED Namespace bug on elements with the same name but different namespaces
+  * IMPROVED Error handling without CtxtReader
+
+ -- Remi Peyronnet <remi+debian@via.ecp.fr>  Sat, 5 May 2005 20:46:00 +0000
+
 libxmldiff (0.2-1) unstable; urgency=low
 
   * Initial debian release.

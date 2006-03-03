@@ -24,6 +24,7 @@
 #include "lx2_ops.h"
 #include "errors.h"
 
+#include <stdarg.h>
 #include <libxml/globals.h>
 #include <libxml/parser.h>
 // #include <libxml/parserinternals.h>
@@ -52,12 +53,38 @@ map<string, xsltStylesheetPtr> parsedXsltFiles;
 static xmlParserCtxtPtr ctxt;
 #endif // WITH_PARSERCTX
 
+#ifndef WITH_PARSERCTX
+// The Error function callback
+void xdErrorFunc(void *ctx, const char *msg, ...) 
+{
+    /*
+    static char str[10240];
+    char tmp[10240];
+    va_list args;
+    va_start(args, msg);
+    vsnprintf(tmp, sizeof(tmp), msg, args);
+    va_end(args);
+    strncat(str, tmp, sizeof(str));
+    if (strchr(str,'\n')) throwError(XD_Exception::XDE_READ_ERROR, str);
+    */
+    if (strchr(msg,'\n')) 
+        throwError(XD_Exception::XDE_READ_ERROR,
+                "%s:%d : %s" ,
+                xmlGetLastError()->file,
+                xmlGetLastError()->line,
+                xmlGetLastError()->message
+                );
+}
+#endif
+
 /// Initialize XML Context
 void xmlInitialize(const struct globalOptions & options)
 {
     LIBXML_TEST_VERSION
 #ifdef WITH_PARSERCTX
     ctxt = xmlNewParserCtxt();
+#else
+    xmlSetGenericErrorFunc(NULL, &xdErrorFunc);
 #endif // WITH_PARSERCTX
     verbose(2, options.verboseLevel, "XML Engine initialized.\n");
 }
@@ -120,6 +147,7 @@ xsltStylesheetPtr getXsltFile(const string & alias, const struct globalOptions &
         if (localOptions.forceClean) localOptions.forceClean = false;
         cur = getXmlFile(alias, localOptions);
         xslt = xsltParseStylesheetDoc(cur->doc);
+		if (xslt == NULL) throwError(XD_Exception::XDE_XSLT_ERROR, "Error parsing XSLT '%s'.", alias.c_str());
         parsedXsltFiles[alias] = xslt;
     }
     return xslt;
@@ -166,6 +194,9 @@ int loadXmlFile(string filename, string alias, const struct globalOptions & opti
     fi.filename = filename;
     fi.modified = false;
     fi.opened = true;
+#ifndef WITHOUT_LIBXSLT
+	fi.xslt = NULL;
+#endif
     loadedFiles[alias] = fi;
     return 0;
 }
@@ -177,12 +208,25 @@ int saveXmlFile(string filename, string alias, const struct globalOptions & opti
     node = getXmlFile(alias, options);
     if (node != NULL)
     {
-        verbose(3, options.verboseLevel, "Saving %s to %s ...", alias.c_str(), filename.c_str());
-        xmlSaveFormatFile(filename.c_str(),
-                      node->doc, 
-                      options.formatPrettyPrint?1:0);
-        verbose(3, options.verboseLevel, "done.\n");
-        loadedFiles[alias].modified = false;
+#ifndef WITHOUT_LIBXSLT
+		if ((loadedFiles[alias].xslt != NULL) && (options.saveWithXslt))
+		{
+			verbose(3, options.verboseLevel, "Saving XSLT Result %s to %s ...", alias.c_str(), filename.c_str());
+			xsltSaveResultToFilename(filename.c_str(), node->doc, loadedFiles[alias].xslt, 0);
+			verbose(3, options.verboseLevel, "done.\n");
+		}
+		else
+		{
+#endif
+			verbose(3, options.verboseLevel, "Saving %s to %s ...", alias.c_str(), filename.c_str());
+			xmlSaveFormatFile(filename.c_str(),
+						  node->doc, 
+						  options.formatPrettyPrint?1:0);
+			verbose(3, options.verboseLevel, "done.\n");
+#ifndef WITHOUT_LIBXSLT
+		}
+#endif
+		loadedFiles[alias].modified = false;
     }
     return 0;
 }
@@ -219,6 +263,13 @@ void closeXmlFile(string alias, const struct globalOptions & options)
 void flushXmlFiles(const struct globalOptions & options)
 {
     map<string, fileInfo>::iterator it;
+#ifndef WITHOUT_LIBXSLT
+	// Free XML with xslt before all XML files (XSLT file is needed)
+    for(it = loadedFiles.begin(); it != loadedFiles.end(); it++)
+    {
+        if ((it->second.opened) && (it->second.xslt != NULL)) closeXmlFile(it->first, options);
+    }
+#endif // WITHOUT_LIBXSLT
     for(it = loadedFiles.begin(); it != loadedFiles.end(); it++)
     {
         if (it->second.opened) closeXmlFile(it->first, options);
@@ -248,6 +299,9 @@ int diffXmlFiles(string beforeAlias, string afterAlias, string outputAlias, cons
         loadedFiles[outputAlias] = loadedFiles[afterAlias];
         loadedFiles[outputAlias].filename = outputAlias;
         loadedFiles[outputAlias].modified = true;
+#ifndef WITHOUT_LIBXSLT
+        loadedFiles[outputAlias].xslt = NULL;
+#endif
         loadedFiles.erase(afterAlias);
     }
     else
@@ -264,6 +318,9 @@ int diffXmlFiles(string beforeAlias, string afterAlias, string outputAlias, cons
         loadedFiles[outputAlias].doc = afterNode->doc;
         loadedFiles[outputAlias].filename = outputAlias;
         loadedFiles[outputAlias].modified = true;
+#ifndef WITHOUT_LIBXSLT
+        loadedFiles[outputAlias].xslt = NULL;
+#endif
         outputNode = afterNode;
     }
 
@@ -278,6 +335,8 @@ int diffXmlFiles(string beforeAlias, string afterAlias, string outputAlias, cons
     if (rc == DN_NONE) verbose(3, options.verboseLevel, "Files are similar.\n");
                     else verbose(3, options.verboseLevel, "Files are different.\n");
 
+    // Do not write the file if not necessary
+    if ((rc == DN_NONE) && (options.optimizeMemory || options.keepDiffOnly) ) loadedFiles[outputAlias].modified = false;
 
     // Cleaning stuff
     if ((!options.diffOnly) && (options.optimizeMemory))
@@ -307,14 +366,26 @@ int recalcXmlFiles(string alias, const struct globalOptions & options)
 int deleteNodes(const string & alias, const xmlstring & xpath, const struct globalOptions & options)
 {
     int i, nb;
-    xmlNodePtr node;
+    xmlNodePtr node, curNode;
     xmlXPathContextPtr xpathCtx; 
     xmlXPathObjectPtr xpathObj; 
+    xmlNsPtr ns;
 
     node = getXmlFile(alias, options);    if (node == NULL) return -1;
     xpathCtx = xmlXPathNewContext(node->doc);   
     if(xpathCtx == NULL)  throwError(XD_Exception::XDE_DIFF_MEMORY_ERROR, "Unable to instanciate stuctures, probably due to a memory problem");
 
+	// Populate NS with the first top-level element
+	curNode = NULL;
+	if (node->doc != NULL) curNode = node->doc->children;
+	while ((curNode != NULL) && ((curNode->type != XML_ELEMENT_NODE))) curNode = curNode->next;
+	if (curNode != NULL) 
+	{
+		xpathCtx->namespaces = xmlGetNsList(node->doc, curNode);
+		xpathCtx->nsNr = 0;
+		if (xpathCtx->namespaces) ns = *xpathCtx->namespaces; else ns = NULL;
+		while (ns != NULL) { xpathCtx->nsNr++; ns = ns->next; }
+	}
 
     xpathObj = xmlXPathEvalExpression(xpath.c_str(), xpathCtx);
     if (xpathObj != NULL)
@@ -355,16 +426,27 @@ int duplicateDocument(const string & src, const string & dest, const struct glob
 #ifndef WITHOUT_LIBXSLT
 int applyStylesheet(const string & xslt, const string & src, const string & dest, const char ** params, const struct globalOptions & options)
 {
+	int ret = 0;
     xmlDocPtr doc, res;
     xsltStylesheetPtr xsltPtr;
+	xsltTransformContextPtr ctxt;
+#ifndef WITHOUT_LIBEXSLT    
     if (options.useEXSLT)
     {
         exsltRegisterAll();
     }
+#endif    
     xsltPtr = getXsltFile(xslt, options);
     doc = getXmlFile(src, options)->doc;
     verbose(2, options.verboseLevel, "Applying %s on %s to %s...", xslt.c_str(), src.c_str(), dest.c_str());
-    res = xsltApplyStylesheet(xsltPtr, doc, params);
+	ctxt = xsltNewTransformContext(xsltPtr, doc);
+	if (ctxt == NULL) { throwError(XD_Exception::XDE_OTHER_ERROR, "Unable to create XSLT context"); return -1; }
+    res = xsltApplyStylesheetUser(xsltPtr, doc, params, NULL, NULL, ctxt);
+	ret = ctxt->state;
+	xsltFreeTransformContext(ctxt);
+	if (ret == XSLT_STATE_ERROR) { throwError(XD_Exception::XDE_XSLT_ERROR, "XSLT Transformation Error"); return -2; }
+	if (ret == XSLT_STATE_STOPPED) { throwError(XD_Exception::XDE_XSLT_STOPPED, "XSLT Transformation Stopped"); return -3; }
+	//
     verbose(2, options.verboseLevel, " done.\n");
     if (src == dest)
     {
@@ -378,13 +460,16 @@ int applyStylesheet(const string & xslt, const string & src, const string & dest
     loadedFiles[dest].filename = dest;
     loadedFiles[dest].modified = true;
     loadedFiles[dest].opened = true;
+    loadedFiles[dest].xslt = xsltPtr;
     return 0;
 }
 #endif // WITHOUT_LIBXSLT
 
 void setDefaultXmldiffOptions(struct appCommand & opt)
 {
+	int i;
     // libXmlDiff Options
+	opt.doNotTagDiff = false;
     opt.tagChildsAddedRemoved = true;
     opt.beforeValue = true;
     opt.doNotFreeBeforeTreeItems = true;
@@ -399,21 +484,25 @@ void setDefaultXmldiffOptions(struct appCommand & opt)
     opt.diffQualifiersList[3] = BAD_CAST "modified";
     opt.diffQualifiersList[4] = BAD_CAST "below";
     opt.diffQualifiersList[5] = BAD_CAST "none";
-    opt.ids.push_back(BAD_CAST "@id");
-    opt.ids.push_back(BAD_CAST  "@value");
+	splitVector("@id,@value", opt.ids);
+	splitVector("", opt.ignore);
     opt.callbackProgressionPercent = NULL;
     // Application Options
     opt.action = XD_NONE;
-    opt.param1 = opt.param2 = opt.param3 = "";
-    opt.param4 = opt.param5 = opt.param6 = opt.param7 = opt.param8 = opt.param9 = "";
+	for(i = 0; i < LX_APPCOMMAND_NBPARAM; i++) opt.param[i] = "";
     opt.formatPrettyPrint = true;
     opt.cleanText = true;
     opt.forceClean = false;
     opt.automaticSave = true;
     opt.optimizeMemory = false;
 #ifndef WITHOUT_LIBXSLT
+#ifndef WITHOUT_LIBEXSLT
     opt.useEXSLT = false;
+	opt.saveWithXslt = true;
+#endif // WITHOUT_LIBEXSLT
 #endif // WITHOUT_LIBXSLT
     opt.verboseLevel = 4;
+	opt.mergeNsOnTop = true;
+	opt.keepDiffOnly = false;
 }
 

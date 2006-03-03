@@ -1,0 +1,2 @@
+print $4
+xslt $1 $2 $3 mode='$4'

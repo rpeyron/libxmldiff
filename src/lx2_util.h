@@ -34,6 +34,7 @@
 #include "lx2_str.h"
 
 #include <libxml/parser.h>
+#include <vector>
 
 using namespace std;
 
@@ -41,9 +42,10 @@ using namespace std;
 /** getNodeTextOnly
  * Get text of the current node, without taking subnodes as does get_text()
  * @param node concerned node
+ * @param cdata if true, return also CDATA contents
  * @return the string contained in direct textnodes of the current node.
  */
-xmlstring LIBXMLUTIL_API getNodeTextOnly(xmlNodePtr node);
+xmlstring LIBXMLUTIL_API getNodeTextOnly(xmlNodePtr node, bool cdata = false);
 
 /** getFirstChildByTagName
  * Returns the first child of the children list having
@@ -75,6 +77,12 @@ void LIBXMLUTIL_API setAttributeToAllChilds(const xmlNodePtr node,
  */
 void LIBXMLUTIL_API cleanEmptyNodes(xmlNodePtr node);
 
+/** cleanPrivateTag
+ * Set to NULL the _private tag of all nodes of the tree.
+ * @param node the tree to be cleaned
+ */
+void LIBXMLUTIL_API cleanPrivateTag(xmlNodePtr node);
+
 /** countNodes
  * Count the number of element nodes
  * @param node the node to count
@@ -82,6 +90,22 @@ void LIBXMLUTIL_API cleanEmptyNodes(xmlNodePtr node);
  */
 long LIBXMLUTIL_API countElementNodes(xmlNodePtr node);
 
+/** createNamespaceOnTop
+ * Create the namespace on top of document of the provided node
+ * @param node the node
+ * @param href the href of the namespace to create
+ * @param prefix the prefix to use in this document for this namespace
+ * @return the number of successfully created namespace
+ * To get the created namespace, use searchNamespace...
+ */
+int LIBXMLUTIL_API createNamespaceOnTop(xmlNodePtr node, const xmlChar * href, const xmlChar * prefix);
 
+/** matchNode
+ * Check if a given node matched a lists of names
+ * @param node the node to match
+ * @param list list of match expressions (no XPath nor regex for now)
+ * @return true if the node matches
+ */
+bool LIBXMLUTIL_API matchNode(xmlNodePtr node, vector<xmlstring> list);
 
 #endif // __LIBXML2_UTILS_H__
