@@ -92,7 +92,7 @@ void populate_itemlist(xmlNodePtr node, vector<idNode> & itemlist, const struct 
 					{
 						if (xmlHasProp(curNode, id->c_str()+1))
 						{
-							curNodeIdent.id += strSpace + *id + strEqual + strQuote + xmlGetProp(curNode, id->c_str()+1) + strQuote;
+							curNodeIdent.id += strSpace + *id + strEqual + strQuote + (xmlChar *)xmlCharTmp(xmlGetProp(curNode, id->c_str()+1)) + strQuote;
 						}
 					}
 					else if (id->at(0) == '.')

@@ -370,26 +370,27 @@ int executeAction(const struct appCommand & p_cmd)
 #ifndef WITHOUT_LIBXSLT
     case XD_XSLT:
 		nparam = 0;
-#define PARSE_PARAM(param) \
-		if ((param != "") && (param.find('=') != string::npos)) \
-		{ \
-			olen = 2 * param.length(); ilen = olen;\
-		    temp = (xmlChar *)malloc(olen + 1); \
-			if (temp == NULL) { throwError(XD_Exception::XDE_MEMORY_ERROR, "Memory error while parsing.");} \
-		    if (isolat1ToUTF8(temp, &olen, (const unsigned char *)param.substr(0, param.find('=')).c_str(), &ilen) == -1) \
-				throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8."); \
-			params[nparam++] = strdup((const char *)temp); \
-			olen = 2 * param.length(); ilen = olen; \
-		    if (isolat1ToUTF8(temp, &olen, (const unsigned char *)param.substr(param.find('=') + 1, param.length()).c_str(), &ilen) == -1) \
-				throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8."); \
-			params[nparam++] = (const char *)temp; \
-			\
-		}
 		for (i = 3; i < LX_APPCOMMAND_NBPARAM; i++)
 		{
-			PARSE_PARAM(cmd.param[i]);
+			if ((cmd.param[i] != "") && (cmd.param[i].find('=') != string::npos))
+			{
+				olen = 3 * cmd.param[i].length();
+				temp = (xmlChar *)malloc(olen + 1);
+				if (temp == NULL) { throwError(XD_Exception::XDE_MEMORY_ERROR, "Memory error while parsing.");}
+				ilen = cmd.param[i].substr(0, cmd.param[i].find('=')).length();
+				if (isolat1ToUTF8(temp, &olen, (const unsigned char *)cmd.param[i].substr(0, cmd.param[i].find('=')).c_str(), &ilen) == -1)
+					throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8.");
+				temp[olen] = 0;
+				params[nparam++] = strdup((const char *)temp);
+				olen = 3 * cmd.param[i].length();
+				ilen = cmd.param[i].substr(cmd.param[i].find('=') + 1, cmd.param[i].length()).length();
+				if (isolat1ToUTF8(temp, &olen, (const unsigned char *)cmd.param[i].substr(cmd.param[i].find('=') + 1, cmd.param[i].length()).c_str(), &ilen) == -1)
+					throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8.");
+				temp[olen] = 0;
+				params[nparam++] = (const char *)temp;
+                verbose(5, cmd.verboseLevel, "Parameter \"%s\" = \"%s\"\n ", params[nparam-2], params[nparam-1]);
+			}
 		}
-#undef PARSE_PARAM
 		params[nparam] = NULL;
         rc = applyStylesheet(cmd.param[0], cmd.param[1], cmd.param[2], params, cmd);
 		while (nparam > 0) { free((void *)params[--nparam]); }
@@ -506,7 +507,8 @@ int executeFile(string scriptFileName, const map<string, string> & variables, co
 
     verbose(2,gOptions.verboseLevel, "Execute %s ...\n", scriptFileName.c_str());
     fin.open(scriptFileName.c_str());
-    while (!fin.eof())
+	if (!fin.is_open()) throwError(XD_Exception::XDE_READ_ERROR, "Script file not found.");
+    while (fin.is_open() && (!fin.eof()))
     {
         fin.getline(cLine, sizeof(cLine)); line = cLine;
         if (line == "") continue;

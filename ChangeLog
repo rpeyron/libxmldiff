@@ -1,4 +1,9 @@
-2006-03-02 22:37  remi
+2006-03-18 23:37  [0.2.5] remi
+	* BUGFIX : infinte loop when executing a script that does not exists
+	* BUGFIX : may crash with XSLT elements
+	* BUGFIX : some Memory Leak (should be ok now)
+
+2006-03-02 22:37  [0.2.4] remi
 	* Major changes in non-regression test unit :  
 		- test support now other operation than simple diff
 		- expected results are no more included  

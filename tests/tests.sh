@@ -2,6 +2,7 @@
 
 CMDFILE="command.lst"
 WDIR="$(pwd)"
+VALGRIND=valgrind
 RET=0;
 
 case "$2" in
@@ -24,6 +25,7 @@ case "$1" in
     find . -name "out-*" -exec rm '{}' \;
     find . -name "diff-*" -exec rm '{}' \;
     find . -name "difflog-*" -exec rm '{}' \;
+    find . -name "memcheck-*" -exec rm '{}' \;
     ;;
  clean-exp)
     find . -name "exp-*" -exec rm '{}' \;
@@ -79,18 +81,25 @@ case "$1" in
             do
               rm -f $FIL out-$ID-$FIL >& /dev/null
             done
+            MEMCHK="$VALGRIND -q --log-file=memcheck-$ID.log"
             CMD="$XMLDIFF $ARG"
             (
              echo $CMD
              if [ -x "$WDIR/$XMLDIFF" ]
              then
-                $WDIR/$CMD
+                $MEMCHK $WDIR/$CMD
              else
-                $CMD
+                $MEMCHK $CMD
              fi
             ) >& out-$ID.log
             STATUT="OK"
             REASON=""
+            MEMCHKLOG=$(ls | grep memcheck-$ID.log.pid)
+            if [ -s "$MEMCHKLOG" ]
+            then
+              STATUT="LEAK"
+              REASON="$REASON (See $MEMCHKLOG)"
+            fi
             diff --ignore-matching-lines="xmldiff " -u exp-$ID.log out-$ID.log > difflog-$ID.txt
             if [ -s difflog-$ID.txt ]
             then

@@ -1690,7 +1690,7 @@ fi
 
 PACKAGE=libxmldiff
 
-VERSION=0.2.4
+VERSION=0.2.5
 
 if test "`cd $srcdir && pwd`" != "`pwd`" && test -f $srcdir/config.status; then
   { { echo "$as_me:$LINENO: error: source directory already configured; run \"make distclean\" there first" >&5

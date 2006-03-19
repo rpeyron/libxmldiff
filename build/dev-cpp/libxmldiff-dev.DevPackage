@@ -1,8 +1,8 @@
 [Setup]
 Version=2
 AppName=libxmldiff-dev
-AppVersion=0.2.0
-AppVerName=libxmldiff 0.2.0
+AppVersion=0.2.5
+AppVerName=libxmldiff 0.2.5
 MenuName=
 Description=xmldiff Library
 Url=http://people.via.ecp.fr/~remi/soft/xml/xmldiff/xmldiff_en.php3

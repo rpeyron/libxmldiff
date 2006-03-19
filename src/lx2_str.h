@@ -42,7 +42,7 @@
 // Provide xmlChar basic_string
 // ***************************************************************
 
-typedef LIBXMLDIFF_API std::basic_string<xmlChar> xmlstring;
+typedef /* LIBXMLDIFF_API */ std::basic_string<xmlChar> xmlstring;
 
 #ifdef _MSC_VER
 // Export STL class used
@@ -67,7 +67,7 @@ public :
 };
 #endif
 
-#ifndef _MSC_VER
+#if ((!defined _MSC_VER) && (__GNUC__ < 4))
 
 // Provide std::char_traits specialization.
 namespace std

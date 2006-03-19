@@ -1,3 +1,11 @@
+libxmldiff (0.2-5) unstable; urgency=low
+
+    * BUGFIX : infinte loop when executing a script that does not exists
+    * BUGFIX : may crash with XSLT elements
+    * BUGFIX : some memory leaks (should be ok now)
+
+ -- Remi Peyronnet <remi+debian@via.ecp.fr>  Fri, 18 Mar 2006 21:46:25 +0200
+
 libxmldiff (0.2-4) unstable; urgency=low
 
     * Improved non-regression test unit
