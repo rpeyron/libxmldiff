@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 
 CMDFILE="command.lst"
 WDIR="$(pwd)"
@@ -66,7 +66,7 @@ case "$1" in
     ;;
  diff)
     echo "Test current results against expected"
-    find . | grep "$CMDFILE" | while read FILE
+    find . | grep -v '.svn' | grep "$CMDFILE" | while read FILE
     do
         DIR=$(dirname "$FILE")
         cd $DIR

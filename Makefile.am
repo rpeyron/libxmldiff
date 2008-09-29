@@ -70,13 +70,13 @@ dox:
 	doxygen doc/libxmldiff.dox
 
 tests-exp:
-	cd tests/ && sh tests.sh exp
+	cd tests/ && bash tests.sh exp
 
 tests-run:
-	cd tests/ && sh tests.sh diff dev
+	cd tests/ && bash tests.sh diff dev
 
 tests-prev:
-	cd tests/ && sh tests.sh diff prev
+	cd tests/ && bash tests.sh diff prev
 
 changelog:
 	mv -f ChangeLog ChangeLog.bak

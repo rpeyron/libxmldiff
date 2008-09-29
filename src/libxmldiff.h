@@ -25,7 +25,7 @@
 #ifndef __LIBXMLDIFF_H__
 #define __LIBXMLDIFF_H__
 
-#define LIBXMLDIFF_VER "v0.2.5a"
+#define LIBXMLDIFF_VER "v0.2.6"
 
 #ifdef _WIN32
 #ifdef LIBXMLDIFF_EXPORTS
@@ -52,9 +52,17 @@
 #pragma warning(disable: 4786)
 // Disable warnings on extern before template instantiation
 #pragma warning (disable : 4231)
+// Disable warnings on another one about dll and template usage 
+#pragma warning (disable : 4251)
 // Disable warning on template already instanciated
 #pragma warning (disable : 4660)
 #endif
+
+#define _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES 1
+#define _CRT_SECURE_NO_DEPRECATE
+// warning C4018: '>=' : incompatibilité signed/unsigned
+// warning C4267: '=' : conversion de 'size_t' en 'int', perte possible de données
+#pragma warning (disable : 4018 4267)
 
 #include <string>
 #include <vector>

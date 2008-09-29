@@ -35,6 +35,10 @@
 #define stricmp strcmp
 #endif
 
+#ifdef _MSC_VER
+#define strdup _strdup
+#endif
+
 void splitVector(const string arg, /*[in,out]*/ vector<xmlstring> & v)
 {
     int pos, oldpos;
@@ -106,7 +110,12 @@ int parseOption(const string & option, const string & arg, /* [in, out] */ struc
     status = 0;
 
     // Separators --sep
-    if OPT_MATCH("--sep") { TWO; opt.separator = BAD_CAST arg.c_str(); }
+    if OPT_MATCH("--sep") 
+	{ 
+		TWO; 
+		opt.separator = BAD_CAST arg.c_str(); 
+		if (opt.separator.compare(BAD_CAST "no") == 0) opt.separator = BAD_CAST "";
+	}
 	// Strings
     else if OPT_MATCH("--diff-ns") 
 	{ 
@@ -247,6 +256,7 @@ int parseAction(string action, struct appCommand & cmd)
     else if ACTION_MATCH("options") cmd.action =  XD_OPTIONS;
     else if ACTION_MATCH("print_configuration") cmd.action =  XD_PRINTCONF;
     else if ACTION_MATCH("print") cmd.action =  XD_PRINT;
+    else if ( ACTION_MATCH("ret") || ACTION_MATCH("return") ) cmd.action =  XD_RET;
     else if ACTION_MATCH("delete") cmd.action =  XD_DELETE;
     else if ACTION_MATCH("dup") cmd.action =  XD_DUP;
     else if (ACTION_MATCH("remark") || 
@@ -318,6 +328,7 @@ int executeAction(const struct appCommand & p_cmd)
 	xmlChar * temp;
 	struct appCommand cmd;
 
+	rc = 0;
 	cmd = p_cmd;
 
     switch(cmd.action)
@@ -357,10 +368,15 @@ int executeAction(const struct appCommand & p_cmd)
         rc = diffXmlFiles(cmd.param[0], cmd.param[1], cmd.param[2], cmd);
         break;
     case XD_PRINT:
+		rc = 0;
 		for(i = 0; i < LX_APPCOMMAND_NBPARAM; i++)
 			cout << cmd.param[i];
 		cout << endl;
         break;
+	case XD_RET:
+		sscanf(cmd.param[0].c_str(),"%d", &i);
+		rc = i;
+		break;
     case XD_DELETE:
         rc = deleteNodes(cmd.param[0], BAD_CAST cmd.param[1].c_str(), cmd);
         break;
@@ -553,6 +569,7 @@ void usage()
          << " - dup(licate) <source alias> <dest alias>" << endl
          << " - rem(ark),#,--,;,// <remark>" << endl
          << " - print_configuration" << endl
+         << " - ret(urn) <value>" << endl
          << endl << "Global Options : " << endl
          << "  --auto-save yes      : Automatically save modified files" << endl
          << "  --force-clean no     : Force remove of blank nodes and trim spaces" << endl

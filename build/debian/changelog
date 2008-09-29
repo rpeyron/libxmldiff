@@ -1,3 +1,9 @@
+libxmldiff (0.2-6) unstable; urgency=low
+
+    * Minor improvements ; see ChangeLog
+
+ -- Remi Peyronnet <remi+debian@via.ecp.fr>  Mon, 29 Sept 2008 21:46:25 +0200
+
 libxmldiff (0.2-5) unstable; urgency=low
 
     * BUGFIX : infinte loop when executing a script that does not exists

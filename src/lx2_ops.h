@@ -60,7 +60,8 @@ enum /*LIBXMLDIFF_API*/ actType {
     XD_REM,
     XD_DISCARD,
     XD_PRINTCONF,
-    XD_HELP
+    XD_HELP,
+	XD_RET
 };
 
 struct LIBXMLDIFF_API globalOptions : public xmldiff_options {

@@ -1,0 +1,21 @@
+[Setup]
+Version=2
+AppName=libxmldiff-dev
+AppVersion=0.2.5
+AppVerName=libxmldiff 0.2.5
+MenuName=
+Description=xmldiff Library
+Url=http://people.via.ecp.fr/~remi/soft/xml/xmldiff/xmldiff_en.php3
+License=License.txt
+Readme=Readme.txt
+Dependencies=libiconv zlib libxml2-dev libxslt-dev
+Picture=
+Dependencies=
+Reboot=0
+[Files]
+bin=<app>\bin\
+include=<app>\include\
+lib=<app>\lib\
+[Icons]
+Package Website=http://people.via.ecp.fr/~remi/dist/devpacks/
+

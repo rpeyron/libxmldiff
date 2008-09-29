@@ -28,7 +28,11 @@
 
 // Unix / Win32 Compatibility
 #ifdef _WIN32
+#ifdef _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES
+#define vsnprintf _vsnprintf_s
+#else
 #define vsnprintf _vsnprintf
+#endif
 #endif
 
 

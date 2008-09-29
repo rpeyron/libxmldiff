@@ -32,6 +32,7 @@
 #ifdef _MSC_VER
 #pragma warning(disable: 4786)
 #pragma warning(disable: 4231) // arning C4231: nonstandard extension used : 'extern' before template explicit instantiation
+#pragma warning(disable: 4251) // export and templates crap
 #endif
 
 

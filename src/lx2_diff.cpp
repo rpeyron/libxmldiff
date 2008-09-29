@@ -336,7 +336,7 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
 				xAttAfter = xmlCharTmp(xmlNodeListGetString(nodeAfter->doc, curAttr->children, 1));
 				if (xAttAfter.compare(xAttBefore) != 0)
 				{
-					if ((!options.diffOnly) && (options.beforeValue))
+					if ((!options.diffOnly) && ((options.beforeValue) || (xAttAfter.compare(BAD_CAST "") == 0)))
 					{
 						s = xAttBefore;
 						s += options.separator;
@@ -387,7 +387,7 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
     valAfter = getNodeTextOnly(nodeAfter); 
     if (valBefore.compare(valAfter))
     {
-        if ((!options.diffOnly) && (options.beforeValue))
+        if ((!options.diffOnly) && ((options.beforeValue) || (valAfter.compare(BAD_CAST "") == 0)))
         {
             s = valBefore;
             s += options.separator;
