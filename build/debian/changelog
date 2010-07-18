@@ -1,3 +1,9 @@
+libxmldiff (0.2-7) unstable; urgency=low
+
+    * Minor improvements ; see ChangeLog
+
+ -- Remi Peyronnet <remi+debian@via.ecp.fr>  Sun, 18 July 2010 21:46:25 +0200
+
 libxmldiff (0.2-6) unstable; urgency=low
 
     * Minor improvements ; see ChangeLog

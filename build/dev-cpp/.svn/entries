@@ -1,7 +1,7 @@
-8
+10
 
 dir
-396
+406
 svn+ssh://localhost/home/svn/trunk/projects/libxmldiff/build/dev-cpp
 svn+ssh://localhost/home/svn
 
@@ -12,7 +12,7 @@ svn+ssh://localhost/home/svn
 remi
 
 
-svn:special svn:externals svn:needs-lock
+
 
 
 
@@ -32,12 +32,33 @@ file
 
 
 
-2008-09-29T16:12:31.000000Z
+2010-07-17T16:38:29.000000Z
 284467760aa27f576453b5538b10f6fb
 2005-02-19T23:12:58.000000Z
 183
 remi
 has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+18095
 
 libxmldiff-dev.DevPackage
 file
@@ -45,12 +66,33 @@ file
 
 
 
-2008-09-29T16:12:31.000000Z
+2010-07-17T16:38:29.000000Z
 7a0b47e75ee03fc40156fc7b8fdd48f2
 2006-03-17T18:31:56.000000Z
 299
 remi
 has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+445
 
 xmldiff.layout
 file
@@ -58,12 +100,33 @@ file
 
 
 
-2008-09-29T16:12:31.000000Z
+2010-07-17T16:38:29.000000Z
 d84af4ae6e2cfba24acf7522a5c68306
 2006-03-19T15:29:05.000000Z
 302
 remi
 has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+171
 
 xmldiff.dev
 file
@@ -71,12 +134,33 @@ file
 
 
 
-2008-09-29T16:12:31.000000Z
+2010-07-17T16:38:29.000000Z
 ecfae45723a449462256684ca97f180b
 2005-03-05T17:59:02.000000Z
 190
 remi
 has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1083
 
 Makefile.win
 file
@@ -84,12 +168,33 @@ file
 
 
 
-2008-09-29T16:12:31.000000Z
+2010-07-17T16:38:29.000000Z
 c44ff02ee21fd80f808e724216d1521f
 2005-04-30T22:46:00.000000Z
 229
 remi
 has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1919
 
 Readme.txt
 file
@@ -97,12 +202,33 @@ file
 
 
 
-2008-09-29T16:12:31.000000Z
+2010-07-17T16:38:29.000000Z
 c3d05cdcfd7f3beb663a1efd9739705d
 2005-03-10T20:54:45.000000Z
 202
 remi
 has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+337
 
 libxmldiff.dev
 file
@@ -110,10 +236,31 @@ file
 
 
 
-2008-09-29T16:12:31.000000Z
+2010-07-17T16:38:29.000000Z
 968c531f6a64aa2c003988c996e07d10
 2005-04-30T22:46:00.000000Z
 229
 remi
 has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2562
 

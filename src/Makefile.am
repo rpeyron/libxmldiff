@@ -21,4 +21,7 @@ xmldiff_SOURCES = \
 	xmldiff.h \
 	xmldiff.cpp
 
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = libxmldiff.pc
+
 xmldiff_LDADD = libxmldiff.a

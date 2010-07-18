@@ -24,6 +24,7 @@
 #include "lx2_ops.h"
 #include "errors.h"
 
+#include <string.h>
 #include <stdarg.h>
 #include <libxml/globals.h>
 #include <libxml/parser.h>

@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+Name: libxmldiff
+Description: 
+Version: @VERSION@
+Requires: 
+Libs: -L${libdir} -lxmldiff
+Cflags: -I${includedir} -I$(includedir)/libxmldiff

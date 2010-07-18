@@ -1,3 +1,10 @@
+2010-07-18 19:14  [0.2.7] remi
+	* Fixed missing headers
+    * Added pkg-config file
+
+2009-08-02 19:14  [0.2.7] remi
+	* Applied patch from Yong Wu (null ns prefix bug)
+
 2008-09-29 20:37  [0.2.6] remi
 	* Added "ret" keyword (usefull for scripting)
     * Accept empty separator (with -s no)

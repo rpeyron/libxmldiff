@@ -25,6 +25,7 @@
 #include "lx2_str.h"
 #include "errors.h"
 
+#include <string.h>
 #include <iostream>
 #include <sstream>
 #include <fstream>

@@ -58,7 +58,8 @@ EXTRA_DIST = \
         tests/xslt/file.xml \
         tests/bugs/product1.xml \
         tests/bugs/product2.xml \
-        tests/bugs/command.lst 
+        tests/bugs/command.lst \
+        src/libxmldiff.pc.in
 
 deb:
 	ln -sf build/debian .

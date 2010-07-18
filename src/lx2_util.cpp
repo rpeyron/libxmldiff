@@ -186,7 +186,7 @@ bool LIBXMLUTIL_API matchNode(xmlNodePtr node, vector<xmlstring> list)
 	vector<xmlstring>::const_iterator i;
 	if (node == NULL) return false;
 	if (list.size() == 0) return false;
-	nodeName = ((node->ns)?(node->ns->prefix + xmlstring(BAD_CAST ":")):BAD_CAST"") + 
+	nodeName = ((node->ns && node->ns->prefix)?(node->ns->prefix + xmlstring(BAD_CAST ":")):BAD_CAST"") + 
 				xmlstring(BAD_CAST ((node->type == XML_ATTRIBUTE_NODE)?"@":"")) +
 				((node->name)?node->name:BAD_CAST "");
     for (i = list.begin(); i != list.end(); i++)

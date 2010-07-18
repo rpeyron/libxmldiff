@@ -25,7 +25,7 @@
 #ifndef __LIBXMLDIFF_H__
 #define __LIBXMLDIFF_H__
 
-#define LIBXMLDIFF_VER "v0.2.6"
+#define LIBXMLDIFF_VER "v0.2.7"
 
 #ifdef _WIN32
 #ifdef LIBXMLDIFF_EXPORTS

@@ -28,6 +28,10 @@ clean:
 install: build
 	#install -d debian/libxmldiff/usr/games debian/libxmldiff/usr/share/games
 	$(MAKE) $(INSTALL_TARGET)
+	mv debian/libxmldiff/usr/lib/pkgconfig/libxmldiff.pc debian/libxmldiff/usr/lib/pkgconfig/libxmldiff.pc.in
+	cat debian/libxmldiff/usr/lib/pkgconfig/libxmldiff.pc.in | sed -e "s*$(CURDIR)/debian/libxmldiff**" > debian/libxmldiff/usr/lib/pkgconfig/libxmldiff.pc 
+	rm -f debian/libxmldiff/usr/lib/pkgconfig/libxmldiff.pc.in
+
 
 binary-indep:
 

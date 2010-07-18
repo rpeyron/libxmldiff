@@ -1,5 +1,5 @@
 AC_INIT(configure.ac)
-AM_INIT_AUTOMAKE(libxmldiff,0.2.6)
+AM_INIT_AUTOMAKE(libxmldiff,0.2.7)
 AM_PROG_LIBTOOL
 AC_PROG_CC
 AC_PROG_CPP
@@ -29,4 +29,5 @@ CFLAGS="$DEBUG $CFLAGS $XML_CFLAGS"
 AC_OUTPUT(  \
     Makefile \
     src/Makefile    \
+    src/libxmldiff.pc \
 )
