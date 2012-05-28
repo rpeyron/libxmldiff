@@ -1,5 +1,6 @@
-AC_INIT(configure.ac)
-AM_INIT_AUTOMAKE(libxmldiff,0.2.8)
+AC_INIT(libxmldiff,0.2.8)
+AC_CONFIG_SRCDIR([configure.ac])
+AM_INIT_AUTOMAKE
 AM_PROG_LIBTOOL
 AC_PROG_CC
 AC_PROG_CPP

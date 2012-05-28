@@ -1,3 +1,15 @@
+libxmldiff (0.2-8ppa5) xenial; urgency=low
+
+    * Minor fixes ; see ChangeLog
+
+ -- Remi Peyronnet <remi+debian@via.ecp.fr>  Sun, 7 Feb 2016 21:46:25 +0200
+
+libxmldiff (0.2-8) stable; urgency=low
+
+    * Minor fixes ; see ChangeLog
+
+ -- Remi Peyronnet <remi+debian@via.ecp.fr>  Sun, 31 Jan 2016 21:46:25 +0200
+
 libxmldiff (0.2-7ppa3) trusty; urgency=low
 
     * Minor improvements ; see ChangeLog

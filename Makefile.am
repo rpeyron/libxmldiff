@@ -27,6 +27,11 @@ EXTRA_DIST = \
         build/win32/package-libxmldiff-src.bat \
         build/win32/package-win32.bat \
         build/win32/package-xmldiff-bin.bat \
+		build/vc2017/xmldiff.vcxproj.filters \
+		build/vc2017/libxmldiff.vcxproj \
+		build/vc2017/xmldiff.sln \
+		build/vc2017/xmldiff.vcxproj \
+		build/vc2017/libxmldiff.sln \
         build/debian/control \
         build/debian/changelog \
         build/debian/conffiles \
@@ -134,3 +139,10 @@ changelog:
 	mv -f ChangeLog ChangeLog.cvs
 	mv -f ChangeLog.bak ChangeLog
 
+
+
+ppa:
+	scite debian/control
+	scite debian/changelog
+	debuild -S -sa
+	dput ppa ../*.changes
