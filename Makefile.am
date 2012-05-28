@@ -124,6 +124,10 @@ deb-src: dist
 dox:
 	doxygen doc/libxmldiff.dox
 
+
+tests-clean:
+	cd tests/ && bash tests.sh clean
+
 tests-exp:
 	cd tests/ && bash tests.sh exp
 
