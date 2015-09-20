@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+Name: libxmldiff
+Description: xmldiff library to diff xml files
+Version: @VERSION@
+Requires: libxml-2.0, libxslt
+Libs: -L${libdir} -lxmldiff
+Cflags: -I${includedir}

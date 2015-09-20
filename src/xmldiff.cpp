@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
     int rc = 0;
     string curAlias;
 
-    printf("xmldiff %s - (c) 2004 - Remi Peyronnet - http://www.via.ecp.fr/~remi/\n", XMLDIFF_VER);
+    printf("xmldiff %s - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/\n", XMLDIFF_VER);
 
     try
     {

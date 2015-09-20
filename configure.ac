@@ -23,11 +23,11 @@ dnl Exports
 DEBUG="-g"
 LIBS="$DEBUG $LIBS $XML_LIBS"
 CXXFLAGS="$DEBUG $CXXFLAGS $XML_CXXFLAGS"
-CPPFLAGS="$DEBUG $CPPFLAGS $XML_CPPFLAGS"
-CFLAGS="$DEBUG $CFLAGS $XML_CFLAGS"
+CPPFLAGS="$DEBUG $CPPFLAGS $XML_CPPFLAGS -Wno-write-strings"
+CFLAGS="$DEBUG $CFLAGS $XML_CFLAGS -Wno-write-strings"
 
 AC_OUTPUT(  \
     Makefile \
     src/Makefile    \
-    src/libxmldiff.pc \
+    libxmldiff.pc \
 )

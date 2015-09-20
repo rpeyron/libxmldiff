@@ -135,6 +135,12 @@ int parseOption(const string & option, const string & arg, /* [in, out] */ struc
 		TWO; 
 		opt.diff_attr = BAD_CAST arg.c_str(); 
 	}
+    // encoding
+    else if OPT_MATCH("--encoding") 
+	{ 
+		TWO; 
+		opt.encoding = BAD_CAST arg.c_str(); 
+	}
     // Before Values --before-values
     else if OPT_MATCH("--before-values") { TWO_BOOL(opt.beforeValue);  }
     // Pretty Print --pretty-print
@@ -591,6 +597,7 @@ void usage()
          << "  --keep-diff-only no  : Keep only different nodes." << endl
          << "  --before-values yes  : Add before values in attributes or text nodes" << endl
          << "  --sep |              : Use this as the separator" << endl
+         << "  --encoding none  : Force encoding" << endl
          << "  --tag-childs yes     : Tag Added or Removed childs" << endl
          << "  --merge-ns yes       : Create missing namespace on top of document" << endl
          << "  --diff-ns http://... : Namespace definition, use no to disable" << endl
@@ -606,6 +613,7 @@ void printConfiguration(const struct globalOptions & opt)
          << "Keep Diff Only      : " << ((opt.keepDiffOnly)?"Yes":"No") << endl
          << "Before values  : " << ((opt.beforeValue)?"Yes":"No") 
          << " (separator " << opt.separator.c_str() << ")" << endl
+         << " Encoding :  " << opt.encoding.c_str()  << endl
          << "Pretty Print   : " << ((opt.formatPrettyPrint)?"Yes":"No") << endl
          << "No Blanks      : " << ((opt.cleanText)?"Yes":"No") << endl
          << "Force Clean    : " << ((opt.forceClean)?"Yes":"No") << endl

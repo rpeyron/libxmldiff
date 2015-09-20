@@ -1,0 +1,10 @@
+prefix=/home/remi/work/libxmldiff/debian/libxmldiff/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+Name: libxmldiff
+Description: 
+Version: 0.2.7
+Requires: 
+Libs: -L${libdir} -lxmldiff
+Cflags: -I${includedir} -I$(includedir)/libxmldiff

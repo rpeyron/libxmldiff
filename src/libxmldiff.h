@@ -25,8 +25,9 @@
 #ifndef __LIBXMLDIFF_H__
 #define __LIBXMLDIFF_H__
 
-#define LIBXMLDIFF_VER "v0.2.7"
+#define LIBXMLDIFF_VER "v0.2.7-2"
 
+/*
 #ifdef _WIN32
 #ifdef LIBXMLDIFF_EXPORTS
 #define LIBXMLDIFF_API __declspec(dllexport)  
@@ -38,10 +39,11 @@
 #define LIBXMLDIFF_TEMPLATE extern
 #endif
 #else
+*/
 #define LIBXMLDIFF_API
 #define LIBXMLUTIL_API
 #define LIBXMLDIFF_TEMPLATE 
-#endif
+//#endif
 
 // #define WITHOUT_LIBXSLT
 
@@ -58,11 +60,13 @@
 #pragma warning (disable : 4660)
 #endif
 
-#define _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES 1
-#define _CRT_SECURE_NO_DEPRECATE
+// warning C4005: '>=' : '_CRT_SECURE_NO_DEPRECATE' : redéfinition de macro
 // warning C4018: '>=' : incompatibilité signed/unsigned
 // warning C4267: '=' : conversion de 'size_t' en 'int', perte possible de données
-#pragma warning (disable : 4018 4267)
+#pragma warning (disable : 4005 4018 4267)
+
+#define _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES 1
+#define _CRT_SECURE_NO_DEPRECATE
 
 #include <string>
 #include <vector>

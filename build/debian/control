@@ -3,6 +3,7 @@ Section: contrib/libs
 Priority: optional
 Maintainer: Remi Peyronnet <remi+libxmldiff@via.ecp.fr>
 Standards-Version: 2.4.1.2
+Build-Depends: pkg-config, libxml2-dev, libxslt-dev, autotools-dev, automake, autoconf
 
 Package: libxmldiff
 Architecture: any

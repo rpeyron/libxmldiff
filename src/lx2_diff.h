@@ -147,6 +147,11 @@ struct LIBXMLDIFF_API xmldiff_options
      * @warning Using elements and too much keys can cause performance issues.
      */
     vector<xmlstring> ignore;
+    
+    /** Encoding forced
+     * Use this to force encoding ; this is usefull for absent or wrong encoding in files.
+    */
+    xmlstring encoding;
 
     /// == Callbacks ==
 

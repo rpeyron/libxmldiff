@@ -47,7 +47,7 @@ map<string, fileInfo> loadedFiles;
 map<string, xsltStylesheetPtr> parsedXsltFiles;
 #endif // WITHOUT_LIBXSLT
 
-// #define WITH_PARSERCTX
+#define WITH_PARSERCTX
 
 #ifdef WITH_PARSERCTX
 // The parser Context
@@ -166,7 +166,7 @@ int loadXmlFile(string filename, string alias, const struct globalOptions & opti
 #ifdef WITH_PARSERCTX
     doc = xmlCtxtReadFile(ctxt, 
                           filename.c_str(), 
-                          NULL, 
+                          (strcmp((const char *)options.encoding.c_str(),"none")!=0)?(const char *)options.encoding.c_str():NULL, 
                           (options.cleanText)?XML_PARSE_NOBLANKS:0);
 #else
 	xmlKeepBlanksDefault((options.cleanText)?0:1);
@@ -479,6 +479,7 @@ void setDefaultXmldiffOptions(struct appCommand & opt)
     opt.diff_ns = BAD_CAST "http://www.via.ecp.fr/~remi/soft/xml/xmldiff";
     opt.diff_xmlns =  BAD_CAST "diff";
     opt.separator = BAD_CAST "|";
+    opt.encoding = BAD_CAST "none";
     opt.diffQualifiersList[0] = BAD_CAST "unknown";
     opt.diffQualifiersList[1] = BAD_CAST "added";
     opt.diffQualifiersList[2] = BAD_CAST "removed";

@@ -59,13 +59,62 @@ EXTRA_DIST = \
         tests/bugs/product1.xml \
         tests/bugs/product2.xml \
         tests/bugs/command.lst \
+        src/libxmldiff.pc \
         src/libxmldiff.pc.in
 
-deb:
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = libxmldiff.pc
+
+old-deb:
 	ln -sf build/debian .
 	chmod +x debian/rules
 	dpkg-buildpackage -rfakeroot
 	fakeroot debian/rules clean
+
+    
+DEBSOURCEPKG=$(PACKAGE)_$(VERSION).orig.tar.gz
+DEBSOURCEDIR=$(PACKAGE)-$(VERSION)
+deb: dist
+	ln -sf build/debian .
+	@echo "Building Debian package..."; \
+	if test ! -d debian; then \
+		echo "The files needed for building a Debian package are not" \
+		"included by default in the distribution. To build a package, check" \
+		"out the project from source control."; \
+		exit 1; \
+	fi; \
+	mv $(PACKAGE)-$(VERSION).tar.gz $(DEBSOURCEPKG) && \
+	tar --extract --gunzip --file $(DEBSOURCEPKG) && \
+	mkdir -p $(DEBSOURCEDIR)/debian && \
+	cp \
+		debian/* \
+		$(DEBSOURCEDIR)/debian && \
+	cd $(DEBSOURCEDIR) && \
+	debuild --no-tgz-check -rfakeroot -D ; \
+	cd .. ; \
+	rm --force $(DEBSOURCEPKG); \
+	rm --recursive --force $(DEBSOURCEDIR)
+
+deb-src: dist
+	ln -sf build/debian .
+	@echo "Building Debian package..."; \
+	if test ! -d debian; then \
+		echo "The files needed for building a Debian package are not" \
+		"included by default in the distribution. To build a package, check" \
+		"out the project from source control."; \
+		exit 1; \
+	fi; \
+	mv $(PACKAGE)-$(VERSION).tar.gz $(DEBSOURCEPKG) && \
+	tar --extract --gunzip --file $(DEBSOURCEPKG) && \
+	mkdir -p $(DEBSOURCEDIR)/debian && \
+	cp \
+		debian/* \
+		$(DEBSOURCEDIR)/debian && \
+	cd $(DEBSOURCEDIR) && \
+	debuild --no-tgz-check -rfakeroot -S -sa  ; \
+	cd ..; \
+	rm --force $(DEBSOURCEPKG); \
+	rm --recursive --force $(DEBSOURCEDIR)
 
 dox:
 	doxygen doc/libxmldiff.dox

@@ -9,3 +9,4 @@ nons#diff before.xml after.xml output.xml --diff-ns no#output.xml
 merge#merge before.xml after.xml merge.xml#merge.xml
 merge-no#merge --sep no before.xml after.xml merge.xml#merge.xml
 merge-bv#merge --before-values no before.xml after.xml merge.xml#merge.xml
+badencoding#load --encoding iso-8859-1 badencoding.xml#output.xml
