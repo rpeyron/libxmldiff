@@ -104,7 +104,7 @@ void populate_itemlist(xmlNodePtr node, vector<idNode> & itemlist, const struct 
 						tmpNode = getFirstChildByTagName(curNode, id->c_str());
 						if (tmpNode != NULL)
 						{
-							curNodeIdent.id += strSpace + *id + strEqual + xmlNodeGetContent(tmpNode);
+							curNodeIdent.id += strSpace + *id + strEqual + (xmlChar *)xmlCharTmp(xmlNodeGetContent(tmpNode));
 						}
 					}
 				}

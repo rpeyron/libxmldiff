@@ -2,7 +2,7 @@
 
 CMDFILE="command.lst"
 WDIR="$(pwd)"
-VALGRIND=valgrind
+VALGRIND="valgrind"
 RET=0;
 
 case "$2" in
@@ -81,7 +81,8 @@ case "$1" in
             do
               rm -f $FIL out-$ID-$FIL >& /dev/null
             done
-            MEMCHK="$VALGRIND -q --log-file=memcheck-$ID.log"
+            MEMCHKLOG="memcheck-$ID.log"
+            MEMCHK="$VALGRIND --trace-children=yes --leak-check=full -q --log-file=$MEMCHKLOG"
             CMD="$XMLDIFF $ARG"
             (
              echo $CMD
@@ -94,50 +95,56 @@ case "$1" in
             ) >& out-$ID.log
             STATUT="OK"
             REASON=""
-            MEMCHKLOG=$(ls | grep memcheck-$ID.log.pid)
+            #MEMCHKLOG=$(ls | grep memcheck-$ID.log.pid)
             if [ -s "$MEMCHKLOG" ]
             then
               STATUT="LEAK"
               REASON="$REASON (See $MEMCHKLOG)"
             fi
-            diff --ignore-matching-lines="xmldiff " -u exp-$ID.log out-$ID.log > difflog-$ID.txt
-            if [ -s difflog-$ID.txt ]
-            then
-                STATUT="LOG"
-                REASON="$REASON (Log Differ, see difflog-$ID.txt)" 
-            fi
-            SUBSHELL=$(
-            echo $FILES | tr "," "\n" | while read FIL
-            do
-                mv $FIL out-$ID-$FIL >& /dev/null
-                if [ -e out-$ID-$FIL ]
+            if [ -f exp-$ID.log ]
+            then 
+                diff --ignore-matching-lines="xmldiff " -u exp-$ID.log out-$ID.log > difflog-$ID.txt
+                if [ -s difflog-$ID.txt ]
                 then
-                 if [ -e exp-$ID-$FIL ]
-                 then
-                   # Standart case
-                   diff -u exp-$ID-$FIL out-$ID-$FIL > diff-$ID-$FIL.txt
-                   if [ -s diff-$ID-$FIL.txt ]
-                   then
-                    echo "See diff-$ID-$FIL.txt for analysis"
-                   else
-                    rm -f diff-$ID-$FIL.txt
-                   fi
-                 else
-                   echo "No expected file $FIL"
-                 fi
-                else
-                 if [ -e exp-$ID-$FIL ]
-                 then
-                   echo "File does not exists $FIL"
-                 fi
+                    STATUT="LOG"
+                    REASON="$REASON (Log Differ, see difflog-$ID.txt)" 
                 fi
-            done
-            )
-            if [ ! "x$SUBSHELL" = "x" ]
-            then
-             STATUT="KO"
-             REASON="($SUBSHELL) $REASON"
-             RET=1
+                SUBSHELL=$(
+                echo $FILES | tr "," "\n" | while read FIL
+                do
+                    mv $FIL out-$ID-$FIL >& /dev/null
+                    if [ -e out-$ID-$FIL ]
+                    then
+                     if [ -e exp-$ID-$FIL ]
+                     then
+                       # Standart case
+                       diff -u exp-$ID-$FIL out-$ID-$FIL > diff-$ID-$FIL.txt
+                       if [ -s diff-$ID-$FIL.txt ]
+                       then
+                        echo "See diff-$ID-$FIL.txt for analysis"
+                       else
+                        rm -f diff-$ID-$FIL.txt
+                       fi
+                     else
+                       echo "No expected file $FIL"
+                     fi
+                    else
+                     if [ -e exp-$ID-$FIL ]
+                     then
+                       echo "File does not exists $FIL"
+                     fi
+                    fi
+                done
+                )
+                if [ ! "x$SUBSHELL" = "x" ]
+                then
+                 STATUT="KO"
+                 REASON="($SUBSHELL) $REASON"
+                 RET=1
+                fi
+            else
+                STATUT="? $STATUT"
+                REASON="No expected log"
             fi
             echo "$STATUT" "$REASON"
         done

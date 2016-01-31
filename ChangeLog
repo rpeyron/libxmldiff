@@ -1,3 +1,9 @@
+2016-01-31 20;29 [0.2.8] remi
+    * Fix memleak signaled by Andrey Paraskevopulo
+
+2015-09-20 19:14  [0.2.7-2] remi
+	* Packaging updates to support xmlTreeNav 0.3.2 release
+
 2010-07-18 19:14  [0.2.7] remi
 	* Fixed missing headers
     * Added pkg-config file

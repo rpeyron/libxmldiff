@@ -1,1 +1,3 @@
 product#diff product1.xml product2.xml product.xml#product.xml
+memleak1#diff --ids '.'  product1.xml product2.xml memleak1.xml#memleak1.xml
+memleak2#diff --ids 'li'  product1.xml product2.xml memleak2.xml#memleak2.xml
