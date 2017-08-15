@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xmldiff", "xmldiff.vcxproj", "{3476B868-F809-2DFC-1783-90C51F02B143}"
+	ProjectSection(ProjectDependencies) = postProject
+		{85888AE5-2AF6-8B58-3801-011A3BF73764} = {85888AE5-2AF6-8B58-3801-011A3BF73764}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libxmldiff", "libxmldiff.vcxproj", "{85888AE5-2AF6-8B58-3801-011A3BF73764}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3476B868-F809-2DFC-1783-90C51F02B143}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3476B868-F809-2DFC-1783-90C51F02B143}.Debug|Win32.Build.0 = Debug|Win32
+		{3476B868-F809-2DFC-1783-90C51F02B143}.Release|Win32.ActiveCfg = Release|Win32
+		{3476B868-F809-2DFC-1783-90C51F02B143}.Release|Win32.Build.0 = Release|Win32
+		{85888AE5-2AF6-8B58-3801-011A3BF73764}.Debug|Win32.ActiveCfg = Debug|Win32
+		{85888AE5-2AF6-8B58-3801-011A3BF73764}.Debug|Win32.Build.0 = Debug|Win32
+		{85888AE5-2AF6-8B58-3801-011A3BF73764}.Release|Win32.ActiveCfg = Release|Win32
+		{85888AE5-2AF6-8B58-3801-011A3BF73764}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
