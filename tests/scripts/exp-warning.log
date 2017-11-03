@@ -1,0 +1,14 @@
+../src/xmldiff execute script.xds warning 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
+xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+XML Engine initialized.
+Execute script.xds ...
+warning3456789101112131415161718192021222324$(24)
+WARNING
+Loading message.xsl as message.xsl... done.
+Applying message.xsl on message.xsl to test... done.
+Saving XSLT Result test to toto.xml ...done.
+done
+Alias test was freed
+Alias message.xsl was freed
+XML Engine is shutting down... done.
+Done.

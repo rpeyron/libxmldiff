@@ -1,0 +1,1 @@
+std#diff sendBuffer.xml sendBuffer2.xml output.xml --ignore 'VerDTD'#output.xml

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<tests xmlns:test="http://test" test:toto="below">
+  <test name="Element identique vide"/>
+  <test name="Element identique valeur">Identique</test>
+  <test name="Element identique composé">
+    <contenu>
+      <composé>Identique</composé>
+    </contenu>
+  </test>
+  <test name="Element ajouté vide" test:toto="below">
+    <element test:toto="added"/>
+  </test>
+  <test name="Element ajouté debut" test:toto="below">
+    <element id="1" test:toto="added"/>
+    <element id="2"/>
+    <element id="3"/>
+    <element id="4"/>
+  </test>
+  <test name="Element ajouté milieu" test:toto="below">
+    <element id="2"/>
+    <element id="1" test:toto="added"/>
+    <element id="3"/>
+    <element id="4"/>
+  </test>
+  <test name="Element ajouté fin" test:toto="below">
+    <element id="2"/>
+    <element id="3"/>
+    <element id="4"/>
+    <element id="5" test:toto="added"/>
+  </test>
+  <test name="Element supprimé vide" test:toto="below">
+    <element id="1" test:toto="removed"/>
+  </test>
+  <test name="Element supprimé début" test:toto="below">
+    <element id="1" test:toto="removed"/>
+    <element id="2"/>
+    <element id="3"/>
+    <element id="4"/>
+    <element id="5"/>
+  </test>
+  <test name="Element supprimé milieu" test:toto="below">
+    <element id="1"/>
+    <element id="2"/>
+    <element id="3" test:toto="removed"/>
+    <element id="4"/>
+    <element id="5"/>
+  </test>
+  <test name="Element supprimé fin" test:toto="below">
+    <element id="1"/>
+    <element id="2"/>
+    <element id="3"/>
+    <element id="4"/>
+    <element id="5" test:toto="removed"/>
+  </test>
+  <test name="Element ajouté sans ordre" test:toto="below">
+    <element>1</element>
+    <element test:toto="modified">3|2</element>
+    <element test:toto="modified">4|3</element>
+    <element test:toto="modified">5|4</element>
+    <element test:toto="added">5</element>
+  </test>
+  <test name="Element supprimé sans ordre" test:toto="below">
+    <element>1</element>
+    <element>2</element>
+    <element test:toto="modified">3|4</element>
+    <element test:toto="modified">4|5</element>
+    <element test:toto="removed">5</element>
+  </test>
+  <test name="Ajout elements variés" test:toto="modified">|<![CDATA[ Element CData ]]><?element Processing instruction ?><!-- Commentaire -->
+  Texte avec &lt; &gt; caractères spéciaux &amp;
+ </test>
+  <test name="Suppression elements variés" test:toto="modified">
+  Texte avec &lt; &gt; caractères spéciaux &amp;
+ |<![CDATA[ Element CData ]]><!-- Commentaire --><?element Processing instruction ?></test>
+  <test name="Elements variés identiques"><![CDATA[ Element CData ]]><?element Processing instruction ?><!-- Commentaire -->
+  Texte avec &lt; &gt; caractères spéciaux &amp;
+ </test>
+  <test name="Elements variés modifiés" test:toto="modified">
+  Texte avec &lt; &gt; caractères spéciaux &amp; avant
+ |<![CDATA[ Element CData - après ]]><?element Processing instruction - après ?><!-- Commentaire - après -->
+  Texte avec &lt; &gt; caractères spéciaux &amp; après
+ <![CDATA[ Element CData - avant ]]><!-- Commentaire - avant --><?element Processing instruction - avant ?></test>
+  <test name="Ajout d'un fils unique" test:toto="below">
+    <root test:toto="below">
+      <child test:toto="below">
+        <element test:toto="added"/>
+      </child>
+    </root>
+  </test>
+  <test name="Suppression d'un fils unique" test:toto="below">
+    <root test:toto="below">
+      <child test:toto="below">
+        <element test:toto="removed"/>
+      </child>
+    </root>
+  </test>
+  <test name="Modification de texte" test:toto="modified">Texte avant|Texte après</test>
+  <test name="Texte variant suivant retour chariots entre balises" test:toto="modified">
+ Texte
+ 
+ Texte
+ 
+ | Texte <balise/> Texte <balise test:toto="modified">
+ Balise
+ | Balise </balise> </test>
+  <test name="Attribut identique mais inversés et espacés">
+    <element att1="val1" att2="val2" att3="val3"/>
+  </test>
+  <test name="Ajout attribut seul" test:toto="below">
+    <element att="|val" test:toto="modified"/>
+  </test>
+  <test name="Ajout attribut debut" test:toto="below">
+    <element att1="|val1" att2="val2" att3="val3" test:toto="modified"/>
+  </test>
+  <test name="Ajout attribut milieu" test:toto="below">
+    <element att1="val1" att2="|val2" att3="val3" test:toto="modified"/>
+  </test>
+  <test name="Ajout attribut fin" test:toto="below">
+    <element att1="val1" att2="val2" att3="|val3" test:toto="modified"/>
+  </test>
+  <test name="Suppression attribut seul" test:toto="below">
+    <element attribut="valeur|" test:toto="modified"/>
+  </test>
+  <test name="Suppression attribut début" test:toto="below">
+    <element att2="val2" att3="val3" att1="val1|" test:toto="modified"/>
+  </test>
+  <test name="Suppression attribut milieu" test:toto="below">
+    <element att1="val1" att3="val3" att2="val2|" test:toto="modified"/>
+  </test>
+  <test name="Suppression attribut fin" test:toto="below">
+    <element att1="val1" att2="val2" att3="val3|" test:toto="modified"/>
+  </test>
+  <test name="Modification attribut" test:toto="below">
+    <element att1="val1" att="val-avant|val-après" att3="val3" test:toto="modified"/>
+  </test>
+  <test name="Modification attribut depuis vide" test:toto="below">
+    <element att1="val1" att="|val" att3="val3" test:toto="modified"/>
+  </test>
+  <test name="Modification attribut vers vide" test:toto="below">
+    <element att1="val1" att="val|" att3="val3" test:toto="modified"/>
+  </test>
+  <test name="Modification d'un attribut identifiant" test:toto="below">
+    <element id="après" test:toto="added"/>
+    <element id="avant" test:toto="removed"/>
+  </test>
+</tests>

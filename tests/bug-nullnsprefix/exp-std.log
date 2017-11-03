@@ -1,0 +1,13 @@
+../src/xmldiff diff sendBuffer.xml sendBuffer2.xml output.xml --ignore 'VerDTD'
+xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+XML Engine initialized.
+Loading sendBuffer.xml as sendBuffer.xml... done.
+Loading sendBuffer2.xml as sendBuffer2.xml... done.
+Diffing (372|372) ... [          ]==========] 371 nodes processed.
+Files are different.
+Saving output.xml to output.xml ...done.
+Alias output.xml was freed
+Alias sendBuffer.xml was freed
+Alias sendBuffer2.xml was freed
+XML Engine is shutting down... done.
+Done.

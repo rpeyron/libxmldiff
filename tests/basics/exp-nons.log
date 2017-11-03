@@ -1,0 +1,13 @@
+../src/xmldiff diff before.xml after.xml output.xml --diff-ns no
+xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+XML Engine initialized.
+Loading before.xml as before.xml... done.
+Loading after.xml as after.xml... done.
+Diffing (92|92) ... [          ]==========] 113 nodes processed.
+Files are different.
+Alias after.xml was freed
+Alias before.xml was freed
+Saving output.xml to output.xml ...done.
+Alias output.xml was freed
+XML Engine is shutting down... done.
+Done.

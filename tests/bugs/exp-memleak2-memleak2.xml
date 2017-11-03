@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<product xmlns="http://foo.com/barl" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:diff="http://www.via.ecp.fr/~remi/soft/xml/xmldiff" xsi:schemaLocation="http://foo.com/barl product.xsd" diff:status="below">
+  <metas>
+    <ean>4242006132934</ean>
+    <price currency="EUR">135.00</price>
+    <replaces/>
+    <xhtml:meta name="keywords" content="keyword 1, keyword2, keyword3"/>
+    <xhtml:meta name="description" content="description about the product"/>
+  </metas>
+  <description diff:status="below">
+    <body xmlns="http://www.w3.org/1999/xhtml" diff:status="below">
+      <li diff:status="modified">line1|line2</li>
+      <li diff:status="modified">line2|line1</li>
+      <li diff:status="added">line3</li>
+    </body>
+  </description>
+  <instalation diff:status="added">Use</instalation>
+</product>

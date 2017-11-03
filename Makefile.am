@@ -124,6 +124,7 @@ deb-src: dist
 dox:
 	doxygen doc/libxmldiff.dox
 
+test: tests-run
 
 tests-clean:
 	cd tests/ && bash tests.sh clean
@@ -143,6 +144,7 @@ changelog:
 	mv -f ChangeLog ChangeLog.cvs
 	mv -f ChangeLog.bak ChangeLog
 
+clean-local: tests-clean
 
 
 ppa:

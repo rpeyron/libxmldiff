@@ -1,0 +1,13 @@
+../src/xmldiff diff product1.xml product2.xml product.xml
+xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+XML Engine initialized.
+Loading product1.xml as product1.xml... done.
+Loading product2.xml as product2.xml... done.
+Diffing (12|14) ... [          ]==========] 13 nodes processed.
+Files are different.
+Saving product.xml to product.xml ...done.
+Alias product.xml was freed
+Alias product1.xml was freed
+Alias product2.xml was freed
+XML Engine is shutting down... done.
+Done.

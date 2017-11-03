@@ -1,0 +1,7 @@
+../src/xmldiff load --encoding iso-8859-1 badencoding.xml
+xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+XML Engine initialized.
+Loading badencoding.xml as badencoding.xml... done.
+Alias badencoding.xml was freed
+XML Engine is shutting down... done.
+Done.
