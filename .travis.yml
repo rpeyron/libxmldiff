@@ -1,5 +1,7 @@
 language: cpp
 
+sudo: enabled
+
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y libxml2-dev libxslt-dev
+  - sudo apt-get install -y libxml2-dev libxslt-dev pkg-config autotools-dev automake autoconf
