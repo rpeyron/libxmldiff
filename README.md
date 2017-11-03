@@ -14,7 +14,7 @@ Homepage : http://www.lprp.fr/soft/xml/libxmldiff/libxmldiff_en.php3
 
 libxmldiff comes with a command line xmldiff exposing all the features.
 
-If you are searching for a GUI, please take a look at xmlTreeNav
+If you are searching for a GUI, please take a look at xmlTreeNav (https://github.com/rpeyron/xmltreenav)
 
 
 # Build instructions
