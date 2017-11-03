@@ -1,4 +1,5 @@
 # libxmldiff
+[![Build Status](https://travis-ci.org/rpeyron/libxmldiff.svg?branch=master)](https://travis-ci.org/rpeyron/libxmldiff)
 
 libxmldiff aims at providing efficient diff on XML files (C library)
 
