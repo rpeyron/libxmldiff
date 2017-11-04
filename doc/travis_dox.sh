@@ -60,6 +60,7 @@ git config user.email "travis@travis-ci.org"
 # can be safely cleaned, and it is sure that everything pushed later is the new
 # documentation.
 #rm -rf *
+
 rm -rf html
 
 # Need to create a .nojekyll file to allow filenames starting with an underscore
