@@ -330,6 +330,7 @@ int executeAction(const struct appCommand & p_cmd)
 {
     int rc, nparam, ilen, olen, i;
     map<string, string> vars;
+	charTmp tmp_params[2*LX_APPCOMMAND_NBPARAM];
 	const char * params[2*LX_APPCOMMAND_NBPARAM];
 	char var[10];
 	xmlChar * temp;
@@ -404,19 +405,21 @@ int executeAction(const struct appCommand & p_cmd)
 				if (isolat1ToUTF8(temp, &olen, (const unsigned char *)cmd.param[i].substr(0, cmd.param[i].find('=')).c_str(), &ilen) == -1)
 					throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8.");
 				temp[olen] = 0;
-				params[nparam++] = strdup((const char *)temp);
+				tmp_params[nparam].setCharTmp(strdup((char *)temp));
+				params[nparam++] = (const char *)tmp_params[nparam-1];
 				olen = 3 * cmd.param[i].length();
 				ilen = cmd.param[i].substr(cmd.param[i].find('=') + 1, cmd.param[i].length()).length();
 				if (isolat1ToUTF8(temp, &olen, (const unsigned char *)cmd.param[i].substr(cmd.param[i].find('=') + 1, cmd.param[i].length()).c_str(), &ilen) == -1)
 					throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8.");
 				temp[olen] = 0;
-				params[nparam++] = (const char *)temp;
+				tmp_params[nparam].setCharTmp((char *)temp);
+				params[nparam++] = (const char *)tmp_params[nparam-1];
                 verbose(5, cmd.verboseLevel, "Parameter \"%s\" = \"%s\"\n ", params[nparam-2], params[nparam-1]);
 			}
 		}
 		params[nparam] = NULL;
         rc = applyStylesheet(cmd.param[0], cmd.param[1], cmd.param[2], params, cmd);
-		while (nparam > 0) { free((void *)params[--nparam]); }
+		// while (nparam > 0) { free((void *)params[--nparam]); }
         break;
 #endif // WITHOUT_LIBXSLT
     case XD_REM: break;

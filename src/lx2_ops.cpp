@@ -445,8 +445,8 @@ int applyStylesheet(const string & xslt, const string & src, const string & dest
     res = xsltApplyStylesheetUser(xsltPtr, doc, params, NULL, NULL, ctxt);
 	ret = ctxt->state;
 	xsltFreeTransformContext(ctxt);
-	if (ret == XSLT_STATE_ERROR) { throwError(XD_Exception::XDE_XSLT_ERROR, "XSLT Transformation Error"); return -2; }
-	if (ret == XSLT_STATE_STOPPED) { throwError(XD_Exception::XDE_XSLT_STOPPED, "XSLT Transformation Stopped"); return -3; }
+	if (ret == XSLT_STATE_ERROR) { xsltFreeStylesheet(xsltPtr); xmlFreeDoc(res); throwError(XD_Exception::XDE_XSLT_ERROR, "XSLT Transformation Error"); return -2; }
+	if (ret == XSLT_STATE_STOPPED) {  xsltFreeStylesheet(xsltPtr); xmlFreeDoc(res); throwError(XD_Exception::XDE_XSLT_STOPPED, "XSLT Transformation Stopped"); return -3; }
 	//
     verbose(2, options.verboseLevel, " done.\n");
     if (src == dest)

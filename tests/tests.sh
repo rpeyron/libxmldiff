@@ -66,11 +66,12 @@ case "$1" in
     ;;
  diff)
     echo "Test current results against expected"
-    find . | grep -v '.svn' | grep "$CMDFILE" | while read FILE
+    find . | grep -v '.svn' | grep "$CMDFILE" | { while read FILE
     do
         DIR=$(dirname "$FILE")
         cd $DIR
-        cat $CMDFILE | while read LINE
+		# Loop in "$CMDFILE"
+        while read LINE
         do
             ID=$(echo $LINE | cut -d'#' -f 1)
             ARG=$(echo $LINE | cut -d'#' -f 2)
@@ -140,16 +141,18 @@ case "$1" in
                 then
                  STATUT="KO"
                  REASON="($SUBSHELL) $REASON"
-                 RET=1
+                 RET=-1
                 fi
             else
                 STATUT="? $STATUT"
                 REASON="No expected log"
             fi
             echo "$STATUT" "$REASON"
-        done
+        done < "$CMDFILE" 
         cd $WDIR
     done
+	exit $RET
+	}
     ;;
  help)
     echo "Possible actions are :"

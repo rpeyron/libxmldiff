@@ -56,6 +56,7 @@ class LIBXMLDIFF_API std::exception;
 
 #ifdef xmlChatTmp_BUG
 #define xmlCharTmp
+#define charTmp
 #else
 
 class LIBXMLDIFF_API xmlCharTmp
@@ -66,6 +67,18 @@ public :
     ~xmlCharTmp() { xmlFree(fLocal); }   
     operator xmlChar * ()  { return (fLocal); }
 };
+
+class LIBXMLDIFF_API charTmp
+{
+    char *   fLocal = NULL;
+public :
+	charTmp() {}
+    charTmp(char * const str)  { fLocal = str; }
+    ~charTmp() { free(fLocal); }   
+	void setCharTmp(char * const str) { fLocal = str; }
+    operator char * ()  { return (fLocal); }
+};
+
 #endif
 
 #if ((!defined _MSC_VER) && (__GNUC__ < 4))

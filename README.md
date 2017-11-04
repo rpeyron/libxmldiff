@@ -41,7 +41,7 @@ You may install dependancies on debian systems by :
 # Build dependancies
 sudo apt-get install pkg-config libxml2-dev libxslt-dev autotools-dev automake autoconf
 # Run dependancies
-sudo apt-get install libc6 libxml2,libxslt1.1 
+sudo apt-get install libc6 libxml2 libxslt1.1 
 ```
 
 
@@ -59,7 +59,7 @@ Contributions are welcome. You may use GitHub issues tracker for issues, or GitH
 
 ```
 xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
-xmldiff - diff two XML files. (c) 2004-2006 - R\ufffdmi Peyronnet
+xmldiff - diff two XML files. (c) 2004-2006 - Rémi Peyronnet
 Syntax : xmldiff action [options] <parameters>
 
 Actions
@@ -105,3 +105,26 @@ Diff Options :
   --diff-attr status   : Name of attribute to use (should not be used in docs)
 
 ```
+# xmldiff output example
+
+Output is a merge of the two files, with a status indicating if the node is modified, added, removed, or if a child is modified (please notice the diff:status attribute). A identifier can be used to compare similar items. If none is provided, comparison is done on identical nodes names by the order of appearance.
+
+```
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<tests xmlns:diff="http://www.via.ecp.fr/~remi/soft/xml/xmldiff" diff:status="below">
+  <test name="Inchangé" />
+  <test name="Element supprimé" diff:status="below">
+    <element id="5" diff:status="removed"/>
+  </test>
+  <test name="Element ajouté sans ordre" diff:status="below">
+    <element diff:status="modified">3|2</element>
+    <element diff:status="modified">4|3</element>
+    <element diff:status="modified">5|4</element>
+    <element diff:status="added">5</element>
+  </test>
+  <test name="Modification de texte" diff:status="modified">Texte avant|Texte après</test>
+</tests>
+```
+
+
+
