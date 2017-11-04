@@ -50,6 +50,9 @@ sudo apt-get install libc6 libxml2 libxslt1.1
 Windows Build is done with Visual Studio Community Edition. 
 Please use the latest version in build/ (older vc version are not maintained)
 
+# Developer Documentation
+
+A developer documentation is available on [the github pages](https://rpeyron.github.io/libxmldiff/html/)
 
 # Contributing
 
