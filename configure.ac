@@ -31,4 +31,5 @@ AC_OUTPUT(  \
     Makefile \
     src/Makefile    \
     libxmldiff.pc \
+	doc/libxmldiff.dox \
 )

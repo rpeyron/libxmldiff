@@ -71,7 +71,7 @@ struct LIBXMLDIFF_API xmldiff_options
     bool tagChildsAddedRemoved;
 
     /** In case of different values, add the value before.
-     * The format is <separator defined> && <value before> && <value after>
+     * The format is  [ value before ] && [ separator defined ] && [ value after ]
      * Useless if diffOnly is true.
      */
     bool beforeValue;
@@ -133,7 +133,7 @@ struct LIBXMLDIFF_API xmldiff_options
     /** Identifiers list
      * These are elements / attributes that will be considered by the 
      * diff function as keys, and not as values.
-     * Attributes are prefixed by '@', and element are set as is. (eg. @id,elementKey)
+     * Attributes are prefixed by '@', and element are set as is. (eg. \@id,elementKey)
      * XPath expression are not supported yet.
      * @warning Using elements and too much keys can cause performance issues.
      */
@@ -142,7 +142,7 @@ struct LIBXMLDIFF_API xmldiff_options
     /** Ignore list
      * These are elements / attributes that will not be taken in account in the diff 
      * but will still be in the result.
-     * Attributes are prefixed by '@', and element are set as is. (eg. @id,elementKey)
+     * Attributes are prefixed by '@', and element are set as is. (eg. \@id,elementKey)
      * XPath expression are not supported yet.
      * @warning Using elements and too much keys can cause performance issues.
      */

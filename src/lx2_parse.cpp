@@ -279,7 +279,7 @@ int parseAction(string action, struct appCommand & cmd)
 
 /** parseCommandLine : parse command line
  * @param cl arguments vector
- * @param appOptions [in, out] the structure that contains the result options
+ * @param opt [in, out] the structure that contains the result options
  * @return status code : 0 means no error
  */
 int parseCommandLine(const vector<string> & cl, /* [in, out] */ struct appCommand & opt)
@@ -516,7 +516,9 @@ int replaceTokens(vector<string> & /*[in, out]*/ tokens, map<string, string> var
 }
 
 /** Execute file
- * @param filename the filename of the script to execute
+ * @param scriptFileName the filename of the script to execute
+ * @param variables the variables of the script
+ * @param gOptions the global options of xmldiff
  * @return status code : 
  *        0 no problems
  *      -10 file not found

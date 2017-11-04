@@ -60,7 +60,7 @@ xmlNodePtr LIBXMLUTIL_API getFirstChildByTagName(xmlNodePtr node, const xmlstrin
  * Set the provided property to all children of the current element.
  * @param node the concerned node
  * @param ns the namespace of the property
- * @param prop the name of the property to add
+ * @param name the name of the property to add
  * @param value the value of the property to set
  * @param toAll if set to false, do not recurse
  */
