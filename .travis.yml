@@ -2,8 +2,25 @@ language: cpp
 
 sudo: enabled
 
+branches:
+  except:
+    - gh-pages
+
+# From https://gist.github.com/vidavidorra/548ffbcdae99d752da02
+env:
+  global:
+    - GH_REPO_NAME: libxmldiff
+    - DOXYFILE: $TRAVIS_BUILD_DIR/doc/libxmldiff.dox
+    - GH_REPO_REF: github.com/rpeyron/libxmldiff.git
+    
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y libxml2-dev libxslt-dev pkg-config autotools-dev automake autoconf libtool valgrind
+  - sudo apt-get install -y doxygen graphviz
   - autoreconf -f -i
   
+# Generate and deploy documentation
+after_success:
+  - cd $TRAVIS_BUILD_DIR/doc
+  - chmod +x travis_dox.sh
+  - ./travis_dox.sh
