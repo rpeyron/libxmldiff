@@ -21,6 +21,6 @@ before_install:
   
 # Generate and deploy documentation
 after_success:
-  - cd $TRAVIS_BUILD_DIR/doc
-  - chmod +x travis_dox.sh
-  - ./travis_dox.sh
+  - cd $TRAVIS_BUILD_DIR
+  - chmod +x doc/travis_dox.sh
+  - ./doc/travis_dox.sh
