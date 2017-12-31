@@ -17,6 +17,24 @@ libxmldiff comes with a command line xmldiff exposing all the features.
 
 If you are searching for a GUI, please take a look at xmlTreeNav (https://github.com/rpeyron/xmltreenav)
 
+# Install
+
+See prebuilt binary packages in release tab for Windows.
+
+PPA repository for Ubuntu : [ppa:rpeyron/ppa](https://launchpad.net/~rpeyron/+archive/ubuntu/ppa)
+
+Debian repository :
+```
+# Add repository
+sudo echo "deb [arch=amd64]  http://www.lprp.fr/debian stable main" > /etc/apt/sources.list.d/lprp.list
+# Add apt key (remi+debian@via.ecp.fr)
+sudo apt-key adv --keyserver keys.gnupg.net --recv-keys 090B93891134CECB
+# Install
+sudo apt-get install libxmldiff
+```
+
+
+Other OSes should build the package (see below).
 
 # Build instructions
 
