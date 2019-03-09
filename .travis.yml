@@ -25,3 +25,11 @@ after_success:
   - make dox
   - chmod +x doc/travis_dox.sh
   - ./doc/travis_dox.sh
+  
+addons:
+  sonarcloud:
+    organization: "rpeyron-github" # the key of the org you chose at step #3
+
+script:
+  # other script steps might be done before running the actual analysis
+  - sonar-scanner
