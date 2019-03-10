@@ -32,4 +32,5 @@ addons:
 
 script:
   # other script steps might be done before running the actual analysis
+  - build-wrapper-linux-x86-64 --out-dir bw-output make 
   - sonar-scanner
