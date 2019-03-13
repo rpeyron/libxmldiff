@@ -1,5 +1,6 @@
 # libxmldiff
 [![Build Status](https://travis-ci.org/rpeyron/libxmldiff.svg?branch=master)](https://travis-ci.org/rpeyron/libxmldiff)
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=libxmldiff&metric=alert_status)](https://sonarcloud.io/dashboard?id=libxmldiff)
 
 libxmldiff aims at providing efficient diff on XML files (C library)
 
