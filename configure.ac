@@ -17,15 +17,16 @@ AC_FUNC_VPRINTF
 
 dnl libxml
 AM_PATH_XML2( 2.0.0, , AC_MSG_ERROR(libxml2 must be installed.) )
-AC_CHECK_LIB(xslt, main, , AC_MSG_ERROR(libxslt must be installed.))
-AC_CHECK_LIB(exslt, main, , AC_MSG_ERROR(libexslt must be installed.))
+AM_PATH_XSLT(,, AC_MSG_ERROR(libxslt must be installed.) )
+dnl AC_CHECK_LIB(xslt, main, , AC_MSG_ERROR(libxslt must be installed.))
+dnl AC_CHECK_LIB(exslt, main, , AC_MSG_ERROR(libexslt must be installed.))
 
 dnl Exports
 DEBUG="-g"
-LIBS="$DEBUG $LIBS $XML_LIBS"
-CXXFLAGS="$DEBUG $CXXFLAGS $XML_CXXFLAGS"
-CPPFLAGS="$DEBUG $CPPFLAGS $XML_CPPFLAGS -Wno-write-strings"
-CFLAGS="$DEBUG $CFLAGS $XML_CFLAGS -Wno-write-strings"
+LIBS="$DEBUG $LIBS $XML_LIBS $XSLT_LIBS -lexslt"
+CXXFLAGS="$DEBUG $CXXFLAGS $XML_CXXFLAGS $XSLT_CXXFLAGS"
+CPPFLAGS="$DEBUG $CPPFLAGS $XML_CPPFLAGS $XSLT_CPPFLAGS -Wno-write-strings"
+CFLAGS="$DEBUG $CFLAGS $XML_CFLAGS $XSLT_CFLAGS - -Wno-write-strings"
 
 AC_OUTPUT(  \
     Makefile \

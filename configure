@@ -633,6 +633,9 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+XSLT_LIBS
+XSLT_CFLAGS
+XSLT_CONFIG
 XML_LIBS
 XML_CPPFLAGS
 XML2_CONFIG
@@ -773,6 +776,9 @@ enable_libtool_lock
 with_xml_prefix
 with_xml_exec_prefix
 enable_xmltest
+with_xslt_prefix
+with_xslt_exec_prefix
+enable_xslttest
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1429,6 +1435,7 @@ Optional Features:
                           speeds up one-time build
   --disable-libtool-lock  avoid locking (might break parallel builds)
   --disable-xmltest       Do not try to compile and run a test LIBXML program
+  --disable-xslttest       Do not try to compile and run a test LIBXSLT program
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1443,6 +1450,8 @@ Optional Packages:
                           compiler's sysroot if not specified).
   --with-xml-prefix=PFX   Prefix where libxml is installed (optional)
   --with-xml-exec-prefix=PFX Exec prefix where libxml is installed (optional)
+  --with-xslt-prefix=PFX   Prefix where libxslt is installed (optional)
+  --with-xslt-exec-prefix=PFX Exec prefix where libxslt is installed (optional)
 
 Some influential environment variables:
   CC          C compiler command
@@ -17223,94 +17232,273 @@ rm -f core conftest.err conftest.$ac_objext \
 
   rm -f conf.xmltest
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lxslt" >&5
-$as_echo_n "checking for main in -lxslt... " >&6; }
-if ${ac_cv_lib_xslt_main+:} false; then :
+
+
+# Check whether --with-xslt-prefix was given.
+if test "${with_xslt_prefix+set}" = set; then :
+  withval=$with_xslt_prefix; xslt_config_prefix="$withval"
+else
+  xslt_config_prefix=""
+fi
+
+
+# Check whether --with-xslt-exec-prefix was given.
+if test "${with_xslt_exec_prefix+set}" = set; then :
+  withval=$with_xslt_exec_prefix; xslt_config_exec_prefix="$withval"
+else
+  xslt_config_exec_prefix=""
+fi
+
+# Check whether --enable-xslttest was given.
+if test "${enable_xslttest+set}" = set; then :
+  enableval=$enable_xslttest;
+else
+  enable_xslttest=yes
+fi
+
+
+  if test x$xslt_config_exec_prefix != x ; then
+     xslt_config_args="$xslt_config_args --exec-prefix=$xslt_config_exec_prefix"
+     if test x${XSLT_CONFIG+set} != xset ; then
+        XSLT_CONFIG=$xslt_config_exec_prefix/bin/xslt-config
+     fi
+  fi
+  if test x$xslt_config_prefix != x ; then
+     xslt_config_args="$xslt_config_args --prefix=$xslt_config_prefix"
+     if test x${XSLT_CONFIG+set} != xset ; then
+        XSLT_CONFIG=$xslt_config_prefix/bin/xslt-config
+     fi
+  fi
+
+  # Extract the first word of "xslt-config", so it can be a program name with args.
+set dummy xslt-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_path_XSLT_CONFIG+:} false; then :
   $as_echo_n "(cached) " >&6
 else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lxslt  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+  case $XSLT_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_XSLT_CONFIG="$XSLT_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_XSLT_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_XSLT_CONFIG" && ac_cv_path_XSLT_CONFIG="no"
+  ;;
+esac
+fi
+XSLT_CONFIG=$ac_cv_path_XSLT_CONFIG
+if test -n "$XSLT_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $XSLT_CONFIG" >&5
+$as_echo "$XSLT_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  min_xslt_version=1.0.0
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libxslt - version >= $min_xslt_version" >&5
+$as_echo_n "checking for libxslt - version >= $min_xslt_version... " >&6; }
+  no_xslt=""
+  if test "$XSLT_CONFIG" = "no" ; then
+    no_xslt=yes
+  else
+    XSLT_CFLAGS=`$XSLT_CONFIG $xslt_config_args --cflags`
+    XSLT_LIBS=`$XSLT_CONFIG $xslt_config_args --libs`
+    xslt_config_major_version=`$XSLT_CONFIG $xslt_config_args --version | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
+    xslt_config_minor_version=`$XSLT_CONFIG $xslt_config_args --version | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
+    xslt_config_micro_version=`$XSLT_CONFIG $xslt_config_args --version | \
+           sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
+    if test "x$enable_xslttest" = "xyes" ; then
+      ac_save_CFLAGS="$CFLAGS"
+      ac_save_LIBS="$LIBS"
+      CFLAGS="$CFLAGS $XSLT_CFLAGS"
+      LIBS="$XSLT_LIBS $LIBS"
+      rm -f conf.xslttest
+      if test "$cross_compiling" = yes; then :
+  echo $ac_n "cross compiling; assumed OK... $ac_c"
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <libxslt/xsltconfig.h>
+#include <libxslt/xslt.h>
+int
+main()
+{
+  int xslt_major_version, xslt_minor_version, xslt_micro_version;
+  int major, minor, micro;
+  char *tmp_version;
+
+  system("touch conf.xslttest");
+
+  /* Capture xslt-config output via autoconf/configure variables */
+  /* HP/UX 9 (%@#!) writes to sscanf strings */
+  tmp_version = (char *)strdup("$min_xslt_version");
+  if (sscanf(tmp_version, "%d.%d.%d", &major, &minor, &micro) != 3) {
+     printf("%s, bad version string from xslt-config\n", "$min_xslt_version");
+     exit(1);
+   }
+   free(tmp_version);
+
+   /* Capture the version information from the header files */
+   tmp_version = (char *)strdup(LIBXSLT_DOTTED_VERSION);
+   if (sscanf(tmp_version, "%d.%d.%d", &xslt_major_version, &xslt_minor_version, &xslt_micro_version) != 3) {
+     printf("%s, bad version string from libxslt includes\n", "LIBXSLT_DOTTED_VERSION");
+     exit(1);
+   }
+   free(tmp_version);
+
+ /* Compare xslt-config output to the libxslt headers */
+  if ((xslt_major_version != $xslt_config_major_version) ||
+      (xslt_minor_version != $xslt_config_minor_version) ||
+      (xslt_micro_version != $xslt_config_micro_version))
+    {
+      printf("*** libxslt header files (version %d.%d.%d) do not match\n",
+         xslt_major_version, xslt_minor_version, xslt_micro_version);
+      printf("*** xslt-config (version %d.%d.%d)\n",
+         $xslt_config_major_version, $xslt_config_minor_version, $xslt_config_micro_version);
+      return 1;
+    }
+/* Compare the headers to the library to make sure we match */
+  /* Less than ideal -- doesn't provide us with return value feedback,
+   * only exits if there's a serious mismatch between header and library.
+   */
+    /* copied from LIBXML_TEST_VERSION; */
+    xmlCheckVersion(LIBXML_VERSION);
+
+    /* Test that the library is greater than our minimum version */
+    if ((xslt_major_version > major) ||
+        ((xslt_major_version == major) && (xslt_minor_version > minor)) ||
+        ((xslt_major_version == major) && (xslt_minor_version == minor) &&
+        (xslt_micro_version >= micro)))
+      {
+        return 0;
+       }
+     else
+      {
+        printf("\n*** An old version of libxslt (%d.%d.%d) was found.\n",
+               xslt_major_version, xslt_minor_version, xslt_micro_version);
+        printf("*** You need a version of libxslt newer than %d.%d.%d. The latest version of\n",
+           major, minor, micro);
+        printf("*** libxslt is always available from ftp://ftp.xmlsoft.org.\n");
+        printf("***\n");
+        printf("*** If you have already installed a sufficiently new version, this error\n");
+        printf("*** probably means that the wrong copy of the xslt-config shell script is\n");
+        printf("*** being found. The easiest way to fix this is to remove the old version\n");
+        printf("*** of LIBXSLT, but you can also set the XSLT_CONFIG environment to point to the\n");
+        printf("*** correct copy of xslt-config. (In this case, you will have to\n");
+        printf("*** modify your LD_LIBRARY_PATH enviroment variable, or edit /etc/ld.so.conf\n");
+        printf("*** so that the correct libraries are found at run-time))\n");
+    }
+  return 1;
+}
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+
+else
+  no_xslt=yes
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+       CFLAGS="$ac_save_CFLAGS"
+       LIBS="$ac_save_LIBS"
+     fi
+  fi
+
+  if test "x$no_xslt" = x ; then
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes (version $xslt_config_major_version.$xslt_config_minor_version.$xslt_config_micro_version)" >&5
+$as_echo "yes (version $xslt_config_major_version.$xslt_config_minor_version.$xslt_config_micro_version)" >&6; }
+     :
+  else
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+     if test "$XSLT_CONFIG" = "no" ; then
+       echo "*** The xslt-config script installed by LIBXSLT could not be found"
+       echo "*** If libxslt was installed in PREFIX, make sure PREFIX/bin is in"
+       echo "*** your path, or set the XSLT_CONFIG environment variable to the"
+       echo "*** full path to xslt-config."
+     else
+       if test -f conf.xslttest ; then
+        :
+       else
+          echo "*** Could not run libxslt test program, checking why..."
+          CFLAGS="$CFLAGS $XSLT_CFLAGS"
+          LIBS="$LIBS $XSLT_LIBS"
+          cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#include <libxslt/xslt.h>
+#include <stdio.h>
 
 int
 main ()
 {
-return main ();
+ LIBXSLT_TEST_VERSION; return 0;
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_xslt_main=yes
+   echo "*** The test program compiled, but did not run. This usually means"
+          echo "*** that the run-time linker is not finding LIBXSLT or finding the wrong"
+          echo "*** version of LIBXSLT. If it is not finding LIBXSLT, you'll need to set your"
+          echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
+          echo "*** to the installed location  Also, make sure you have run ldconfig if that"
+          echo "*** is required on your system"
+          echo "***"
+          echo "*** If you have an old version installed, it is best to remove it, although"
+          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"
 else
-  ac_cv_lib_xslt_main=no
+   echo "*** The test program failed to compile or link. See the file config.log for the"
+          echo "*** exact error that occured. This usually means LIBXSLT was incorrectly installed"
+          echo "*** or that you have moved LIBXSLT since it was installed. In the latter case, you"
+          echo "*** may want to edit the xslt-config script: $XSLT_CONFIG"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_xslt_main" >&5
-$as_echo "$ac_cv_lib_xslt_main" >&6; }
-if test "x$ac_cv_lib_xslt_main" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBXSLT 1
-_ACEOF
+          CFLAGS="$ac_save_CFLAGS"
+          LIBS="$ac_save_LIBS"
+       fi
+     fi
 
-  LIBS="-lxslt $LIBS"
-
-else
-  as_fn_error $? "libxslt must be installed." "$LINENO" 5
-fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lexslt" >&5
-$as_echo_n "checking for main in -lexslt... " >&6; }
-if ${ac_cv_lib_exslt_main+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lexslt  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
+     XSLT_CFLAGS=""
+     XSLT_LIBS=""
+     as_fn_error $? "libxslt must be installed." "$LINENO" 5
+  fi
 
 
-int
-main ()
-{
-return main ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_exslt_main=yes
-else
-  ac_cv_lib_exslt_main=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_exslt_main" >&5
-$as_echo "$ac_cv_lib_exslt_main" >&6; }
-if test "x$ac_cv_lib_exslt_main" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBEXSLT 1
-_ACEOF
-
-  LIBS="-lexslt $LIBS"
-
-else
-  as_fn_error $? "libexslt must be installed." "$LINENO" 5
-fi
+  rm -f conf.xslttest
 
 
 DEBUG="-g"
-LIBS="$DEBUG $LIBS $XML_LIBS"
-CXXFLAGS="$DEBUG $CXXFLAGS $XML_CXXFLAGS"
-CPPFLAGS="$DEBUG $CPPFLAGS $XML_CPPFLAGS -Wno-write-strings"
-CFLAGS="$DEBUG $CFLAGS $XML_CFLAGS -Wno-write-strings"
+LIBS="$DEBUG $LIBS $XML_LIBS $XSLT_LIBS -lexslt"
+CXXFLAGS="$DEBUG $CXXFLAGS $XML_CXXFLAGS $XSLT_CXXFLAGS"
+CPPFLAGS="$DEBUG $CPPFLAGS $XML_CPPFLAGS $XSLT_CPPFLAGS -Wno-write-strings"
+CFLAGS="$DEBUG $CFLAGS $XML_CFLAGS $XSLT_CFLAGS - -Wno-write-strings"
 
 ac_config_files="$ac_config_files Makefile src/Makefile libxmldiff.pc doc/libxmldiff.dox"
 
