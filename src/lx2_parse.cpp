@@ -363,7 +363,7 @@ int executeAction(const struct appCommand & p_cmd)
 		{
 			if (cmd.param[i] != "")
 			{
-				if (i < 10) sprintf(var, "$%d",i); else sprintf(var, "$(%d)", i);
+				if (i < 10) snprintf(var, 9, "$%d",i); else snprintf(var, 9, "$(%d)", i);
 				vars[var] = cmd.param[i];
 			}
 		}
@@ -401,20 +401,22 @@ int executeAction(const struct appCommand & p_cmd)
 				olen = 3 * cmd.param[i].length();
 				temp = (xmlChar *)malloc(olen + 1);
 				if (temp == NULL) { throwError(XD_Exception::XDE_MEMORY_ERROR, "Memory error while parsing.");}
-				ilen = cmd.param[i].substr(0, cmd.param[i].find('=')).length();
-				if (isolat1ToUTF8(temp, &olen, (const unsigned char *)cmd.param[i].substr(0, cmd.param[i].find('=')).c_str(), &ilen) == -1)
-					throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8.");
-				temp[olen] = 0;
-				tmp_params[nparam].setCharTmp(strdup((char *)temp));
-				params[nparam++] = (const char *)tmp_params[nparam-1];
-				olen = 3 * cmd.param[i].length();
-				ilen = cmd.param[i].substr(cmd.param[i].find('=') + 1, cmd.param[i].length()).length();
-				if (isolat1ToUTF8(temp, &olen, (const unsigned char *)cmd.param[i].substr(cmd.param[i].find('=') + 1, cmd.param[i].length()).c_str(), &ilen) == -1)
-					throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8.");
-				temp[olen] = 0;
-				tmp_params[nparam].setCharTmp((char *)temp);
-				params[nparam++] = (const char *)tmp_params[nparam-1];
-                verbose(5, cmd.verboseLevel, "Parameter \"%s\" = \"%s\"\n ", params[nparam-2], params[nparam-1]);
+				else {
+					ilen = cmd.param[i].substr(0, cmd.param[i].find('=')).length();
+					if (isolat1ToUTF8(temp, &olen, (const unsigned char *)cmd.param[i].substr(0, cmd.param[i].find('=')).c_str(), &ilen) == -1)
+						throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8.");
+					temp[olen] = 0;
+					tmp_params[nparam].setCharTmp(strdup((char *)temp));
+					params[nparam++] = (const char *)tmp_params[nparam-1];
+					olen = 3 * cmd.param[i].length();
+					ilen = cmd.param[i].substr(cmd.param[i].find('=') + 1, cmd.param[i].length()).length();
+					if (isolat1ToUTF8(temp, &olen, (const unsigned char *)cmd.param[i].substr(cmd.param[i].find('=') + 1, cmd.param[i].length()).c_str(), &ilen) == -1)
+						throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8.");
+					temp[olen] = 0;
+					tmp_params[nparam].setCharTmp((char *)temp);
+					params[nparam++] = (const char *)tmp_params[nparam-1];
+					verbose(5, cmd.verboseLevel, "Parameter \"%s\" = \"%s\"\n ", params[nparam-2], params[nparam-1]);
+				}
 			}
 		}
 		params[nparam] = NULL;

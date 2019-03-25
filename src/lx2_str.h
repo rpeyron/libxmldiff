@@ -66,6 +66,10 @@ public :
     xmlCharTmp(xmlChar * const str)  { fLocal = str; }
     ~xmlCharTmp() { xmlFree(fLocal); }   
     operator xmlChar * ()  { return (fLocal); }
+	// Not sure about these (from sonar example)
+	xmlCharTmp(xmlCharTmp& copy) { fLocal = copy.fLocal;}
+	xmlCharTmp& operator=(const xmlCharTmp &other) { xmlFree(fLocal); fLocal = other.fLocal; return *this;}
+	xmlCharTmp(xmlCharTmp &&fp) noexcept {fLocal = fp.fLocal; fp.fLocal = NULL; }
 };
 
 class LIBXMLDIFF_API charTmp
@@ -77,6 +81,10 @@ public :
     ~charTmp() { free(fLocal); }   
 	void setCharTmp(char * const str) { fLocal = str; }
     operator char * ()  { return (fLocal); }
+	// Not sure about these (from sonar example)
+	charTmp(charTmp& copy) { fLocal = copy.fLocal;}
+	charTmp& operator=(const charTmp &other) { free(fLocal); fLocal = other.fLocal; return *this;}
+	charTmp(charTmp &&fp) noexcept {fLocal = fp.fLocal; fp.fLocal = NULL; }
 };
 
 #endif

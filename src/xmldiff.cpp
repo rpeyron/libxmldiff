@@ -132,13 +132,13 @@ int main(int argc, char* argv[])
     verbose(2, curOptions.verboseLevel, "Done.\n");
 
     }
-    catch(XD_Exception e)
+    catch(XD_Exception &e)
     {
         printf("\n[ERROR] %s\n", e.what());
         xmlFinalize(curOptions);
         rc = - e.getType(); 
     }
-    catch(exception e)
+    catch(exception &e)
     {
         printf("\n[ERROR] %s\n", e.what());
         xmlFinalize(curOptions);

@@ -350,7 +350,7 @@ int diffXmlFiles(string beforeAlias, string afterAlias, string outputAlias, cons
 /// Recalc an XML File according to provided options
 int recalcXmlFiles(string alias, const struct globalOptions & options)
 {
-    int rc;
+    int rc = -1;
     xmlNodePtr node;
     node = getXmlFile(alias, options);
     verbose(2, options.verboseLevel, "Recalculating %s...", alias.c_str());
@@ -380,7 +380,7 @@ int deleteNodes(const string & alias, const xmlstring & xpath, const struct glob
 	curNode = NULL;
 	if (node->doc != NULL) curNode = node->doc->children;
 	while ((curNode != NULL) && ((curNode->type != XML_ELEMENT_NODE))) curNode = curNode->next;
-	if (curNode != NULL) 
+	if ((curNode != NULL)  && (xpathCtx != NULL))
 	{
 		xpathCtx->namespaces = xmlGetNsList(node->doc, curNode);
 		xpathCtx->nsNr = 0;
@@ -413,14 +413,16 @@ int duplicateDocument(const string & src, const string & dest, const struct glob
     xmlNodePtr srcNode, destNode;
     srcNode = getXmlFile(src, options);
     if (srcNode == NULL) throwError(XD_Exception::XDE_DIFF_MEMORY_ERROR, "Unable to instanciate stuctures, probably due to a memory problem");
-    verbose(3, options.verboseLevel, "Duplicating %s to %d...", src.c_str(), dest.c_str());
-    destNode = (xmlNodePtr)xmlCopyDoc(srcNode->doc, 1);
-    verbose(3, options.verboseLevel, " done.\n");
-    loadedFiles[dest] = loadedFiles[src];
-    loadedFiles[dest].doc = destNode->doc;
-    loadedFiles[dest].filename = dest;
-    loadedFiles[dest].modified = true;
-    loadedFiles[dest].opened = true;
+	else {
+		verbose(3, options.verboseLevel, "Duplicating %s to %d...", src.c_str(), dest.c_str());
+		destNode = (xmlNodePtr)xmlCopyDoc(srcNode->doc, 1);
+		verbose(3, options.verboseLevel, " done.\n");
+		loadedFiles[dest] = loadedFiles[src];
+		loadedFiles[dest].doc = destNode->doc;
+		loadedFiles[dest].filename = dest;
+		loadedFiles[dest].modified = true;
+		loadedFiles[dest].opened = true;
+	}
     return 0;
 }
 

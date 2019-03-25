@@ -297,7 +297,7 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
 					options.diff_attr, 
 					options.diffQualifiersList[DN_REMOVED], 
 					options.tagChildsAddedRemoved);
-            if ((!options.diffOnly) && (bisNode->type == XML_ELEMENT_NODE)) 
+            if ((!options.diffOnly) && (bisNode) && (bisNode->type == XML_ELEMENT_NODE)) 
 				if (xmlReconciliateNs(nodeAfter->doc, bisNode) < 0) throwError(XD_Exception::XDE_NAMESPACE_PROBLEM, "Unable to reconciliate Namespaces");
         }
     }
@@ -438,7 +438,7 @@ int diffTree(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
 {
     int status;
 	xmlNodePtr curNode;
-	xmlNsPtr curNs;
+	xmlNsPtr curNs = NULL;
     beforeNodesNb = 0; afterNodesNb = 0; 
     if (options.callbackProgressionPercent != NULL)
     {
@@ -465,7 +465,7 @@ int diffTree(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
 			// Search NS Definition node on after file
 			if (nodeAfter->type == XML_DOCUMENT_NODE) curNode = nodeAfter->children; else curNode = nodeAfter;
 			while ((curNode != NULL) && (curNode->type != XML_ELEMENT_NODE)) curNode = curNode->next;
-			while (curNs != NULL)
+			while ((curNs != NULL) && (curNode != NULL))
 			{
 				if (!xmlSearchNsByHref(curNode->doc, curNode, curNs->href))
 				{
