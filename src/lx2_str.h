@@ -69,8 +69,10 @@ public :
 	// Not sure about these (from sonar example)
 	xmlCharTmp(xmlCharTmp& copy) { fLocal = copy.fLocal;}
 	xmlCharTmp& operator=(const xmlCharTmp &other) { if (this != &other) { xmlFree(fLocal); fLocal = other.fLocal; } return *this;}
+#if __cplusplus > 199711L
 	xmlCharTmp& operator=(xmlCharTmp &&other) { if (this != &other) { xmlFree(fLocal); fLocal = other.fLocal; } return *this;}
 	//xmlCharTmp(xmlCharTmp &&fp) noexcept {fLocal = fp.fLocal; fp.fLocal = NULL; }
+#endif	
 };
 
 class LIBXMLDIFF_API charTmp
@@ -85,8 +87,10 @@ public :
 	// Not sure about these (from sonar example)
 	charTmp(charTmp& copy) { fLocal = copy.fLocal;}
 	charTmp& operator=(const charTmp &other) { if (this != &other) { free(fLocal); fLocal = other.fLocal; } return *this;}
+#if __cplusplus > 199711L
 	charTmp& operator=(charTmp &&other) { if (this != &other) { free(fLocal); fLocal = other.fLocal; } return *this;}
 	//charTmp(charTmp &&fp) noexcept {fLocal = fp.fLocal; fp.fLocal = NULL; }
+#endif	
 };
 
 #endif
