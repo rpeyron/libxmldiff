@@ -1,5 +1,10 @@
 # libxmldiff
 [![Build Status](https://travis-ci.org/rpeyron/libxmldiff.svg?branch=master)](https://travis-ci.org/rpeyron/libxmldiff)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=libxmldiff&metric=security_rating)](https://sonarcloud.io/dashboard?id=libxmldiff)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=libxmldiff&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=libxmldiff)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=libxmldiff&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=libxmldiff)
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=libxmldiff&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=libxmldiff)
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=libxmldiff&metric=bugs)](https://sonarcloud.io/dashboard?id=libxmldiff)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=libxmldiff&metric=alert_status)](https://sonarcloud.io/dashboard?id=libxmldiff)
 
 libxmldiff aims at providing efficient diff on XML files (C library)
