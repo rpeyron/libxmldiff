@@ -410,7 +410,7 @@ int deleteNodes(const string & alias, const xmlstring & xpath, const struct glob
         if (nb != 0) loadedFiles[alias].modified = true;
     }
 	
-	if (xpathCtx->namespaces) xmlFree(xpathCtx->namespaces);
+	if ((xpathCtx) && (xpathCtx->namespaces)) xmlFree(xpathCtx->namespaces);
     xmlXPathFreeContext(xpathCtx); 
     return 0;
 }
