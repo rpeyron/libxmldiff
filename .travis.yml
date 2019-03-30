@@ -17,6 +17,7 @@ before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y libxml2-dev libxslt-dev pkg-config autotools-dev automake autoconf libtool valgrind
   - sudo apt-get install -y doxygen graphviz
+  - sudo apt-get install -y gcovr
   - autoreconf -f -i
   
 # Generate and deploy documentation
