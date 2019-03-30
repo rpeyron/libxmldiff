@@ -1,5 +1,5 @@
 ../src/xmldiff diff --ids '.' product1.xml product2.xml memleak1.xml
-xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+xmldiff v0.2.8 - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
 XML Engine initialized.
 Loading product1.xml as product1.xml... done.
 Loading product2.xml as product2.xml... done.

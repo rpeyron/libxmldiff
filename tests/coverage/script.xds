@@ -1,14 +1,12 @@
-# Script to cover untested features
-# options --auto-save no --force-clean yes --verbose 2 --optimize yes
-# options --force-clean yes --verbose 5 
+options --auto-save no --force-clean yes --verbose 6 --optimize yes
 diff before.xml after.xml output.xml
-# dup before.xml 'alias.xml'
-# discard 'alias.xml'
-# delete output.xml //root
-# recalc output.xml
+dup before.xml 'alias.xml'
+discard 'alias.xml'
+delete output.xml //root
+recalc output.xml
 save output.xml output.xml
 close before.xml
 close after.xml
-# flush
+flush
 print done
 ret 0

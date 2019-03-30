@@ -1,15 +1,20 @@
 ../src/xmldiff execute script.xds
-xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+xmldiff v0.2.8 - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
 XML Engine initialized.
 Execute script.xds ...
-Loading before.xml as before.xml... done.
-Loading after.xml as after.xml... done.
+Loading before.xml as before.xml... Cleaning... done.
+Loading after.xml as after.xml... Cleaning... done.
 Diffing (92|92) ... [          ]==========] 113 nodes processed.
 Files are different.
+Alias before.xml was freed
+Loading before.xml as before.xml... Cleaning... done.
+Duplicating before.xml to alias.xml... done.
+Alias alias.xml was freed
+Deleting //root = 2 nodes... done.
+Recalculating output.xml... done.
 Saving output.xml to output.xml ...done.
 Alias before.xml was freed
-Alias after.xml was freed
-done
 Alias output.xml was freed
+done
 XML Engine is shutting down... done.
 Done.

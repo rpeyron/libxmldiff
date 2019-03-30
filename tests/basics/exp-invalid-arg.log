@@ -1,5 +1,5 @@
 ../src/xmldiff diff before.xml after.xml output.xml --bad-argument
-xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+xmldiff v0.2.8 - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
 
 [ERROR] Unknown argument '--bad-argument'.
 XML Engine is shutting down... done.

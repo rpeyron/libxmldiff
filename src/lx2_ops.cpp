@@ -391,15 +391,22 @@ int deleteNodes(const string & alias, const xmlstring & xpath, const struct glob
     xpathObj = xmlXPathEvalExpression(xpath.c_str(), xpathCtx);
     if (xpathObj != NULL)
     {
+		std::vector<xmlNodePtr> vnodelist;
         nb = ((xpathObj->nodesetval)?xpathObj->nodesetval->nodeNr:0);
         verbose(2, options.verboseLevel, "Deleting %s = %d nodes...", BAD_CAST xpath.c_str(), nb);
+		// Copy in vector
+        for(i=0;i<nb;i++) { vnodelist.push_back(xpathObj->nodesetval->nodeTab[i]); }
+		// Free XPath
+        xmlXPathFreeObject(xpathObj);
+		// Delete nodes
         for(i=0;i<nb;i++)
         {
-            xmlUnlinkNode(xpathObj->nodesetval->nodeTab[i]);
-            //xmlFreeNode(xpathObj->nodesetval->nodeTab[i]);
+			if (vnodelist[i]) {
+				xmlUnlinkNode(vnodelist[i]);
+				xmlFreeNode(vnodelist[i]);
+			}
         }
         verbose(2, options.verboseLevel, " done.\n");
-        xmlXPathFreeObject(xpathObj);
         if (nb != 0) loadedFiles[alias].modified = true;
     }
 	
@@ -416,7 +423,7 @@ int duplicateDocument(const string & src, const string & dest, const struct glob
     srcNode = getXmlFile(src, options);
     if (srcNode == NULL) throwError(XD_Exception::XDE_DIFF_MEMORY_ERROR, "Unable to instanciate stuctures, probably due to a memory problem");
 	else {
-		verbose(3, options.verboseLevel, "Duplicating %s to %d...", src.c_str(), dest.c_str());
+		verbose(3, options.verboseLevel, "Duplicating %s to %s...", src.c_str(), dest.c_str());
 		destNode = (xmlNodePtr)xmlCopyDoc(srcNode->doc, 1);
 		verbose(3, options.verboseLevel, " done.\n");
 		loadedFiles[dest] = loadedFiles[src];

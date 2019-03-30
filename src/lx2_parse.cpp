@@ -31,6 +31,10 @@
 #include <fstream>
 #include <vector>
 
+#ifdef VALGRIND
+#include <memcheck.h>
+#endif
+
 // If stricmp is not supported, just replace it... (only used in command line)
 #ifndef stricmp
 #define stricmp strcmp
@@ -555,6 +559,9 @@ int executeFile(string scriptFileName, const map<string, string> & variables, co
         {
             rc = executeAction(cmd);
         }
+#ifdef VALGRIND
+		VALGRIND_DO_ADDED_LEAK_CHECK
+#endif 
     }
     flushXmlFiles(options);
     return rc;

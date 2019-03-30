@@ -1,5 +1,5 @@
 ../src/xmldiff xslt omit-declaration.xsl file.xml result.txt
-xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+xmldiff v0.2.8 - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
 XML Engine initialized.
 Loading omit-declaration.xsl as omit-declaration.xsl... done.
 Loading file.xml as file.xml... done.

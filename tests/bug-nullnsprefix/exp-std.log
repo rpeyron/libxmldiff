@@ -1,5 +1,5 @@
 ../src/xmldiff diff sendBuffer.xml sendBuffer2.xml output.xml --ignore 'VerDTD'
-xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+xmldiff v0.2.8 - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
 XML Engine initialized.
 Loading sendBuffer.xml as sendBuffer.xml... done.
 Loading sendBuffer2.xml as sendBuffer2.xml... done.
