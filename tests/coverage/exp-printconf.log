@@ -1,0 +1,25 @@
+../src/xmldiff print_configuration
+xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+XML Engine initialized.
+Diff Only      : No
+Keep Diff Only      : No
+Before values  : Yes (separator |)
+ Encoding :  none
+Pretty Print   : Yes
+No Blanks      : Yes
+Force Clean    : No
+Optimize       : No
+Auto-Save      : Yes
+Tag Childs     : Yes
+Merge Ns       : Yes
+Use EXSLT      : No
+Save With XSLT : Yes
+Verbose Level  : 4
+Ids            : @id @value 
+Ignore         : 
+Diff Namespace : http://www.via.ecp.fr/~remi/soft/xml/xmldiff
+Diff Alias     : diff
+Diff Attribute : status
+
+XML Engine is shutting down... done.
+Done.

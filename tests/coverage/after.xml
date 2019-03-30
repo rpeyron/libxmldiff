@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<tests>
+ <test xmlns:test="test" test:name="Element identique vide" />
+ <test name="Element identique valeur">Identique</test>
+ <test name="Element identique composé">
+  <contenu>
+   <composé>Identique</composé>
+  </contenu>
+ </test>
+ <test name="Element ajouté vide">
+  <element />
+ </test>
+ <test name="Element ajouté debut">
+  <element id="1">contenu</element>
+  <element id="2" />
+  <element id="3" />
+  <element id="4" />
+ </test>
+ <test name="Element ajouté milieu">
+  <element id="2" />
+  <element id="1" />
+  <element id="3" />
+  <element id="4" />
+ </test>
+ <test name="Element ajouté fin">
+  <element id="2" />
+  <element id="3" />
+  <element id="4" />
+  <element id="5" />
+ </test>
+ <test name="Element supprimé vide" />
+ <test name="Element supprimé début">
+  <element id="2" />
+  <element id="3" />
+  <element id="4" />
+  <element id="5" />
+ </test>
+ <test name="Element supprimé milieu">
+  <element id="1" />
+  <element id="2" />
+  <element id="4" />
+  <element id="5" />
+ </test>
+ <test name="Element supprimé fin">
+  <element id="1" />
+  <element id="2" />
+  <element id="3" />
+  <element id="4" />
+ </test>
+ <test name="Element ajouté sans ordre">
+  <element>1</element>
+  <element>2</element>
+  <element>3</element>
+  <element>4</element>
+  <element>5</element>
+ </test>
+ <test name="Element supprimé sans ordre">
+  <element>1</element>
+  <element>2</element>
+  <element>4</element>
+  <element>5</element>
+ </test>
+ <test name="Ajout elements variés">
+  <![CDATA[ Element CData ]]>
+  <?element Processing instruction ?>
+  <!-- Commentaire -->
+  Texte avec &lt; &gt; caractères spéciaux &amp;
+ </test>
+ <test name="Suppression elements variés" />
+ <test name="Elements variés identiques">
+  <![CDATA[ Element CData ]]>
+  <?element Processing instruction ?>
+  <!-- Commentaire -->
+  Texte avec &lt; &gt; caractères spéciaux &amp;
+ </test>
+ <test name="Elements variés modifiés">
+  <![CDATA[ Element CData - après ]]>
+  <?element Processing instruction - après ?>
+  <!-- Commentaire - après -->
+  Texte avec &lt; &gt; caractères spéciaux &amp; après
+ </test>
+ <test name="Ajout d'un fils unique"> 
+  <root>
+   <child>
+    <element />
+   </child>
+  </root>
+ </test>
+ <test name="Suppression d'un fils unique"> 
+  <root>
+   <child />
+  </root>
+ </test>
+ <test name="Modification de texte">Texte après</test>
+ <test name="Texte variant suivant retour chariots entre balises"> Texte <balise /> Texte <balise> Balise </balise> </test>
+ <test name="Attribut identique mais inversés et espacés">
+  <element att1="val1"      att2="val2" 
+  att3="val3" />
+ </test>
+ <test name="Ajout attribut seul">
+  <element att="val" />
+ </test>
+ <test name="Ajout attribut debut">
+  <element att1="val1" att2="val2" att3="val3" />
+ </test>
+ <test name="Ajout attribut milieu">
+  <element att1="val1" att2="val2" att3="val3" />
+ </test>
+ <test name="Ajout attribut fin">
+  <element att1="val1" att2="val2" att3="val3" />
+ </test>
+ <test name="Suppression attribut seul">
+  <element />
+ </test>
+ <test name="Suppression attribut début">
+  <element att2="val2" att3="val3" />
+ </test>
+ <test name="Suppression attribut milieu">
+  <element att1="val1"  att3="val3" />
+ </test>
+ <test name="Suppression attribut fin">
+  <element att1="val1" att2="val2" />
+ </test>
+ <test name="Modification attribut">
+  <element att1="val1" att="val-après" att3="val3" />
+ </test>
+ <test name="Modification attribut depuis vide">
+  <element att1="val1" att="val" att3="val3" />
+ </test>
+ <test name="Modification attribut vers vide">
+  <element att1="val1" att="" att3="val3" />
+ </test>
+ <test name="Modification d'un attribut identifiant">
+  <element id="après" />
+ </test>
+</tests>

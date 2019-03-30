@@ -498,7 +498,7 @@ int recalcTree(xmlNodePtr node, const struct xmldiff_options & options)
         // Get Current Status
         strStatus = BAD_CAST "";
         if (xmlHasNsProp(node, options.diff_attr.c_str(), options.diff_ns.c_str()))
-            strStatus = xmlstring(xmlGetNsProp(node, options.diff_attr.c_str(), options.diff_ns.c_str()));
+            strStatus = xmlstring(xmlCharTmp(xmlGetNsProp(node, options.diff_attr.c_str(), options.diff_ns.c_str())));
         status = DN_NONE;
         if (strStatus == options.diffQualifiersList[DN_ADDED]) status = DN_ADDED;
         else if (strStatus == options.diffQualifiersList[DN_REMOVED]) status = DN_REMOVED;

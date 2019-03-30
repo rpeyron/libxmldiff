@@ -1,0 +1,49 @@
+../src/xmldiff --help
+xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+XML Engine initialized.
+xmldiff - diff two XML files. (c) 2004-2006 - Rémi Peyronnet
+Syntax : xmldiff action [options] <parameters>
+
+Actions
+ - diff <before.xml> <after.xml> <output.xml>
+ - merge <before.xml> <after.xml> <output.xml>
+ - xslt <style.xsl> <input.xml> <output.xml> [param='value']
+ - recalc <output.xml>
+ - execute <script.xds> (xds = list of these commands)
+ - load <filename> <alias>
+ - save <filename> <alias>
+ - close <alias> / discard <alias> (same as close without saving)
+ - flush
+ - options
+ - print <string>
+ - delete <from alias> <xpath expression>
+ - dup(licate) <source alias> <dest alias>
+ - rem(ark),#,--,;,// <remark>
+ - print_configuration
+ - ret(urn) <value>
+
+Global Options : 
+  --auto-save yes      : Automatically save modified files
+  --force-clean no     : Force remove of blank nodes and trim spaces
+  --no-blanks yes      : Remove all blank spaces
+  --pretty-print yes   : Output using pretty print writer
+  --optimize no        : Optimize diff algorithm to reduce memory (see doc)
+  --use-exslt no       : Allow the use of exslt.org extended functions.
+  --savewithxslt yes   : Save with <xsl:output> options the results of XSLT.
+  --verbose 4          : Verbose level, from 0 (nothing) to 9 (everything).
+
+Diff Options : 
+  --ids '@id,@value'   : Use these item to identify a node
+  --ignore '@ignore,..': Ignore differences on these items
+  --diff-only no       : Do not alter files, just compare.
+  --keep-diff-only no  : Keep only different nodes.
+  --before-values yes  : Add before values in attributes or text nodes
+  --sep |              : Use this as the separator
+  --encoding none  : Force encoding
+  --tag-childs yes     : Tag Added or Removed childs
+  --merge-ns yes       : Create missing namespace on top of document
+  --diff-ns http://... : Namespace definition, use no to disable
+  --diff-xmlns diff    : Alias to use, use no to disable
+  --diff-attr status   : Name of attribute to use (should not be used in docs)
+XML Engine is shutting down... done.
+Done.

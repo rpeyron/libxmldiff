@@ -1,0 +1,15 @@
+../src/xmldiff execute script.xds
+xmldiff v0.2.8pre - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+XML Engine initialized.
+Execute script.xds ...
+Loading before.xml as before.xml... done.
+Loading after.xml as after.xml... done.
+Diffing (92|92) ... [          ]==========] 113 nodes processed.
+Files are different.
+Saving output.xml to output.xml ...done.
+Alias before.xml was freed
+Alias after.xml was freed
+done
+Alias output.xml was freed
+XML Engine is shutting down... done.
+Done.

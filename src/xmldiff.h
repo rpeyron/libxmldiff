@@ -27,6 +27,6 @@
 
 #include "libxmldiff.h"
 
-#define XMLDIFF_VER "v0.2.8pre"
+#define XMLDIFF_VER "v0.2.8"
 
 #endif // __XMLDIFF_H__

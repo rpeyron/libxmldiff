@@ -142,4 +142,9 @@ ppa:
 code-coverage-clean:
 	-$(LCOV) --directory $(top_builddir) -z
 	-find . \( -name "*.gcda" -o -name "*.gcno" -o -name "*.gcov" \) -delete
-#	-rm -rf "$(CODE_COVERAGE_OUTPUT_FILE)" "$(CODE_COVERAGE_OUTPUT_FILE).tmp" "$(CODE_COVERAGE_OUTPUT_DIRECTORY)"
+	-rm -rf "gcov-rapport" "gcov-rapport.info"
+
+gcov-view:
+	lcov --directory src -c -o gcov-rapport.info
+	genhtml -o gcov-rapport -t "couverture de code des tests" gcov-rapport.info
+	sensible-browser gcov-rapport/index.html

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+<tests xmlns:diff="http://www.via.ecp.fr/~remi/soft/xml/xmldiff" diff:status="below">
+  <test xmlns:test="test" test:name="|Element identique vide" name="Element identique vide|" diff:status="modified"/>
+  <test name="Element identique valeur">Identique</test>
+  <test name="Element identique composé">
+    <contenu>
+      <composé>Identique</composé>
+    </contenu>
+  </test>
+  <test name="Element ajouté vide" diff:status="below">
+    <element diff:status="added"/>
+  </test>
+  <test name="Element ajouté debut" diff:status="below">
+    <element id="1" diff:status="added">contenu</element>
+    <element id="2"/>
+    <element id="3"/>
+    <element id="4"/>
+  </test>
+  <test name="Element ajouté milieu" diff:status="below">
+    <element id="2"/>
+    <element id="1" diff:status="added"/>
+    <element id="3"/>
+    <element id="4"/>
+  </test>
+  <test name="Element ajouté fin" diff:status="below">
+    <element id="2"/>
+    <element id="3"/>
+    <element id="4"/>
+    <element id="5" diff:status="added"/>
+  </test>
+  <test name="Element supprimé vide" diff:status="below">
+    <element id="1" diff:status="removed"/>
+  </test>
+  <test name="Element supprimé début" diff:status="below">
+    <element id="1" diff:status="removed"/>
+    <element id="2"/>
+    <element id="3"/>
+    <element id="4"/>
+    <element id="5"/>
+  </test>
+  <test name="Element supprimé milieu" diff:status="below">
+    <element id="1"/>
+    <element id="2"/>
+    <element id="3" diff:status="removed"/>
+    <element id="4"/>
+    <element id="5"/>
+  </test>
+  <test name="Element supprimé fin" diff:status="below">
+    <element id="1"/>
+    <element id="2"/>
+    <element id="3"/>
+    <element id="4"/>
+    <element id="5" diff:status="removed"/>
+  </test>
+  <test name="Element ajouté sans ordre" diff:status="below">
+    <element>1</element>
+    <element diff:status="modified">3|2</element>
+    <element diff:status="modified">4|3</element>
+    <element diff:status="modified">5|4</element>
+    <element diff:status="added">5</element>
+  </test>
+  <test name="Element supprimé sans ordre" diff:status="below">
+    <element>1</element>
+    <element>2</element>
+    <element diff:status="modified">3|4</element>
+    <element diff:status="modified">4|5</element>
+    <element diff:status="removed">5</element>
+  </test>
+  <test name="Ajout elements variés" diff:status="modified">|<![CDATA[ Element CData ]]><?element Processing instruction ?><!-- Commentaire -->
+  Texte avec &lt; &gt; caractères spéciaux &amp;
+ </test>
+  <test name="Suppression elements variés" diff:status="modified">
+  Texte avec &lt; &gt; caractères spéciaux &amp;
+ |<![CDATA[ Element CData ]]><!-- Commentaire --><?element Processing instruction ?></test>
+  <test name="Elements variés identiques"><![CDATA[ Element CData ]]><?element Processing instruction ?><!-- Commentaire -->
+  Texte avec &lt; &gt; caractères spéciaux &amp;
+ </test>
+  <test name="Elements variés modifiés" diff:status="modified">
+  Texte avec &lt; &gt; caractères spéciaux &amp; avant
+ |<![CDATA[ Element CData - après ]]><?element Processing instruction - après ?><!-- Commentaire - après -->
+  Texte avec &lt; &gt; caractères spéciaux &amp; après
+ <![CDATA[ Element CData - avant ]]><!-- Commentaire - avant --><?element Processing instruction - avant ?></test>
+  <test name="Ajout d'un fils unique" diff:status="below">
+    <root diff:status="below">
+      <child diff:status="below">
+        <element diff:status="added"/>
+      </child>
+    </root>
+  </test>
+  <test name="Suppression d'un fils unique" diff:status="below">
+    <root diff:status="below">
+      <child diff:status="below">
+        <element diff:status="removed"/>
+      </child>
+    </root>
+  </test>
+  <test name="Modification de texte" diff:status="modified">Texte avant|Texte après</test>
+  <test name="Texte variant suivant retour chariots entre balises" diff:status="modified">
+ Texte
+ 
+ Texte
+ 
+ | Texte <balise/> Texte <balise diff:status="modified">
+ Balise
+ | Balise </balise> </test>
+  <test name="Attribut identique mais inversés et espacés">
+    <element att1="val1" att2="val2" att3="val3"/>
+  </test>
+  <test name="Ajout attribut seul" diff:status="below">
+    <element att="|val" diff:status="modified"/>
+  </test>
+  <test name="Ajout attribut debut" diff:status="below">
+    <element att1="|val1" att2="val2" att3="val3" diff:status="modified"/>
+  </test>
+  <test name="Ajout attribut milieu" diff:status="below">
+    <element att1="val1" att2="|val2" att3="val3" diff:status="modified"/>
+  </test>
+  <test name="Ajout attribut fin" diff:status="below">
+    <element att1="val1" att2="val2" att3="|val3" diff:status="modified"/>
+  </test>
+  <test name="Suppression attribut seul" diff:status="below">
+    <element attribut="valeur|" diff:status="modified"/>
+  </test>
+  <test name="Suppression attribut début" diff:status="below">
+    <element att2="val2" att3="val3" att1="val1|" diff:status="modified"/>
+  </test>
+  <test name="Suppression attribut milieu" diff:status="below">
+    <element att1="val1" att3="val3" att2="val2|" diff:status="modified"/>
+  </test>
+  <test name="Suppression attribut fin" diff:status="below">
+    <element att1="val1" att2="val2" att3="val3|" diff:status="modified"/>
+  </test>
+  <test name="Modification attribut" diff:status="below">
+    <element att1="val1" att="val-avant|val-après" att3="val3" diff:status="modified"/>
+  </test>
+  <test name="Modification attribut depuis vide" diff:status="below">
+    <element att1="val1" att="|val" att3="val3" diff:status="modified"/>
+  </test>
+  <test name="Modification attribut vers vide" diff:status="below">
+    <element att1="val1" att="val|" att3="val3" diff:status="modified"/>
+  </test>
+  <test name="Modification d'un attribut identifiant" diff:status="below">
+    <element id="après" diff:status="added"/>
+    <element id="avant" diff:status="removed"/>
+  </test>
+</tests>

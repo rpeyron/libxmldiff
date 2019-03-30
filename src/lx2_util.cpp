@@ -110,11 +110,12 @@ void cleanEmptyNodes(xmlNodePtr node)
             else
             { 
                 int sb, se, sl;
-                str = xmlstring(curNode->content);
+                str = xmlstring(xmlCharTmp(xmlNodeGetContent(curNode)));
                 sl = str.length();    sb = 0;   se = sl - 1;
                 while ((sb < sl) && ( (str[sb] == 0x0A) || (str[sb] == 0x0D) || (str[sb] == 0x20) || (str[sb] == 0x09) ) ) sb++;
                 while ((se > 00) && ( (str[se] == 0x0A) || (str[se] == 0x0D) || (str[se] == 0x20) || (str[se] == 0x09) ) ) se--;
                 if (se < sb) str = BAD_CAST ""; else str =  str.substr(sb, se - sb + 1);
+				xmlNodeSetContent(curNode, str.c_str());
                 str = BAD_CAST "";
             }
             break;

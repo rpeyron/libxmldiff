@@ -1,0 +1,4 @@
+coverage#execute script.xds#output.xml
+cmderror#blabla#
+printconf#print_configuration#
+help#--help#

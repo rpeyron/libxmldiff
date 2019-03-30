@@ -571,7 +571,7 @@ void usage()
 #ifndef WITHOUT_LIBXSLT
          << " - xslt <style.xsl> <input.xml> <output.xml> [param='value']" << endl
 #endif // WITHOUT_LIBXSLT
-         << " - recalc <before.xml> <after.xml>" << endl
+         << " - recalc <output.xml>" << endl
          << " - execute <script.xds> (xds = list of these commands)" << endl
          << " - load <filename> <alias>" << endl
          << " - save <filename> <alias>" << endl

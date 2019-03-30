@@ -396,12 +396,14 @@ int deleteNodes(const string & alias, const xmlstring & xpath, const struct glob
         for(i=0;i<nb;i++)
         {
             xmlUnlinkNode(xpathObj->nodesetval->nodeTab[i]);
-            xmlFreeNode(xpathObj->nodesetval->nodeTab[i]);
+            //xmlFreeNode(xpathObj->nodesetval->nodeTab[i]);
         }
         verbose(2, options.verboseLevel, " done.\n");
         xmlXPathFreeObject(xpathObj);
         if (nb != 0) loadedFiles[alias].modified = true;
     }
+	
+	if (xpathCtx->namespaces) xmlFree(xpathCtx->namespaces);
     xmlXPathFreeContext(xpathCtx); 
     return 0;
 }
