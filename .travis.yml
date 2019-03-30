@@ -36,6 +36,6 @@ script:
   - autoreconf --force --install
   - ./configure --enable-gcov
   - build-wrapper-linux-x86-64 --out-dir bw-output make clean all test
-  - gcovr -r . --xml > gcov.xml
+  - cd src && gcov -p *.cpp *.h && cd ..
   - sonar-scanner
   - find .
