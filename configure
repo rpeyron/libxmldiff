@@ -633,6 +633,12 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+LCOV
+GCOV
+ENABLE_GCOV_FALSE
+ENABLE_GCOV_TRUE
+GCOV_LIBS
+GCOV_CFLAGS
 XSLT_LIBS
 XSLT_CFLAGS
 XSLT_CONFIG
@@ -779,6 +785,7 @@ enable_xmltest
 with_xslt_prefix
 with_xslt_exec_prefix
 enable_xslttest
+enable_gcov
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1436,6 +1443,7 @@ Optional Features:
   --disable-libtool-lock  avoid locking (might break parallel builds)
   --disable-xmltest       Do not try to compile and run a test LIBXML program
   --disable-xslttest       Do not try to compile and run a test LIBXSLT program
+  --enable-gcov           turn on test coverage [default=no]
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -2333,6 +2341,7 @@ ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 
 
 
@@ -8260,6 +8269,10 @@ _lt_linker_boilerplate=`cat conftest.err`
 $RM -r conftest*
 
 
+## CAVEAT EMPTOR:
+## There is no encapsulation within the following macros, do not change
+## the running order or otherwise move them around unless you know exactly
+## what you are doing...
 if test -n "$compiler"; then
 
 lt_prog_compiler_no_builtin_flag=
@@ -17494,11 +17507,132 @@ rm -f core conftest.err conftest.$ac_objext \
   rm -f conf.xslttest
 
 
+
+# Check whether --enable-gcov was given.
+if test "${enable_gcov+set}" = set; then :
+  enableval=$enable_gcov; case "${enableval}" in
+  yes) enable_gcov=true ;;
+  no)  enable_gcov=false ;;
+  *)   as_fn_error $? "bad value ${enableval} for --enable-gcov" "$LINENO" 5 ;;
+esac
+else
+  enable_gcov=false
+fi
+
+
+if test x$enable_gcov = xtrue ; then
+  if test x"$GCC" != xyes; then
+    as_fn_error $? "gcov only works if gcc is used" "$LINENO" 5
+  fi
+
+  GCOV_CFLAGS="-fprofile-arcs -ftest-coverage"
+
+
+        GCOV_LIBS=-lgcov
+
+fi
+
+ if test x"$enable_gcov" = "xtrue"; then
+  ENABLE_GCOV_TRUE=
+  ENABLE_GCOV_FALSE='#'
+else
+  ENABLE_GCOV_TRUE='#'
+  ENABLE_GCOV_FALSE=
+fi
+
+
+for ac_prog in gcov
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GCOV+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GCOV"; then
+  ac_cv_prog_GCOV="$GCOV" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GCOV="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GCOV=$ac_cv_prog_GCOV
+if test -n "$GCOV"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GCOV" >&5
+$as_echo "$GCOV" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GCOV" && break
+done
+test -n "$GCOV" || GCOV="false"
+
+for ac_prog in lcov
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_LCOV+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$LCOV"; then
+  ac_cv_prog_LCOV="$LCOV" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_LCOV="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+LCOV=$ac_cv_prog_LCOV
+if test -n "$LCOV"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $LCOV" >&5
+$as_echo "$LCOV" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$LCOV" && break
+done
+test -n "$LCOV" || LCOV="false"
+
+
 DEBUG="-g"
-LIBS="$DEBUG $LIBS $XML_LIBS $XSLT_LIBS -lexslt"
-CXXFLAGS="$DEBUG $CXXFLAGS $XML_CXXFLAGS $XSLT_CXXFLAGS"
-CPPFLAGS="$DEBUG $CPPFLAGS $XML_CPPFLAGS $XSLT_CPPFLAGS -Wno-write-strings"
-CFLAGS="$DEBUG $CFLAGS $XML_CFLAGS $XSLT_CFLAGS - -Wno-write-strings"
+LIBS="$DEBUG $LIBS $XML_LIBS $XSLT_LIBS -lexslt $GCOV_LIBS"
+CXXFLAGS="$DEBUG $CXXFLAGS $XML_CXXFLAGS $XSLT_CXXFLAGS $GCOV_CFLAGS"
+CPPFLAGS="$DEBUG $CPPFLAGS $XML_CPPFLAGS $XSLT_CPPFLAGS -Wno-write-strings $GCOV_CFLAGS"
+CFLAGS="$DEBUG $CFLAGS $XML_CFLAGS $XSLT_CFLAGS - -Wno-write-strings $GCOV_LIBS"
 
 ac_config_files="$ac_config_files Makefile src/Makefile libxmldiff.pc doc/libxmldiff.dox"
 
@@ -17677,6 +17811,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCXX_TRUE}" && test -z "${am__fastdepCXX_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCXX\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${ENABLE_GCOV_TRUE}" && test -z "${ENABLE_GCOV_FALSE}"; then
+  as_fn_error $? "conditional \"ENABLE_GCOV\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

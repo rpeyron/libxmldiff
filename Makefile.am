@@ -1,5 +1,7 @@
 SUBDIRS=src
 
+ACLOCAL_AMFLAGS=-I m4
+
 EXTRA_DIST = \
         README \
         COPYING \
@@ -129,11 +131,15 @@ changelog:
 	mv -f ChangeLog ChangeLog.cvs
 	mv -f ChangeLog.bak ChangeLog
 
-clean-local: tests-clean
-
+clean-local: tests-clean code-coverage-clean
 
 ppa:
 	scite debian/control
 	scite debian/changelog
 	debuild -S -sa
 	dput ppa ../*.changes
+
+code-coverage-clean:
+	-$(LCOV) --directory $(top_builddir) -z
+	-find . \( -name "*.gcda" -o -name "*.gcno" -o -name "*.gcov" \) -delete
+#	-rm -rf "$(CODE_COVERAGE_OUTPUT_FILE)" "$(CODE_COVERAGE_OUTPUT_FILE).tmp" "$(CODE_COVERAGE_OUTPUT_DIRECTORY)"

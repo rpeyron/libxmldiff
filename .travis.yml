@@ -33,6 +33,6 @@ addons:
 script:
   # other script steps might be done before running the actual analysis
   - autoreconf --force --install
-  - ./configure  
-  - build-wrapper-linux-x86-64 --out-dir bw-output make clean all
+  - ./configure --enable-gcov
+  - build-wrapper-linux-x86-64 --out-dir bw-output make clean all test
   - sonar-scanner
