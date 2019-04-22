@@ -1,3 +1,8 @@
 product#diff product1.xml product2.xml product.xml#product.xml
 memleak1#diff --ids '.'  product1.xml product2.xml memleak1.xml#memleak1.xml
 memleak2#diff --ids 'li'  product1.xml product2.xml memleak2.xml#memleak2.xml
+cdata#diff cdata1.xml cdata2.xml cdata.xml#cdata.xml
+cdata-ids#diff  --no-blanks no --special-nodes-ids no cdata1.xml cdata2.xml cdata.xml#cdata.xml
+cdata-ids-noblanks#diff  --no-blanks no --special-nodes-ids yes cdata1.xml cdata2.xml cdata.xml#cdata.xml
+cdata-before#diff --no-blanks no --special-nodes-before-value yes  cdata1.xml cdata2.xml cdata.xml#cdata.xml
+cdata-before-ids#diff --no-blanks no --special-nodes-ids no --special-nodes-before-value yes cdata1.xml cdata2.xml cdata.xml#cdata.xml

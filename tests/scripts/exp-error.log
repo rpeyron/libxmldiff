@@ -1,5 +1,5 @@
 ../src/xmldiff execute script.xds error 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
-xmldiff v0.2.8 - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+xmldiff v0.2.9beta - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
 XML Engine initialized.
 Execute script.xds ...
 error3456789101112131415161718192021222324$(24)

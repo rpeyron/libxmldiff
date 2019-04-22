@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<cdata xmlns:diff="http://www.via.ecp.fr/~remi/soft/xml/xmldiff" diff:status="below">
+  <description diff:status="below"><![CDATA[begin after endnewnew2]]><![CDATA[oldbegin before end]]></description>
+</cdata>

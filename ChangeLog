@@ -1,3 +1,6 @@
+2019-04-22 11:52 [0.2.9pre] remi
+    * Fix CData diff : added --special-nodes-ids and --special-nodes-before-value
+
 2016-01-31 20:29 [0.2.8] remi
     * Fix memleak signaled by Andrey Paraskevopulo
 

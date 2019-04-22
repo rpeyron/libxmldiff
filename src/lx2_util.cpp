@@ -48,6 +48,7 @@ xmlstring getNodeTextOnly(xmlNodePtr node, bool cdata)
     return ret;
 }
 
+
 /// Get the first child with this tagname : used for id elements.
 xmlNodePtr getFirstChildByTagName(xmlNodePtr node, const xmlstring name)
 {

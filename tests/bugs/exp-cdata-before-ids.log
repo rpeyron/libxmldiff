@@ -1,0 +1,13 @@
+../src/xmldiff diff --no-blanks no --special-nodes-ids no --special-nodes-before-value yes cdata1.xml cdata2.xml cdata.xml
+xmldiff v0.2.9beta - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+XML Engine initialized.
+Loading cdata1.xml as cdata1.xml... done.
+Loading cdata2.xml as cdata2.xml... done.
+Diffing (3|3) ... [          ]=====================] 7 nodes processed.
+Files are different.
+Saving cdata.xml to cdata.xml ...done.
+Alias cdata.xml was freed
+Alias cdata1.xml was freed
+Alias cdata2.xml was freed
+XML Engine is shutting down... done.
+Done.

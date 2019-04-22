@@ -105,6 +105,20 @@ struct LIBXMLDIFF_API xmldiff_options
 	 */
 	bool mergeNsOnTop;
 
+	/** specialNodesIds
+	 * This option will build id of special nodes (CData, PI, Comment) with contents
+	 * Note th noBlanks options of the parser may merge some of the input nodes.
+	 */
+	bool specialNodesIds;
+
+	/** specialNodesBeforeValue
+	 * This option will add before value to special nodes.
+	 * Note as special nodes do not contains attributes, it is the only way to see
+	 * modifications on theses nodes. But as the result could be also confusion 
+	 * this is shipped as a separate option.
+	 */
+	bool specialNodesBeforeValue;
+
     /// == Values ==
 
     /** Namespace declaration :

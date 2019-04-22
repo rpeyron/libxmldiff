@@ -163,6 +163,10 @@ int parseOption(const string & option, const string & arg, /* [in, out] */ struc
     else if OPT_MATCH("--keep-diff-only")  { TWO_BOOL(opt.keepDiffOnly); }
 	// mergeNsOnTop
     else if OPT_MATCH("--merge-ns")  { TWO_BOOL(opt.mergeNsOnTop); }
+	// specialNodesIds
+    else if OPT_MATCH("--special-nodes-ids")  { TWO_BOOL(opt.specialNodesIds); }
+	// specialNodesBeforeValue
+    else if OPT_MATCH("--special-nodes-before-value")  { TWO_BOOL(opt.specialNodesBeforeValue); }
 #ifndef WITHOUT_LIBXSLT
 #ifndef WITHOUT_LIBEXSLT    
     // Use EXSLT --use-exslt
@@ -614,6 +618,8 @@ void usage()
          << "  --encoding none  : Force encoding" << endl
          << "  --tag-childs yes     : Tag Added or Removed childs" << endl
          << "  --merge-ns yes       : Create missing namespace on top of document" << endl
+         << "  --special-nodes-ids yes  : Content of special nodes (CData, PI,...) will be used as ids" << endl
+         << "  --special-nodes-before-value no  : Display changed value for special nodes (CData, PI,...)" << endl
          << "  --diff-ns http://... : Namespace definition, use no to disable" << endl
          << "  --diff-xmlns diff    : Alias to use, use no to disable" << endl
          << "  --diff-attr status   : Name of attribute to use (should not be used in docs)" << endl
@@ -635,6 +641,8 @@ void printConfiguration(const struct globalOptions & opt)
          << "Auto-Save      : " << ((opt.automaticSave)?"Yes":"No") << endl
          << "Tag Childs     : " << ((opt.tagChildsAddedRemoved)?"Yes":"No") << endl
          << "Merge Ns       : " << ((opt.mergeNsOnTop)?"Yes":"No") << endl
+         << "SpeNodes Ids   : " << ((opt.specialNodesIds)?"Yes":"No") << endl
+         << "SpeNodes BVal  : " << ((opt.specialNodesBeforeValue)?"Yes":"No") << endl
 #ifndef WITHOUT_LIBXSLT
 #ifndef WITHOUT_LIBEXSLT
          << "Use EXSLT      : " << ((opt.useEXSLT)?"Yes":"No") << endl

@@ -508,6 +508,7 @@ void setDefaultXmldiffOptions(struct appCommand & opt)
     opt.forceClean = false;
     opt.automaticSave = true;
     opt.optimizeMemory = false;
+	opt.specialNodesIds = true;
 #ifndef WITHOUT_LIBXSLT
 #ifndef WITHOUT_LIBEXSLT
     opt.useEXSLT = false;

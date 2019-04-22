@@ -1,5 +1,5 @@
 ../src/xmldiff --help
-xmldiff v0.2.8 - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+xmldiff v0.2.9beta - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
 XML Engine initialized.
 xmldiff - diff two XML files. (c) 2004-2006 - Rémi Peyronnet
 Syntax : xmldiff action [options] <parameters>
@@ -42,6 +42,8 @@ Diff Options :
   --encoding none  : Force encoding
   --tag-childs yes     : Tag Added or Removed childs
   --merge-ns yes       : Create missing namespace on top of document
+  --special-nodes-ids yes  : Content of special nodes (CData, PI,...) will be used as ids
+  --special-nodes-before-value no  : Display changed value for special nodes (CData, PI,...)
   --diff-ns http://... : Namespace definition, use no to disable
   --diff-xmlns diff    : Alias to use, use no to disable
   --diff-attr status   : Name of attribute to use (should not be used in docs)

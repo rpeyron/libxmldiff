@@ -1,5 +1,5 @@
 ../src/xmldiff print_configuration
-xmldiff v0.2.8 - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+xmldiff v0.2.9beta - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
 XML Engine initialized.
 Diff Only      : No
 Keep Diff Only      : No
@@ -12,6 +12,8 @@ Optimize       : No
 Auto-Save      : Yes
 Tag Childs     : Yes
 Merge Ns       : Yes
+SpeNodes Ids   : Yes
+SpeNodes BVal  : No
 Use EXSLT      : No
 Save With XSLT : Yes
 Verbose Level  : 4

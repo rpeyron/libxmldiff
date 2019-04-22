@@ -1,4 +1,4 @@
-AC_INIT(libxmldiff,0.2.8)
+AC_INIT(libxmldiff,0.2.9beta)
 AC_CONFIG_SRCDIR([configure.ac])
 AC_CONFIG_MACRO_DIRS([m4])
 AM_INIT_AUTOMAKE

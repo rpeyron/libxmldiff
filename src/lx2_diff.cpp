@@ -128,7 +128,9 @@ void populate_itemlist(xmlNodePtr node, vector<idNode> & itemlist, const struct 
 				}
 				// TODO : Use hash code instead
 				// curNodeIdent.id += strSpace + strEqual + getNodeTextOnly(curNode);
-				curNodeIdent.id += strSpace + strEqual + curNode->content;
+				if (options.specialNodesIds) {
+					curNodeIdent.id += strSpace + strEqual + curNode->content;
+				}
 				curNodeIdent.node = curNode;
 				itemlist.push_back(curNodeIdent);
 				break;
@@ -213,6 +215,15 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
                                         options.diff_attr, 
                                         options.diffQualifiersList[DN_ADDED], 
                                         options.tagChildsAddedRemoved);
+			// For special nodes before value
+			if ((!options.diffOnly && options.specialNodesBeforeValue) && (
+					(iterAfter->node->type == XML_PI_NODE) ||
+					(iterAfter->node->type == XML_COMMENT_NODE) ||
+					(iterAfter->node->type == XML_CDATA_SECTION_NODE) 		)) {
+				s = options.separator;
+				if (iterAfter->node->content) s += iterAfter->node->content;
+				xmlNodeSetContent(iterAfter->node,  s.c_str());
+			}
             iterAfter++; afterNodesCur++; nodesCur++;
             status = DN_BELOW;
             break;
@@ -258,6 +269,14 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
                 bisNode = xmlDocCopyNode(curNode, nodeAfter->doc, 1);
             }
             xmlUnlinkNode(bisNode);
+
+			// For special nodes before value
+			if ((!options.diffOnly && options.specialNodesBeforeValue) && (
+					(bisNode->type == XML_PI_NODE) ||
+					(bisNode->type == XML_COMMENT_NODE) ||
+					(bisNode->type == XML_CDATA_SECTION_NODE) 		)) {
+				xmlNodeAddContent(bisNode,  options.separator.c_str());
+			}
 
             // Search insert point
             // - add before the next pair found
@@ -381,10 +400,10 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
 			}
         }
     }
-    // Compare values
+    // Compare Text values
     xmlstring valBefore, valAfter;
-    valBefore = getNodeTextOnly(nodeBefore);
-    valAfter = getNodeTextOnly(nodeAfter); 
+    valBefore = getNodeTextOnly(nodeBefore, false);
+    valAfter = getNodeTextOnly(nodeAfter, false); 
     if (valBefore.compare(valAfter))
     {
         if ((!options.diffOnly) && ((options.beforeValue) || (valAfter.compare(BAD_CAST "") == 0)))
@@ -402,6 +421,25 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
         }
         status = DN_MODIFIED;
     }
+    // Compare node values (CData, Comment & others)
+    valBefore = BAD_CAST "";
+    valAfter = BAD_CAST "";
+	if (nodeBefore) valBefore += xmlCharTmp(xmlNodeGetContent(nodeBefore));
+	if (nodeAfter) valAfter += xmlCharTmp(xmlNodeGetContent(nodeAfter));
+    if (valBefore.compare(valAfter))
+    {
+		if ((!options.diffOnly && options.specialNodesBeforeValue) && (
+				(nodeAfter->type == XML_PI_NODE) ||
+				(nodeAfter->type == XML_COMMENT_NODE) ||
+				(nodeAfter->type == XML_CDATA_SECTION_NODE) 		)) 
+		{
+            s = valBefore;
+            s += options.separator;
+			s += valAfter;
+			xmlNodeSetContent(nodeAfter,s.c_str());
+        }
+        status = DN_MODIFIED;
+	}
     // Update Progess Status
     if ( (afterNodesNb != 0) || (beforeNodesNb != 0))
     {

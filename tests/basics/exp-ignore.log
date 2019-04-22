@@ -1,5 +1,5 @@
 ../src/xmldiff diff before.xml after.xml output.xml --ignore root,@att
-xmldiff v0.2.8 - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
+xmldiff v0.2.9beta - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/
 XML Engine initialized.
 Loading before.xml as before.xml... done.
 Loading after.xml as after.xml... done.
