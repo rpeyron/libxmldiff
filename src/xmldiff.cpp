@@ -3,7 +3,7 @@
  * -------------------------------------------------------------------------- *
  *                                                                            *
  * XMLDiff : a diff tool for XML files                                        *
- * Copyright (C) 2004 - Rémi Peyronnet <remi+xmldiff@via.ecp.fr>              *
+ * Copyright (C) 2004 - RÃ©mi Peyronnet <remi+xmldiff@via.ecp.fr>              *
  *                                                                            *
  * This program is free software; you can redistribute it and/or              *
  * modify it under the terms of the GNU General Public License                *
@@ -78,7 +78,7 @@ void cbPrintProgressionBar(int percent, int prec,
         printf("|%ld) ... [          ]\b\b\b\b\b\b\b\b\b\b\b",nbNodesAfter);
         break;
     case -3:
-        printf("] %d nodes processed.\n", nbNodesProcessed);
+        printf("] %ld nodes processed.\n", nbNodesProcessed);
         break;
     default:
         while ((percent - precPer) >= 10)
