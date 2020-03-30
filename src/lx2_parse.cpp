@@ -2,7 +2,7 @@
  * lx2_parse.cpp : parsing xmldiff commands                                   *
  * -------------------------------------------------------------------------- *
  *                                                                            *
- * Copyright (C) 2004 - R�mi Peyronnet <remi+xmldiff@via.ecp.fr>              *
+ * Copyright (C) 2004 - Rémi Peyronnet <remi+xmldiff@via.ecp.fr>              *
  *                                                                            *
  * This program is free software; you can redistribute it and/or              *
  * modify it under the terms of the GNU General Public License                *
@@ -300,7 +300,8 @@ int parseCommandLine(const std::vector<std::string> & cl, /* [in, out] */ struct
 
     nArgOther = 0;
     // Parse command line
-    for (curarg = 0; curarg < cl.size(); curarg++)
+    curarg = 0;
+    while(curarg < cl.size())
     {
         if (ARG_MATCH("--help") || ARG_MATCH("-h") || ARG_MATCH("-?"))
         {
@@ -329,6 +330,7 @@ int parseCommandLine(const std::vector<std::string> & cl, /* [in, out] */ struct
 			}
             nArgOther++;
         }
+	curarg++;
     }
     return 0;
 }
@@ -576,7 +578,7 @@ int executeFile(std::string scriptFileName, const std::map<std::string, std::str
 /// Print usage
 void usage()
 {
-    std::cout << "xmldiff - diff two XML files. (c) 2004-2006 - R�mi Peyronnet" << std::endl
+    std::cout << "xmldiff - diff two XML files. (c) 2004-2006 - Rémi Peyronnet" << std::endl
          << "Syntax : xmldiff action [options] <parameters>" << std::endl
          << std::endl << "Actions" << std::endl
          << " - diff <before.xml> <after.xml> <output.xml>" << std::endl
