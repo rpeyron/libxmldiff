@@ -47,7 +47,7 @@ long nodesCur;
 int precPercent = 0, curPercent;
 
 
-/// This struct contains the id string to be sorted, and a reference to the node
+/// This struct contains the id std::string to be sorted, and a reference to the node
 struct idNode {
     xmlstring id;
     xmlNodePtr node;
@@ -71,11 +71,11 @@ struct IdNodeCompare {
  * @param itemlist : the list to populate
  * @param options : diff options
  */
-void populate_itemlist(xmlNodePtr node, vector<idNode> & itemlist, const struct xmldiff_options & options)
+void populate_itemlist(xmlNodePtr node, std::vector<idNode> & itemlist, const struct xmldiff_options & options)
 {
     xmlNodePtr curNode, tmpNode;
     idNode curNodeIdent;
-    vector<xmlstring>::const_iterator id;
+    std::vector<xmlstring>::const_iterator id;
 
     curNode = node->children;
     while (curNode != NULL)
@@ -176,21 +176,21 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
     xmlNodePtr curNode, tmpNode, bisNode;
     xmlNodePtr insertPoint;
     //xmlNsPtr curNs;
-    vector<idNode> * listBefore;
-    vector<idNode> * listAfter;
-    vector<idNode>::iterator iterBefore;
-    vector<idNode>::iterator iterAfter;
-    vector<xmlNodePtr> removed_nodes;
-    vector<xmlNodePtr> subnodes_to_diff;
-    vector<xmlNodePtr>::iterator iter;
+    std::vector<idNode> * listBefore;
+    std::vector<idNode> * listAfter;
+    std::vector<idNode>::iterator iterBefore;
+    std::vector<idNode>::iterator iterAfter;
+    std::vector<xmlNodePtr> removed_nodes;
+    std::vector<xmlNodePtr> subnodes_to_diff;
+    std::vector<xmlNodePtr>::iterator iter;
 
     xmlstring s;  // char ss[100];
 
     status = DN_NONE;
     // Compare elements
     // * Create lists
-    listBefore = new vector<idNode>;
-    listAfter = new vector<idNode>;
+    listBefore = new std::vector<idNode>;
+    listAfter = new std::vector<idNode>;
     if ((listBefore == NULL) || (listAfter == NULL)) return -1;
     // * Populate lists
     populate_itemlist(nodeBefore, *listBefore, options);
@@ -207,7 +207,7 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
         switch(cmp)
         {
         case -1:
-            // If the id string after < before, the element has been added
+            // If the id std::string after < before, the element has been added
             if (!(options.diffOnly || options.doNotTagDiff))  
                     setAttributeToAllChilds(
                                         iterAfter->node, 
@@ -228,7 +228,7 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
             status = DN_BELOW;
             break;
         case 1:
-            // If the id string after > before, the element has been removed
+            // If the id std::string after > before, the element has been removed
             // As we cannot insert it now, we add it in the removed_nodes list
             // which will be processed later.
             removed_nodes.push_back(iterBefore->node);

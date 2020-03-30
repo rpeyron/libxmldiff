@@ -102,7 +102,7 @@ void cbPrintProgressionBar(int percent, int prec,
 int main(int argc, char* argv[])
 {
     int rc = 0;
-    string curAlias;
+    std::string curAlias;
 
     printf("xmldiff %s - (c) 2004 - Remi Peyronnet - http://people.via.ecp.fr/~remi/\n", XMLDIFF_VER);
 
@@ -112,8 +112,8 @@ int main(int argc, char* argv[])
     setDefaultXmldiffOptions(curOptions);
     curOptions.callbackProgressionPercent = cbPrintProgressionBar;
 
-    vector<string> cl;
-    for (int i = 1; i < argc; i++) cl.push_back(string(argv[i]));
+    std::vector<std::string> cl;
+    for (int i = 1; i < argc; i++) cl.push_back(std::string(argv[i]));
     if (parseCommandLine(cl, curOptions) != 0)
     {
         printf("Error while parsing the command line.\n");
@@ -138,7 +138,7 @@ int main(int argc, char* argv[])
         xmlFinalize(curOptions);
         rc = - e.getType(); 
     }
-    catch(exception &e)
+    catch(std::exception &e)
     {
         printf("\n[ERROR] %s\n", e.what());
         xmlFinalize(curOptions);

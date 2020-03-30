@@ -34,11 +34,9 @@
 #include "libxmldiff.h"
 #include <exception>
 
-using namespace std;
-
-class LIBXMLDIFF_API XD_Exception : public exception
+class LIBXMLDIFF_API XD_Exception : public std::exception
 {
-    string strWhat;
+    std::string strWhat;
     int type;
 public:
     enum XDErrors {
@@ -57,7 +55,7 @@ public:
 		 XDE_XSLT_STOPPED
     };
 public:
-    XD_Exception(int m_type, string m_what) : exception(), 
+    XD_Exception(int m_type, std::string m_what) : exception(), 
         strWhat(m_what),
         type(m_type)
     {

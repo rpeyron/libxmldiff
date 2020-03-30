@@ -27,8 +27,6 @@
 #include "libxmldiff.h"
 #include "lx2_ops.h"
 
-using namespace std;
-
 /** parseOption : parse option item
  * @param option the option
  * @param arg the option argument (must be empty if none)
@@ -38,38 +36,38 @@ using namespace std;
  *          1 if only the option was taken
  *          2 if the argument was usefull
  */
-int LIBXMLDIFF_API parseOption(const string & option, const string & arg, /* [in, out] */ struct globalOptions & opt);
+int LIBXMLDIFF_API parseOption(const std::string & option, const std::string & arg, /* [in, out] */ struct globalOptions & opt);
 
 /** parseAction : parse action item
- * @param action string containing the action
+ * @param action std::string containing the action
  * @param cmd command structure
  * @return 0 if no error happened
  * @note Set default values for actions
  */
-int LIBXMLDIFF_API parseAction(string action, struct appCommand & cmd);
+int LIBXMLDIFF_API parseAction(std::string action, struct appCommand & cmd);
 
 /** parseCommandLine : parse command line
- * @param cl arguments vector
+ * @param cl arguments std::vector
  * @param opt [in, out] the structure that contains the result options
  * @return status code : 0 means no error
  */
-int LIBXMLDIFF_API parseCommandLine(const vector<string> & cl, /* [in, out] */ struct appCommand & opt);
+int LIBXMLDIFF_API parseCommandLine(const std::vector<std::string> & cl, /* [in, out] */ struct appCommand & opt);
 
 /// Execute an action from the command line
 int LIBXMLDIFF_API executeAction(const struct appCommand & cmd);
 
 /** tokenizeCommand : parse command line
- * @param command command string
+ * @param command command std::string
  * @return the list of tokens
  */
-vector<string> tokenizeCommand(string command);
+std::vector<std::string> tokenizeCommand(std::string command);
 
 /** Replace tokens by other values
  * @param tokens [in, out] the list of tokens
  * @param variables the list of variables name/value
  * @return the number of token replaced, or negative value on error
  */
-int replaceTokens(vector<string> & /*[in, out]*/ tokens, map<string, string> variables);
+int replaceTokens(std::vector<std::string> & /*[in, out]*/ tokens, std::map<std::string, std::string> variables);
 
 /** Execute file
  * @param scriptFileName the filename of the script to execute
@@ -79,13 +77,13 @@ int replaceTokens(vector<string> & /*[in, out]*/ tokens, map<string, string> var
  *        0 no problems
  *      -10 file not found
  */
-int LIBXMLDIFF_API executeFile(string scriptFileName, const map<string, string> & variables, const struct globalOptions & gOptions);
+int LIBXMLDIFF_API executeFile(std::string scriptFileName, const std::map<std::string, std::string> & variables, const struct globalOptions & gOptions);
 
-/** Split a string into a vector */
-void splitVector(const string arg, /*[in,out]*/ vector<xmlstring> & v);
+/** Split a std::string into a std::vector */
+void splitVector(const std::string arg, /*[in,out]*/ std::vector<xmlstring> & v);
 
-/** Join a vector into a string */
-string joinVector(const vector<xmlstring> & v);
+/** Join a std::vector into a std::string */
+std::string joinVector(const std::vector<xmlstring> & v);
 
 
 

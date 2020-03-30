@@ -34,6 +34,9 @@ EXTRA_DIST = \
 		build/vc2017/xmldiff.sln \
 		build/vc2017/xmldiff.vcxproj \
 		build/vc2017/libxmldiff.sln \
+        build/vscode/c_cpp_properties.json \
+        build/vscode/launch.json \
+        build/vscode/tasks.json \
         build/debian/control \
         build/debian/changelog \
         build/debian/conffiles \

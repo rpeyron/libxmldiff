@@ -1,3 +1,6 @@
+2020-03-29 11:52 [0.2.9pre] remi
+    * Removed global 'using namespace std'
+
 2019-04-22 11:52 [0.2.9pre] remi
     * Fix CData diff : added --special-nodes-ids and --special-nodes-before-value
 

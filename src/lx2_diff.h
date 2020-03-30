@@ -38,8 +38,6 @@
 #include <iostream>
 #include <algorithm>
 
-using namespace std;
-
 /// Status List
 enum /*LIBXMLDIFF_API*/ DN_STATUS {
     DN_UNKNOWN = 0,
@@ -151,7 +149,7 @@ struct LIBXMLDIFF_API xmldiff_options
      * XPath expression are not supported yet.
      * @warning Using elements and too much keys can cause performance issues.
      */
-    vector<xmlstring> ids;
+    std::vector<xmlstring> ids;
 
     /** Ignore list
      * These are elements / attributes that will not be taken in account in the diff 
@@ -160,7 +158,7 @@ struct LIBXMLDIFF_API xmldiff_options
      * XPath expression are not supported yet.
      * @warning Using elements and too much keys can cause performance issues.
      */
-    vector<xmlstring> ignore;
+    std::vector<xmlstring> ignore;
     
     /** Encoding forced
      * Use this to force encoding ; this is usefull for absent or wrong encoding in files.

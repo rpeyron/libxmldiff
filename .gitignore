@@ -1,0 +1,8 @@
+.svn
+autom4te.cache
+m4
+*.o
+*.a
+*.gcda
+*.gcno
+*.Po

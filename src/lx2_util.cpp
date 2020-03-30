@@ -182,10 +182,10 @@ int createNamespaceOnTop(xmlNodePtr node, const xmlChar * href, const xmlChar * 
 }
 
 
-bool LIBXMLUTIL_API matchNode(xmlNodePtr node, vector<xmlstring> list)
+bool LIBXMLUTIL_API matchNode(xmlNodePtr node, std::vector<xmlstring> list)
 {
 	xmlstring nodeName;
-	vector<xmlstring>::const_iterator i;
+	std::vector<xmlstring>::const_iterator i;
 	if (node == NULL) return false;
 	if (list.size() == 0) return false;
 	nodeName = ((node->ns && node->ns->prefix)?(node->ns->prefix + xmlstring(BAD_CAST ":")):BAD_CAST"") + 

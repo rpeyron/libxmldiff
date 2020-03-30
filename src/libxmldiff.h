@@ -86,7 +86,4 @@
 
 
 
-using namespace std;
-
-
 #endif // __LIBXMLDIFF_H__

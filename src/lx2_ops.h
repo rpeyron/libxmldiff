@@ -96,11 +96,11 @@ struct LIBXMLDIFF_API globalOptions : public xmldiff_options {
 
 struct LIBXMLDIFF_API appCommand : public globalOptions {
     enum actType action;
-    string param[LX_APPCOMMAND_NBPARAM];
+    std::string param[LX_APPCOMMAND_NBPARAM];
 };
 
 struct fileInfo {
-    string filename;
+    std::string filename;
     xmlDocPtr doc;
     bool modified;
     bool opened;
@@ -109,7 +109,7 @@ struct fileInfo {
 #endif
 };
 
-extern  map<string, fileInfo> loadedFiles;
+extern  std::map<std::string, fileInfo> loadedFiles;
 
 /** Initialize XML Context
  */
@@ -127,7 +127,7 @@ void LIBXMLDIFF_API xmlFinalize(const struct globalOptions & options);
  * @param options Options used while loading the file.
  * @return 0 if the file was successfully loaded
  */
-int LIBXMLDIFF_API loadXmlFile(string filename, string alias, const struct globalOptions & options);
+int LIBXMLDIFF_API loadXmlFile(std::string filename, std::string alias, const struct globalOptions & options);
 
 /** Write an XML File according to provided options
  * @param filename The name of the file to be loaded.
@@ -135,14 +135,14 @@ int LIBXMLDIFF_API loadXmlFile(string filename, string alias, const struct globa
  * @param options Options used while saving the file.
  * @return 0 if the file was successfully saved
  */ 
-int LIBXMLDIFF_API saveXmlFile(string filename, string alias, const struct globalOptions & options);
+int LIBXMLDIFF_API saveXmlFile(std::string filename, std::string alias, const struct globalOptions & options);
 
 /** Get the XML File tree
  * @param alias The alias of the tree to be returned
  * @param options Options used while treating the file.
  * @return The associated tree
  */
-xmlNodePtr LIBXMLDIFF_API getXmlFile(const string & alias, const struct globalOptions & options);
+xmlNodePtr LIBXMLDIFF_API getXmlFile(const std::string & alias, const struct globalOptions & options);
 
 #ifndef WITHOUT_LIBXSLT
 /** Get the XSLT File tree
@@ -150,7 +150,7 @@ xmlNodePtr LIBXMLDIFF_API getXmlFile(const string & alias, const struct globalOp
  * @param options Options used while treating the file.
  * @return The associated tree
  */
-xsltStylesheetPtr LIBXMLDIFF_API getXsltFile(const string & alias, const struct globalOptions & options);
+xsltStylesheetPtr LIBXMLDIFF_API getXsltFile(const std::string & alias, const struct globalOptions & options);
 #endif // WITHOUT_LIBXSLT
 
 /** Flush files
@@ -163,7 +163,7 @@ void LIBXMLDIFF_API flushXmlFiles(const struct globalOptions & options);
  * @param alias The alias of the tree to be closed
  * @param options Options used while treating the file.
  */
-void LIBXMLDIFF_API closeXmlFile(string alias, const struct globalOptions & options);
+void LIBXMLDIFF_API closeXmlFile(std::string alias, const struct globalOptions & options);
 
 /** Write an XML File according to provided options
  * @param beforeAlias Alias/Filename for before XML Tree
@@ -173,7 +173,7 @@ void LIBXMLDIFF_API closeXmlFile(string alias, const struct globalOptions & opti
  * @return the result of the diff (DN_NONE means no modifications, 
  *      else the tree has been modified)
  */ 
-int LIBXMLDIFF_API diffXmlFiles(string beforeAlias, string afterAlias, string outputAlias, const struct globalOptions & options);
+int LIBXMLDIFF_API diffXmlFiles(std::string beforeAlias, std::string afterAlias, std::string outputAlias, const struct globalOptions & options);
 
 /** Recalc an XML File according to provided options
  * @param alias Alias for XML Tree to be relaculated
@@ -181,7 +181,7 @@ int LIBXMLDIFF_API diffXmlFiles(string beforeAlias, string afterAlias, string ou
  * @warning the provided tree will be modified, whatever options could be.
  * @return the status of the recalculated tree
  */
-int LIBXMLDIFF_API recalcXmlFiles(string alias, const struct globalOptions & options);
+int LIBXMLDIFF_API recalcXmlFiles(std::string alias, const struct globalOptions & options);
 
 
 /** Delete nodes.
@@ -189,7 +189,7 @@ int LIBXMLDIFF_API recalcXmlFiles(string alias, const struct globalOptions & opt
  * @param xpath the xpath expression of node set to be deleted
  * @param options Options used while diffing
  */
-int LIBXMLDIFF_API deleteNodes(const string & alias, const xmlstring & xpath, const struct globalOptions & options);
+int LIBXMLDIFF_API deleteNodes(const std::string & alias, const xmlstring & xpath, const struct globalOptions & options);
 // cf example xpath1.c
 
 /** Duplicate document
@@ -197,7 +197,7 @@ int LIBXMLDIFF_API deleteNodes(const string & alias, const xmlstring & xpath, co
  * @param dest alias of destination document
  * @param options Options used while diffing
  */
-int LIBXMLDIFF_API duplicateDocument(const string & src, const string & dest, const struct globalOptions & options);
+int LIBXMLDIFF_API duplicateDocument(const std::string & src, const std::string & dest, const struct globalOptions & options);
 
 #ifndef WITHOUT_LIBXSLT
 /** Appy Stylesheet
@@ -207,7 +207,7 @@ int LIBXMLDIFF_API duplicateDocument(const string & src, const string & dest, co
  * @param params parameters to pass to the stylesheet
  * @param options Options used while diffing
  */
-int LIBXMLDIFF_API applyStylesheet(const string & xslt, const string & src, const string & dest, const char ** params, const struct globalOptions & options);
+int LIBXMLDIFF_API applyStylesheet(const std::string & xslt, const std::string & src, const std::string & dest, const char ** params, const struct globalOptions & options);
 #endif // WITHOUT_LIBXSLT
 
 /** Set the defaults options

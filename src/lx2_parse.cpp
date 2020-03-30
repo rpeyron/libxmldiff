@@ -2,7 +2,7 @@
  * lx2_parse.cpp : parsing xmldiff commands                                   *
  * -------------------------------------------------------------------------- *
  *                                                                            *
- * Copyright (C) 2004 - Rémi Peyronnet <remi+xmldiff@via.ecp.fr>              *
+ * Copyright (C) 2004 - Rï¿½mi Peyronnet <remi+xmldiff@via.ecp.fr>              *
  *                                                                            *
  * This program is free software; you can redistribute it and/or              *
  * modify it under the terms of the GNU General Public License                *
@@ -44,7 +44,7 @@
 #define strdup _strdup
 #endif
 
-void splitVector(const string arg, /*[in,out]*/ vector<xmlstring> & v)
+void splitVector(const std::string arg, /*[in,out]*/ std::vector<xmlstring> & v)
 {
     int pos, oldpos;
     oldpos = pos = 0;
@@ -58,10 +58,10 @@ void splitVector(const string arg, /*[in,out]*/ vector<xmlstring> & v)
 }
 
 
-string joinVector(const vector<xmlstring> & v)
+std::string joinVector(const std::vector<xmlstring> & v)
 {
-	vector<xmlstring>::const_iterator i;
-	stringstream out;
+	std::vector<xmlstring>::const_iterator i;
+	std::stringstream out;
     for(i = v.begin(); i != v.end(); i++)
     {
         out << i->c_str() << " ";
@@ -79,7 +79,7 @@ string joinVector(const vector<xmlstring> & v)
  *          1 if only the option was taken
  *          2 if the argument was usefull
  */
-int parseOption(const string & option, const string & arg, /* [in, out] */ struct globalOptions & opt)
+int parseOption(const std::string & option, const std::string & arg, /* [in, out] */ struct globalOptions & opt)
 {
     bool argBool;
     int status;
@@ -208,12 +208,12 @@ int parseOption(const string & option, const string & arg, /* [in, out] */ struc
 }
 
 /** parseAction : parse action item
- * @param action string containing the action
+ * @param action std::string containing the action
  * @param cmd command structure
  * @return 0 if no error happened
  * @note Set default values for actions
  */
-int parseAction(string action, struct appCommand & cmd)
+int parseAction(std::string action, struct appCommand & cmd)
 {
 	int i;
 
@@ -286,11 +286,11 @@ int parseAction(string action, struct appCommand & cmd)
 }
 
 /** parseCommandLine : parse command line
- * @param cl arguments vector
+ * @param cl arguments std::vector
  * @param opt [in, out] the structure that contains the result options
  * @return status code : 0 means no error
  */
-int parseCommandLine(const vector<string> & cl, /* [in, out] */ struct appCommand & opt)
+int parseCommandLine(const std::vector<std::string> & cl, /* [in, out] */ struct appCommand & opt)
 {
     int curarg;
     int nArgOther;
@@ -337,7 +337,7 @@ int parseCommandLine(const vector<string> & cl, /* [in, out] */ struct appComman
 int executeAction(const struct appCommand & p_cmd)
 {
     int rc, nparam, ilen, olen, i;
-    map<string, string> vars;
+    std::map<std::string, std::string> vars;
 	charTmp tmp_params[2*LX_APPCOMMAND_NBPARAM];
 	const char * params[2*LX_APPCOMMAND_NBPARAM];
 	char var[10];
@@ -386,8 +386,8 @@ int executeAction(const struct appCommand & p_cmd)
     case XD_PRINT:
 		rc = 0;
 		for(i = 0; i < LX_APPCOMMAND_NBPARAM; i++)
-			cout << cmd.param[i];
-		cout << endl;
+			std::cout << cmd.param[i];
+		std::cout << std::endl;
         break;
 	case XD_RET:
 		sscanf(cmd.param[0].c_str(),"%d", &i);
@@ -404,7 +404,7 @@ int executeAction(const struct appCommand & p_cmd)
 		nparam = 0;
 		for (i = 3; i < LX_APPCOMMAND_NBPARAM; i++)
 		{
-			if ((cmd.param[i] != "") && (cmd.param[i].find('=') != string::npos))
+			if ((cmd.param[i] != "") && (cmd.param[i].find('=') != std::string::npos))
 			{
 				olen = 3 * cmd.param[i].length();
 				temp = (xmlChar *)malloc(olen + 1);
@@ -415,14 +415,16 @@ int executeAction(const struct appCommand & p_cmd)
 						throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8.");
 					temp[olen] = 0;
 					tmp_params[nparam].setCharTmp(strdup((char *)temp));
-					params[nparam++] = (const char *)tmp_params[nparam-1];
+					params[nparam] = (char *)tmp_params[nparam]; 
+                    nparam++;
 					olen = 3 * cmd.param[i].length();
 					ilen = cmd.param[i].substr(cmd.param[i].find('=') + 1, cmd.param[i].length()).length();
 					if (isolat1ToUTF8(temp, &olen, (const unsigned char *)cmd.param[i].substr(cmd.param[i].find('=') + 1, cmd.param[i].length()).c_str(), &ilen) == -1)
 						throwError(XD_Exception::XDE_OTHER_ERROR, "Error while converting input to UTF8.");
 					temp[olen] = 0;
 					tmp_params[nparam].setCharTmp((char *)temp);
-					params[nparam++] = (const char *)tmp_params[nparam-1];
+					params[nparam] = (char *)tmp_params[nparam]; 
+                    nparam++;
 					verbose(5, cmd.verboseLevel, "Parameter \"%s\" = \"%s\"\n ", params[nparam-2], params[nparam-1]);
 				}
 			}
@@ -448,15 +450,15 @@ int executeAction(const struct appCommand & p_cmd)
 }
 
 /** tokenizeCommand : parse command line
- * @param command command string
+ * @param command command std::string
  * @return the list of tokens
  */
-vector<string> tokenizeCommand(string command)
+std::vector<std::string> tokenizeCommand(std::string command)
 {
-    string::const_iterator iter;
-    string buf = "";
+    std::string::const_iterator iter;
+    std::string buf = "";
     enum eStatus {CL_NONE = 0, CL_IN_ARG, CL_IN_SIMPLE_QUOTE, CL_IN_DOUBLE_QUOTE} status = CL_NONE;
-    vector<string> cl;
+    std::vector<std::string> cl;
 
     #define IS_BLANK(x) ((x == ' ') || (x == '\t') || (x == '\n') || (x == '\r'))
 
@@ -498,11 +500,11 @@ vector<string> tokenizeCommand(string command)
  * @param variables the list of variables name/value
  * @return the number of token replaced, or negative value on error
  */
-int replaceTokens(vector<string> & /*[in, out]*/ tokens, map<string, string> variables)
+int replaceTokens(std::vector<std::string> & /*[in, out]*/ tokens, std::map<std::string, std::string> variables)
 {
     int nb = 0, start = 0;
-    vector<string>::iterator iter;
-	map<string, string>::iterator var;
+    std::vector<std::string>::iterator iter;
+	std::map<std::string, std::string>::iterator var;
     for(iter=tokens.begin(); iter != tokens.end(); iter++)
     {
 		/* Old way : only replace full words
@@ -515,7 +517,7 @@ int replaceTokens(vector<string> & /*[in, out]*/ tokens, map<string, string> var
 		for(var=variables.begin(); var != variables.end(); var++)
 		{
 			start = 0;
-			while ((start = iter->find(var->first, start)) != string::npos)
+			while ((start = iter->find(var->first, start)) != std::string::npos)
 			{
 				iter->replace(start, var->first.length(), var->second);
 				nb++;
@@ -533,15 +535,15 @@ int replaceTokens(vector<string> & /*[in, out]*/ tokens, map<string, string> var
  *        0 no problems
  *      -10 file not found
  */
-int executeFile(string scriptFileName, const map<string, string> & variables, const struct globalOptions & gOptions)
+int executeFile(std::string scriptFileName, const std::map<std::string, std::string> & variables, const struct globalOptions & gOptions)
 {
     int rc = 0;
     struct globalOptions options = gOptions;
     struct appCommand cmd;
-    ifstream fin;
-    string line;
+    std::ifstream fin;
+    std::string line;
     char cLine[10240];
-    vector<string> tokens;
+    std::vector<std::string> tokens;
 
     verbose(2,gOptions.verboseLevel, "Execute %s ...\n", scriptFileName.c_str());
     fin.open(scriptFileName.c_str());
@@ -574,87 +576,87 @@ int executeFile(string scriptFileName, const map<string, string> & variables, co
 /// Print usage
 void usage()
 {
-    cout << "xmldiff - diff two XML files. (c) 2004-2006 - Rémi Peyronnet" << endl
-         << "Syntax : xmldiff action [options] <parameters>" << endl
-         << endl << "Actions" << endl
-         << " - diff <before.xml> <after.xml> <output.xml>" << endl
-         << " - merge <before.xml> <after.xml> <output.xml>" << endl
+    std::cout << "xmldiff - diff two XML files. (c) 2004-2006 - Rï¿½mi Peyronnet" << std::endl
+         << "Syntax : xmldiff action [options] <parameters>" << std::endl
+         << std::endl << "Actions" << std::endl
+         << " - diff <before.xml> <after.xml> <output.xml>" << std::endl
+         << " - merge <before.xml> <after.xml> <output.xml>" << std::endl
 #ifndef WITHOUT_LIBXSLT
-         << " - xslt <style.xsl> <input.xml> <output.xml> [param='value']" << endl
+         << " - xslt <style.xsl> <input.xml> <output.xml> [param='value']" << std::endl
 #endif // WITHOUT_LIBXSLT
-         << " - recalc <output.xml>" << endl
-         << " - execute <script.xds> (xds = list of these commands)" << endl
-         << " - load <filename> <alias>" << endl
-         << " - save <filename> <alias>" << endl
-         << " - close <alias> / discard <alias> (same as close without saving)" << endl
-         << " - flush" << endl
-         << " - options" << endl
-         << " - print <string>" << endl
-         << " - delete <from alias> <xpath expression>" << endl
-         << " - dup(licate) <source alias> <dest alias>" << endl
-         << " - rem(ark),#,--,;,// <remark>" << endl
-         << " - print_configuration" << endl
-         << " - ret(urn) <value>" << endl
-         << endl << "Global Options : " << endl
-         << "  --auto-save yes      : Automatically save modified files" << endl
-         << "  --force-clean no     : Force remove of blank nodes and trim spaces" << endl
-         << "  --no-blanks yes      : Remove all blank spaces" << endl
-         << "  --pretty-print yes   : Output using pretty print writer" << endl
-         << "  --optimize no        : Optimize diff algorithm to reduce memory (see doc)" << endl
+         << " - recalc <output.xml>" << std::endl
+         << " - execute <script.xds> (xds = list of these commands)" << std::endl
+         << " - load <filename> <alias>" << std::endl
+         << " - save <filename> <alias>" << std::endl
+         << " - close <alias> / discard <alias> (same as close without saving)" << std::endl
+         << " - flush" << std::endl
+         << " - options" << std::endl
+         << " - print <string>" << std::endl
+         << " - delete <from alias> <xpath expression>" << std::endl
+         << " - dup(licate) <source alias> <dest alias>" << std::endl
+         << " - rem(ark),#,--,;,// <remark>" << std::endl
+         << " - print_configuration" << std::endl
+         << " - ret(urn) <value>" << std::endl
+         << std::endl << "Global Options : " << std::endl
+         << "  --auto-save yes      : Automatically save modified files" << std::endl
+         << "  --force-clean no     : Force remove of blank nodes and trim spaces" << std::endl
+         << "  --no-blanks yes      : Remove all blank spaces" << std::endl
+         << "  --pretty-print yes   : Output using pretty print writer" << std::endl
+         << "  --optimize no        : Optimize diff algorithm to reduce memory (see doc)" << std::endl
 #ifndef WITHOUT_LIBXSLT
 #ifndef WITHOUT_LIBEXSLT
-         << "  --use-exslt no       : Allow the use of exslt.org extended functions." << endl
+         << "  --use-exslt no       : Allow the use of exslt.org extended functions." << std::endl
 #endif // WITHOUT_LIBEXSLT
-         << "  --savewithxslt yes   : Save with <xsl:output> options the results of XSLT." << endl
+         << "  --savewithxslt yes   : Save with <xsl:output> options the results of XSLT." << std::endl
 #endif // WITHOUT_LIBXSLT
-         << "  --verbose 4          : Verbose level, from 0 (nothing) to 9 (everything)." << endl
-         << endl << "Diff Options : " << endl
-         << "  --ids '@id,@value'   : Use these item to identify a node" << endl
-         << "  --ignore '@ignore,..': Ignore differences on these items" << endl
-         << "  --diff-only no       : Do not alter files, just compare." << endl
-         << "  --keep-diff-only no  : Keep only different nodes." << endl
-         << "  --before-values yes  : Add before values in attributes or text nodes" << endl
-         << "  --sep |              : Use this as the separator" << endl
-         << "  --encoding none  : Force encoding" << endl
-         << "  --tag-childs yes     : Tag Added or Removed childs" << endl
-         << "  --merge-ns yes       : Create missing namespace on top of document" << endl
-         << "  --special-nodes-ids yes  : Content of special nodes (CData, PI,...) will be used as ids" << endl
-         << "  --special-nodes-before-value no  : Display changed value for special nodes (CData, PI,...)" << endl
-         << "  --diff-ns http://... : Namespace definition, use no to disable" << endl
-         << "  --diff-xmlns diff    : Alias to use, use no to disable" << endl
-         << "  --diff-attr status   : Name of attribute to use (should not be used in docs)" << endl
+         << "  --verbose 4          : Verbose level, from 0 (nothing) to 9 (everything)." << std::endl
+         << std::endl << "Diff Options : " << std::endl
+         << "  --ids '@id,@value'   : Use these item to identify a node" << std::endl
+         << "  --ignore '@ignore,..': Ignore differences on these items" << std::endl
+         << "  --diff-only no       : Do not alter files, just compare." << std::endl
+         << "  --keep-diff-only no  : Keep only different nodes." << std::endl
+         << "  --before-values yes  : Add before values in attributes or text nodes" << std::endl
+         << "  --sep |              : Use this as the separator" << std::endl
+         << "  --encoding none  : Force encoding" << std::endl
+         << "  --tag-childs yes     : Tag Added or Removed childs" << std::endl
+         << "  --merge-ns yes       : Create missing namespace on top of document" << std::endl
+         << "  --special-nodes-ids yes  : Content of special nodes (CData, PI,...) will be used as ids" << std::endl
+         << "  --special-nodes-before-value no  : Display changed value for special nodes (CData, PI,...)" << std::endl
+         << "  --diff-ns http://... : Namespace definition, use no to disable" << std::endl
+         << "  --diff-xmlns diff    : Alias to use, use no to disable" << std::endl
+         << "  --diff-attr status   : Name of attribute to use (should not be used in docs)" << std::endl
             ;
 }
 
 /// Dump current configuration
 void printConfiguration(const struct globalOptions & opt)
 {
-    cout << "Diff Only      : " << ((opt.diffOnly)?"Yes":"No") << endl
-         << "Keep Diff Only      : " << ((opt.keepDiffOnly)?"Yes":"No") << endl
+    std::cout << "Diff Only      : " << ((opt.diffOnly)?"Yes":"No") << std::endl
+         << "Keep Diff Only      : " << ((opt.keepDiffOnly)?"Yes":"No") << std::endl
          << "Before values  : " << ((opt.beforeValue)?"Yes":"No") 
-         << " (separator " << opt.separator.c_str() << ")" << endl
-         << " Encoding :  " << opt.encoding.c_str()  << endl
-         << "Pretty Print   : " << ((opt.formatPrettyPrint)?"Yes":"No") << endl
-         << "No Blanks      : " << ((opt.cleanText)?"Yes":"No") << endl
-         << "Force Clean    : " << ((opt.forceClean)?"Yes":"No") << endl
-         << "Optimize       : " << ((opt.optimizeMemory)?"Yes":"No") << endl
-         << "Auto-Save      : " << ((opt.automaticSave)?"Yes":"No") << endl
-         << "Tag Childs     : " << ((opt.tagChildsAddedRemoved)?"Yes":"No") << endl
-         << "Merge Ns       : " << ((opt.mergeNsOnTop)?"Yes":"No") << endl
-         << "SpeNodes Ids   : " << ((opt.specialNodesIds)?"Yes":"No") << endl
-         << "SpeNodes BVal  : " << ((opt.specialNodesBeforeValue)?"Yes":"No") << endl
+         << " (separator " << opt.separator.c_str() << ")" << std::endl
+         << " Encoding :  " << opt.encoding.c_str()  << std::endl
+         << "Pretty Print   : " << ((opt.formatPrettyPrint)?"Yes":"No") << std::endl
+         << "No Blanks      : " << ((opt.cleanText)?"Yes":"No") << std::endl
+         << "Force Clean    : " << ((opt.forceClean)?"Yes":"No") << std::endl
+         << "Optimize       : " << ((opt.optimizeMemory)?"Yes":"No") << std::endl
+         << "Auto-Save      : " << ((opt.automaticSave)?"Yes":"No") << std::endl
+         << "Tag Childs     : " << ((opt.tagChildsAddedRemoved)?"Yes":"No") << std::endl
+         << "Merge Ns       : " << ((opt.mergeNsOnTop)?"Yes":"No") << std::endl
+         << "SpeNodes Ids   : " << ((opt.specialNodesIds)?"Yes":"No") << std::endl
+         << "SpeNodes BVal  : " << ((opt.specialNodesBeforeValue)?"Yes":"No") << std::endl
 #ifndef WITHOUT_LIBXSLT
 #ifndef WITHOUT_LIBEXSLT
-         << "Use EXSLT      : " << ((opt.useEXSLT)?"Yes":"No") << endl
+         << "Use EXSLT      : " << ((opt.useEXSLT)?"Yes":"No") << std::endl
 #endif // WITHOUT_LIBEXSLT
-         << "Save With XSLT : " << ((opt.saveWithXslt)?"Yes":"No") << endl
+         << "Save With XSLT : " << ((opt.saveWithXslt)?"Yes":"No") << std::endl
 #endif // WITHOUT_LIBXSLT
-         << "Verbose Level  : " << opt.verboseLevel << endl
-         << "Ids            : " << joinVector(opt.ids) << endl
-		 << "Ignore         : " << joinVector(opt.ignore) << endl
-		 << "Diff Namespace : " << opt.diff_ns.c_str() << endl
-		 << "Diff Alias     : " << opt.diff_xmlns.c_str() << endl
-		 << "Diff Attribute : " << opt.diff_attr.c_str() << endl
-         << endl;
+         << "Verbose Level  : " << opt.verboseLevel << std::endl
+         << "Ids            : " << joinVector(opt.ids) << std::endl
+		 << "Ignore         : " << joinVector(opt.ignore) << std::endl
+		 << "Diff Namespace : " << opt.diff_ns.c_str() << std::endl
+		 << "Diff Alias     : " << opt.diff_xmlns.c_str() << std::endl
+		 << "Diff Attribute : " << opt.diff_attr.c_str() << std::endl
+         << std::endl;
 }
 

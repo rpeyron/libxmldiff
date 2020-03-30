@@ -36,14 +36,11 @@
 #include <libxml/parser.h>
 #include <vector>
 
-using namespace std;
-
-
 /** getNodeTextOnly
  * Get text of the current node, without taking subnodes as does get_text()
  * @param node concerned node
  * @param cdata if true, return also CDATA contents
- * @return the string contained in direct textnodes of the current node.
+ * @return the std::string contained in direct textnodes of the current node.
  */
 xmlstring LIBXMLUTIL_API getNodeTextOnly(xmlNodePtr node, bool cdata = false);
 
@@ -106,6 +103,6 @@ int LIBXMLUTIL_API createNamespaceOnTop(xmlNodePtr node, const xmlChar * href, c
  * @param list list of match expressions (no XPath nor regex for now)
  * @return true if the node matches
  */
-bool LIBXMLUTIL_API matchNode(xmlNodePtr node, vector<xmlstring> list);
+bool LIBXMLUTIL_API matchNode(xmlNodePtr node, std::vector<xmlstring> list);
 
 #endif // __LIBXML2_UTILS_H__

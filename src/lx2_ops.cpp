@@ -41,10 +41,10 @@
 #endif // WITHOUT_LIBEXSLT
 #endif // WITHOUT_LIBXSLT
 
-map<string, fileInfo> loadedFiles;
+std::map<std::string, fileInfo> loadedFiles;
 
 #ifndef WITHOUT_LIBXSLT
-map<string, xsltStylesheetPtr> parsedXsltFiles;
+std::map<std::string, xsltStylesheetPtr> parsedXsltFiles;
 #endif // WITHOUT_LIBXSLT
 
 #define WITH_PARSERCTX
@@ -107,7 +107,7 @@ void xmlFinalize(const struct globalOptions & options)
 
 
 /// Get the XML File tree
-xmlNodePtr getXmlFile(const string & alias, const struct globalOptions & options)
+xmlNodePtr getXmlFile(const std::string & alias, const struct globalOptions & options)
 {
     if (loadedFiles.find(alias) != loadedFiles.end())
     {
@@ -131,7 +131,7 @@ xmlNodePtr getXmlFile(const string & alias, const struct globalOptions & options
 
 #ifndef WITHOUT_LIBXSLT
 /// Get the XSLT File
-xsltStylesheetPtr getXsltFile(const string & alias, const struct globalOptions & options)
+xsltStylesheetPtr getXsltFile(const std::string & alias, const struct globalOptions & options)
 {
     struct globalOptions localOptions;
     localOptions = options;
@@ -157,7 +157,7 @@ xsltStylesheetPtr getXsltFile(const string & alias, const struct globalOptions &
 
 
 /// Load an XML File according to provided options.
-int loadXmlFile(string filename, string alias, const struct globalOptions & options)
+int loadXmlFile(std::string filename, std::string alias, const struct globalOptions & options)
 {
     fileInfo fi;
     xmlDocPtr doc;
@@ -203,7 +203,7 @@ int loadXmlFile(string filename, string alias, const struct globalOptions & opti
 }
 
 /// Save an XML File according to provided options.
-int saveXmlFile(string filename, string alias, const struct globalOptions & options)
+int saveXmlFile(std::string filename, std::string alias, const struct globalOptions & options)
 {
     xmlNodePtr node;
     node = getXmlFile(alias, options);
@@ -233,7 +233,7 @@ int saveXmlFile(string filename, string alias, const struct globalOptions & opti
 }
 
 /// Close the XML File 
-void closeXmlFile(string alias, const struct globalOptions & options)
+void closeXmlFile(std::string alias, const struct globalOptions & options)
 {
     if (loadedFiles.find(alias) != loadedFiles.end())
     {
@@ -263,7 +263,7 @@ void closeXmlFile(string alias, const struct globalOptions & options)
 /// Flush files
 void flushXmlFiles(const struct globalOptions & options)
 {
-    map<string, fileInfo>::iterator it;
+    std::map<std::string, fileInfo>::iterator it;
 #ifndef WITHOUT_LIBXSLT
 	// Free XML with xslt before all XML files (XSLT file is needed)
     for(it = loadedFiles.begin(); it != loadedFiles.end(); it++)
@@ -279,7 +279,7 @@ void flushXmlFiles(const struct globalOptions & options)
 }
 
 /// Diff Trees XML Files
-int diffXmlFiles(string beforeAlias, string afterAlias, string outputAlias, const struct globalOptions & options)
+int diffXmlFiles(std::string beforeAlias, std::string afterAlias, std::string outputAlias, const struct globalOptions & options)
 {
     int rc;
     xmlNodePtr beforeNode, afterNode, outputNode;
@@ -348,7 +348,7 @@ int diffXmlFiles(string beforeAlias, string afterAlias, string outputAlias, cons
 }
 
 /// Recalc an XML File according to provided options
-int recalcXmlFiles(string alias, const struct globalOptions & options)
+int recalcXmlFiles(std::string alias, const struct globalOptions & options)
 {
     int rc = -1;
     xmlNodePtr node;
@@ -364,7 +364,7 @@ int recalcXmlFiles(string alias, const struct globalOptions & options)
 }
 
 /// Delete nodes of the file
-int deleteNodes(const string & alias, const xmlstring & xpath, const struct globalOptions & options)
+int deleteNodes(const std::string & alias, const xmlstring & xpath, const struct globalOptions & options)
 {
     int i, nb;
     xmlNodePtr node, curNode;
@@ -394,7 +394,7 @@ int deleteNodes(const string & alias, const xmlstring & xpath, const struct glob
 		std::vector<xmlNodePtr> vnodelist;
         nb = ((xpathObj->nodesetval)?xpathObj->nodesetval->nodeNr:0);
         verbose(2, options.verboseLevel, "Deleting %s = %d nodes...", BAD_CAST xpath.c_str(), nb);
-		// Copy in vector
+		// Copy in std::vector
         for(i=0;i<nb;i++) { vnodelist.push_back(xpathObj->nodesetval->nodeTab[i]); }
 		// Free XPath
         xmlXPathFreeObject(xpathObj);
@@ -417,7 +417,7 @@ int deleteNodes(const string & alias, const xmlstring & xpath, const struct glob
 
 
 /// Duplicate Document
-int duplicateDocument(const string & src, const string & dest, const struct globalOptions & options)
+int duplicateDocument(const std::string & src, const std::string & dest, const struct globalOptions & options)
 {
     xmlNodePtr srcNode, destNode;
     srcNode = getXmlFile(src, options);
@@ -436,7 +436,7 @@ int duplicateDocument(const string & src, const string & dest, const struct glob
 }
 
 #ifndef WITHOUT_LIBXSLT
-int applyStylesheet(const string & xslt, const string & src, const string & dest, const char ** params, const struct globalOptions & options)
+int applyStylesheet(const std::string & xslt, const std::string & src, const std::string & dest, const char ** params, const struct globalOptions & options)
 {
 	int ret = 0;
     xmlDocPtr doc, res;
