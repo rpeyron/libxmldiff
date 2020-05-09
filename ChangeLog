@@ -1,3 +1,7 @@
+2020-05-09 19:52 [0.2.9] remi
+    * Release 0.2.9
+	* Moved Windows build to vs2019
+
 2020-03-29 11:52 [0.2.9pre] remi
     * Removed global 'using namespace std'
 

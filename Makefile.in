@@ -399,6 +399,12 @@ EXTRA_DIST = \
 		build/vc2017/xmldiff.sln \
 		build/vc2017/xmldiff.vcxproj \
 		build/vc2017/libxmldiff.sln \
+		build/vc2019/xmldiff.vcxproj.filters \
+		build/vc2019/libxmldiff.vcxproj \
+		build/vc2019/xmldiff.sln \
+		build/vc2019/xmldiff.vcxproj \
+		build/vc2019/libxmldiff.sln \
+		build/vc2019/clean.bat \
         build/vscode/c_cpp_properties.json \
         build/vscode/launch.json \
         build/vscode/tasks.json \

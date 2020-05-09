@@ -1,9 +1,9 @@
 Source: libxmldiff
 Section: contrib/libs
 Priority: optional
-Maintainer: Remi Peyronnet <remi+libxmldiff@via.ecp.fr>
+Maintainer: Remi Peyronnet <remi+debian@via.ecp.fr>
 Standards-Version: 2.4.1.2
-Build-Depends: pkg-config, libxml2-dev, libxslt-dev, autotools-dev, automake, autoconf
+Build-Depends: pkg-config, libxml2-dev, libxslt-dev, autotools-dev, automake, autoconf, libtool
 
 Package: libxmldiff
 Architecture: any
