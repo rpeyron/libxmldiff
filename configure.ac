@@ -17,10 +17,13 @@ AC_TYPE_SIZE_T
 AC_FUNC_VPRINTF
 
 dnl libxml
-AM_PATH_XML2( 2.0.0, , AC_MSG_ERROR(libxml2 must be installed.) )
-AM_PATH_XSLT(,, AC_MSG_ERROR(libxslt must be installed.) )
+dnl AM_PATH_XML2( 2.0.0, , AC_MSG_ERROR(libxml2 must be installed.) )
+dnl AM_PATH_XSLT(,, AC_MSG_ERROR(libxslt must be installed.) )
 dnl AC_CHECK_LIB(xslt, main, , AC_MSG_ERROR(libxslt must be installed.))
 dnl AC_CHECK_LIB(exslt, main, , AC_MSG_ERROR(libexslt must be installed.))
+PKG_CHECK_MODULES(XML, libxml-2.0)
+PKG_CHECK_MODULES(XSLT, libxslt)
+PKG_CHECK_MODULES(EXSLT, libexslt)
 
 dnl GCOV
 
@@ -54,11 +57,13 @@ AC_CHECK_PROGS(GCOV, gcov, false)
 AC_CHECK_PROGS(LCOV, lcov, false)
 
 dnl Exports
+dnl a bug in libxml-2.0 pkg-config needs to include cflags in LIBS...
 DEBUG="-g"
-LIBS="$DEBUG $LIBS $XML_LIBS $XSLT_LIBS -lexslt $GCOV_LIBS"
+LIBS="$DEBUG $LIBS $XML_LIBS $XML_CFLAGS $XSLT_LIBS -lexslt $GCOV_LIBS"
 CXXFLAGS="$DEBUG $CXXFLAGS $XML_CXXFLAGS $XSLT_CXXFLAGS $GCOV_CFLAGS"
 CPPFLAGS="$DEBUG $CPPFLAGS $XML_CPPFLAGS $XSLT_CPPFLAGS -Wno-write-strings $GCOV_CFLAGS"
 CFLAGS="$DEBUG $CFLAGS $XML_CFLAGS $XSLT_CFLAGS - -Wno-write-strings $GCOV_LIBS"
+
 
 AC_OUTPUT(  \
     Makefile \
