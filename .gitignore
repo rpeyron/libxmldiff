@@ -29,6 +29,5 @@ build/vc2017/xmldiff.project
 build/vc2017/xmldiff.workspace
 build/vc2017/.codelite
 doc/libxmldiff.dox.bak
-libxmldiff/
 src/Makefile.xmldiff
 src/rapport.info
