@@ -4,3 +4,6 @@ aclocal
 libtoolize
 automake -a
 autoconf
+
+# autoupdate
+# autoreconf -fsi

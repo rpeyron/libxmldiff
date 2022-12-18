@@ -62,8 +62,29 @@ sudo apt-get install libc6 libxml2 libxslt1.1
 
 ## Windows build
 
+### With Visual Studio
+
 Windows Build is done with Visual Studio Community Edition. 
 Please use the latest version in build/ (older vc version are not maintained)
+
+### With vscode and msys2
+
+To build with msys2/mingw64:
+
+```
+msys2 -mingw64
+pacman -S mingw-w64-x86_64-autotools
+pacman -S mingw64/mingw-w64-x86_64-libxml2 mingw-w64-x86_64-libxslt
+./configure
+make
+make install
+```
+
+Note: the build with msys2 won't be statically linked, so if you want to use it outside the msys2 environment, you will need to collect the required DLL to identify with:
+```
+ldd src/xmldiff.exe | grep mingw
+```
+
 
 # Developer Documentation
 

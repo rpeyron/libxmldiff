@@ -6,6 +6,8 @@ m4
 *.gcda
 *.gcno
 *.Po
+*.exe
+.libs
 src/xmldiff
 config.log
 config.status

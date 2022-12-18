@@ -1,15 +1,13 @@
-AC_INIT(libxmldiff,0.2.9)
+AC_INIT([libxmldiff],[0.2.9])
 AC_CONFIG_SRCDIR([configure.ac])
 AC_CONFIG_MACRO_DIRS([m4])
 AM_INIT_AUTOMAKE
-AM_PROG_LIBTOOL
+LT_INIT
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_CXX
 AC_PROG_INSTALL
 
-dnl Stuff detected by autoscan
-AC_HEADER_STDC
 AC_C_CONST
 AC_CHECK_FUNCS([memmove])
 AC_HEADER_STDBOOL
@@ -28,8 +26,7 @@ PKG_CHECK_MODULES(EXSLT, libexslt)
 dnl GCOV
 
 AC_ARG_ENABLE(gcov,
-AC_HELP_STRING([--enable-gcov],
-	       [turn on test coverage @<:@default=no@:>@]),
+AS_HELP_STRING([--enable-gcov],[turn on test coverage @<:@default=no@:>@]),
 [case "${enableval}" in
   yes) enable_gcov=true ;;
   no)  enable_gcov=false ;;
@@ -60,15 +57,16 @@ dnl Exports
 dnl a bug in libxml-2.0 pkg-config needs to include cflags in LIBS...
 dnl and pkg-config does not seem to declare CXXFLAGS or CPPFLAGS, so it may be redundant, but more will not harm
 DEBUG="-g"
-LIBS="$DEBUG $LIBS $XML_LIBS $XML_CFLAGS $XSLT_LIBS $EXSLT_LIBS -lexslt $GCOV_LIBS"
-CXXFLAGS="$DEBUG $CXXFLAGS $XML_CXXFLAGS $XSLT_CXXFLAGS  $EXSLT_CXXFLAGS $XML_CFLAGS $XSLT_CFLAGS $EXSLT_CFLAGS $GCOV_CFLAGS"
+LIBS="$DEBUG $LIBS $XML_LIBS $XSLT_LIBS $EXSLT_LIBS $GCOV_LIBS -static -static-libgcc -static-libstdc++  "
+CXXFLAGS="$DEBUG $CXXFLAGS $XML_CXXFLAGS $XSLT_CXXFLAGS  $EXSLT_CXXFLAGS $XML_CFLAGS $XSLT_CFLAGS $EXSLT_CFLAGS  -Wno-write-strings $GCOV_CFLAGS"
 CPPFLAGS="$DEBUG $CPPFLAGS $XML_CPPFLAGS $XSLT_CPPFLAGS  $EXSLT_CPPFLAGS $XML_CFLAGS $XSLT_CFLAGS $EXSLT_CFLAGS  -Wno-write-strings $GCOV_CFLAGS"
-CFLAGS="$DEBUG $CFLAGS $XML_CFLAGS $XSLT_CFLAGS $EXSLT_CFLAGS - -Wno-write-strings $GCOV_LIBS"
+CFLAGS="$DEBUG $CFLAGS $XML_CFLAGS $XSLT_CFLAGS $EXSLT_CFLAGS -Wno-write-strings $GCOV_LIBS"
 
 
-AC_OUTPUT(  \
+AC_CONFIG_FILES([\
     Makefile \
     src/Makefile    \
     libxmldiff.pc \
 	doc/libxmldiff.dox \
-)
+])
+AC_OUTPUT

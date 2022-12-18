@@ -6,6 +6,7 @@ libxmldiff_a_SOURCES = \
     lx2_ops.cpp \
     lx2_parse.cpp \
     lx2_util.cpp
+libxmldiff_a_LDFLAGS= -static
 
 libxmldiff_includedir=$(includedir)/libxmldiff
 libxmldiff_include_HEADERS= \
