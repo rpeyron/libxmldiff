@@ -33,3 +33,10 @@ build/vc2017/.codelite
 doc/libxmldiff.dox.bak
 src/Makefile.xmldiff
 src/rapport.info
+/.vs
+/build/vc*/x64
+/build/vc*/win32
+/build/vc*/Debug
+/build/vc*/Release
+/build/vc*/vcpkg_installed
+/out

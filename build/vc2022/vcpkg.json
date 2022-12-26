@@ -1,0 +1,9 @@
+{
+  "name": "libxmldiff",
+  "version": "0.2.9",
+  "dependencies": [
+    "libxml2",
+    "libxslt"
+  ],
+  "builtin-baseline": "6adca01a3fadca0cc0b80f03ec57c7c3a0be5c02"
+}
