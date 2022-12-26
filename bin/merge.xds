@@ -1,0 +1,20 @@
+# Load files
+load $1 first
+load $2 second 
+
+# Do not keep values of the first file when element exists in the second one
+# Set elements identifier to attribute id
+# Disable namespace to avoid extra tag
+options --before-values no --ids '@id' --diff-ns no --diff-attr xmldiff_status
+
+# Do the diff
+diff first second output
+
+# Remove nodes with diff:status=added, as they were not in the first fils
+delete output '//*[@xmldiff_status="added"]'
+
+# Remove diff:status attibute to get a clean file
+delete output //@xmldiff_status
+
+# Save the results
+save $3 output
