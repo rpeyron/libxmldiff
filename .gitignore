@@ -7,6 +7,9 @@ m4
 *.gcno
 *.Po
 *.exe
+*.exp
+*.lib
+*.pdb
 .libs
 src/xmldiff
 config.log
@@ -34,6 +37,7 @@ doc/libxmldiff.dox.bak
 src/Makefile.xmldiff
 src/rapport.info
 /.vs
+/build/vc*/.vs
 /build/vc*/x64
 /build/vc*/win32
 /build/vc*/Debug
