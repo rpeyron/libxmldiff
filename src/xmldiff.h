@@ -3,7 +3,7 @@
  * -------------------------------------------------------------------------- *
  *                                                                            *
  * XMLDiff : a diff tool for XML files                                        *
- * Copyright (C) 2004 - Rémi Peyronnet <remi+xmldiff@via.ecp.fr>              *
+ * Copyright (C) 2004 - Rï¿½mi Peyronnet <remi+xmldiff@via.ecp.fr>              *
  *                                                                            *
  * This program is free software; you can redistribute it and/or              *
  * modify it under the terms of the GNU General Public License                *
@@ -27,6 +27,6 @@
 
 #include "libxmldiff.h"
 
-#define XMLDIFF_VER "v0.2.9"
+#define XMLDIFF_VER "v0.2.10pre"
 
 #endif // __XMLDIFF_H__

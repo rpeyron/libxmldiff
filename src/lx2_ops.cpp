@@ -2,7 +2,7 @@
  * lx2_util.cpp : useful functions for libxml2                                *
  * -------------------------------------------------------------------------- *
  *                                                                            *
- * Copyright (C) 2004 - Rémi Peyronnet <remi+xmldiff@via.ecp.fr>              *
+ * Copyright (C) 2004 - Rï¿½mi Peyronnet <remi+xmldiff@via.ecp.fr>              *
  *                                                                            *
  * This program is free software; you can redistribute it and/or              *
  * modify it under the terms of the GNU General Public License                *
@@ -167,7 +167,8 @@ int loadXmlFile(std::string filename, std::string alias, const struct globalOpti
     doc = xmlCtxtReadFile(ctxt, 
                           filename.c_str(), 
                           (strcmp((const char *)options.encoding.c_str(),"none")!=0)?(const char *)options.encoding.c_str():NULL, 
-                          (options.cleanText)?XML_PARSE_NOBLANKS:0);
+                          ((options.cleanText)?XML_PARSE_NOBLANKS:0) 
+                            + ((options.parseHuge)?XML_PARSE_HUGE:0));
 #else
 	xmlKeepBlanksDefault((options.cleanText)?0:1);
     doc = xmlParseFile(filename.c_str());
@@ -507,6 +508,7 @@ void setDefaultXmldiffOptions(struct appCommand & opt)
     opt.cleanText = true;
     opt.forceClean = false;
     opt.automaticSave = true;
+    opt.parseHuge = true;
     opt.optimizeMemory = false;
 	opt.specialNodesIds = true;
 #ifndef WITHOUT_LIBXSLT

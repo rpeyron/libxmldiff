@@ -167,6 +167,8 @@ int parseOption(const std::string & option, const std::string & arg, /* [in, out
     else if OPT_MATCH("--special-nodes-ids")  { TWO_BOOL(opt.specialNodesIds); }
 	// specialNodesBeforeValue
     else if OPT_MATCH("--special-nodes-before-value")  { TWO_BOOL(opt.specialNodesBeforeValue); }
+	// parseHuge
+    else if OPT_MATCH("--parse-huge")  { TWO_BOOL(opt.parseHuge); }
 #ifndef WITHOUT_LIBXSLT
 #ifndef WITHOUT_LIBEXSLT    
     // Use EXSLT --use-exslt
@@ -604,6 +606,7 @@ void usage()
          << "  --force-clean no     : Force remove of blank nodes and trim spaces" << std::endl
          << "  --no-blanks yes      : Remove all blank spaces" << std::endl
          << "  --pretty-print yes   : Output using pretty print writer" << std::endl
+         << "  --parse-huge yes     : Relax libxml2 size limitations" << std::endl
          << "  --optimize no        : Optimize diff algorithm to reduce memory (see doc)" << std::endl
 #ifndef WITHOUT_LIBXSLT
 #ifndef WITHOUT_LIBEXSLT
@@ -619,7 +622,7 @@ void usage()
          << "  --keep-diff-only no  : Keep only different nodes." << std::endl
          << "  --before-values yes  : Add before values in attributes or text nodes" << std::endl
          << "  --sep |              : Use this as the separator" << std::endl
-         << "  --encoding none  : Force encoding" << std::endl
+         << "  --encoding none      : Force encoding" << std::endl
          << "  --tag-childs yes     : Tag Added or Removed childs" << std::endl
          << "  --merge-ns yes       : Create missing namespace on top of document" << std::endl
          << "  --special-nodes-ids yes  : Content of special nodes (CData, PI,...) will be used as ids" << std::endl
@@ -642,6 +645,7 @@ void printConfiguration(const struct globalOptions & opt)
          << "No Blanks      : " << ((opt.cleanText)?"Yes":"No") << std::endl
          << "Force Clean    : " << ((opt.forceClean)?"Yes":"No") << std::endl
          << "Optimize       : " << ((opt.optimizeMemory)?"Yes":"No") << std::endl
+         << "Parse Huge     : " << ((opt.parseHuge)?"Yes":"No") << std::endl
          << "Auto-Save      : " << ((opt.automaticSave)?"Yes":"No") << std::endl
          << "Tag Childs     : " << ((opt.tagChildsAddedRemoved)?"Yes":"No") << std::endl
          << "Merge Ns       : " << ((opt.mergeNsOnTop)?"Yes":"No") << std::endl

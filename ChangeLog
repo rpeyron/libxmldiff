@@ -1,3 +1,6 @@
+2023-07-15 12:42 [0.2.10pre] remi
+	* Added option --parse-huge to relax libxml2 default limitations
+
 2020-05-09 19:52 [0.2.9] remi
     * Release 0.2.9
 	* Moved Windows build to vs2019

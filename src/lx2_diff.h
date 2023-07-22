@@ -3,7 +3,7 @@
  * -------------------------------------------------------------------------- *
  *                                                                            *
  * XMLDiff : a diff tool for XML files                                        *
- * Copyright (C) 2004 - Rémi Peyronnet <remi+rphoto@via.ecp.fr>               *
+ * Copyright (C) 2004 - Rï¿½mi Peyronnet <remi+rphoto@via.ecp.fr>               *
  *                                                                            *
  * This program is free software; you can redistribute it and/or              *
  * modify it under the terms of the GNU General Public License                *
@@ -164,6 +164,12 @@ struct LIBXMLDIFF_API xmldiff_options
      * Use this to force encoding ; this is usefull for absent or wrong encoding in files.
     */
     xmlstring encoding;
+
+    /** Parse Huge file
+     * 
+     * Relax any hardcoded limit from the libxml2 parser newer versions
+     */
+    bool parseHuge;
 
     /// == Callbacks ==
 
