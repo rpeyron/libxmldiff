@@ -1,3 +1,12 @@
+2025-03-01 19:42 [0.2.10pre] remi
+    * Fixed #13 aclocal-1.16: command not found
+	* Fixed #12 ./bootstrap: line 4: libtoolize: command not found
+	* Merged PR #11 by ryandesign Convert source files to UTF-8 
+	* Fixed #10 warning: 'xmlMemoryDump' is deprecated [-Wdeprecated-declarations]
+	* Fixed #9 warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+	* Fixed #8 Shared library is not produced; only static library is produced
+	* Fixed #7 error: possibly undefined macro: AM_PATH_XSLT
+
 2023-07-15 12:42 [0.2.10pre] remi
 	* Added option --parse-huge to relax libxml2 default limitations
 

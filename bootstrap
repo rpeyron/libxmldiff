@@ -1,9 +1,8 @@
 #! /bin/sh
 
-aclocal
-libtoolize
-automake -a
-autoconf
+autoupdate && autoreconf -v -s -i -f
 
-# autoupdate
-# autoreconf -fsi
+#aclocal \ 
+#&& libtoolize \
+#&& automake -a \
+#&& autoconf \ 

@@ -1,12 +1,22 @@
 bin_PROGRAMS=xmldiff
-lib_LIBRARIES=libxmldiff.a
-libxmldiff_a_SOURCES = \
+
+#lib_LIBRARIES=libxmldiff.a
+#libxmldiff_a_SOURCES = \
+#    errors.cpp \
+#    lx2_diff.cpp \
+#    lx2_ops.cpp \
+#    lx2_parse.cpp \
+#    lx2_util.cpp
+#libxmldiff_a_LDFLAGS= -static
+
+lib_LTLIBRARIES=libxmldiff.la
+libxmldiff_la_SOURCES = \
     errors.cpp \
     lx2_diff.cpp \
     lx2_ops.cpp \
     lx2_parse.cpp \
     lx2_util.cpp
-libxmldiff_a_LDFLAGS= -static
+libxmldiff_la_LDFLAGS= -static -shared
 
 libxmldiff_includedir=$(includedir)/libxmldiff
 libxmldiff_include_HEADERS= \
@@ -25,4 +35,4 @@ xmldiff_SOURCES = \
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libxmldiff.pc
 
-xmldiff_LDADD = libxmldiff.a
+xmldiff_LDADD = libxmldiff.la

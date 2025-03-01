@@ -348,7 +348,8 @@ int diffNode(xmlNodePtr nodeBefore, xmlNodePtr nodeAfter, const struct xmldiff_o
             if (!matchNode((xmlNodePtr)curAttr, options.ignore))
             {
                 xAttBefore = BAD_CAST "";
-                if (attBefore = xmlHasNsProp(nodeBefore, curAttr->name, (curAttr->ns)?curAttr->ns->href:NULL)) 
+                attBefore = xmlHasNsProp(nodeBefore, curAttr->name, (curAttr->ns)?curAttr->ns->href:NULL);
+                if (attBefore)
                 {
                     xAttBefore = xmlCharTmp(xmlNodeListGetString(nodeBefore->doc, attBefore->children, 1));
                 }    

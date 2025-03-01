@@ -101,7 +101,7 @@ void xmlFinalize(const struct globalOptions & options)
     xsltCleanupGlobals();
 #endif // WITHOUT_LIBXSLT
     xmlCleanupParser();
-    xmlMemoryDump();
+    //xmlMemoryDump(); // Removed 2025-03-01 - Deprecated
     verbose(2, options.verboseLevel, " done.\n");
 }
 

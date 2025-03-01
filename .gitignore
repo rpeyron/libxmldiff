@@ -3,7 +3,9 @@
 autom4te.cache
 m4
 *.o
+*.lo
 *.a
+*.la
 *.gcda
 *.gcno
 *.Po
@@ -12,6 +14,11 @@ m4
 *.lib
 *.pdb
 .libs
+
+*.ac~
+*~
+
+src/.deps
 
 *.old
 
