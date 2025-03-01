@@ -2,7 +2,7 @@
  * lx2_util.cpp : useful functions for libxml2                                *
  * -------------------------------------------------------------------------- *
  *                                                                            *
- * Copyright (C) 2004 - Rémi Peyronnet <remi+xmldiff@via.ecp.fr>              *
+ * Copyright (C) 2004 - RÃ©mi Peyronnet <remi+xmldiff@via.ecp.fr>              *
  *                                                                            *
  * This program is free software; you can redistribute it and/or              *
  * modify it under the terms of the GNU General Public License                *

@@ -3,7 +3,7 @@
  * -------------------------------------------------------------------------- *
  *                                                                            *
  * XMLDiff : a diff tool for XML files                                        *
- * Copyright (C) 2004 - Rémi Peyronnet <remi+xmldiff@via.ecp.fr>              *
+ * Copyright (C) 2004 - RÃ©mi Peyronnet <remi+xmldiff@via.ecp.fr>              *
  *                                                                            *
  * This program is free software; you can redistribute it and/or              *
  * modify it under the terms of the GNU General Public License                *
@@ -60,9 +60,9 @@
 #pragma warning (disable : 4660)
 #endif
 
-// warning C4005: '>=' : '_CRT_SECURE_NO_DEPRECATE' : redéfinition de macro
-// warning C4018: '>=' : incompatibilité signed/unsigned
-// warning C4267: '=' : conversion de 'size_t' en 'int', perte possible de données
+// warning C4005: '>='Â : '_CRT_SECURE_NO_DEPRECATE'Â : redÃ©finition de macro
+// warning C4018: '>='Â : incompatibilitÃ© signed/unsigned
+// warning C4267: '='Â : conversion de 'size_t' en 'int', perte possible de donnÃ©es
 #pragma warning (disable : 4005 4018 4267)
 
 #define _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES 1
